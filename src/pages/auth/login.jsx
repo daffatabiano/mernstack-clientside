@@ -37,6 +37,7 @@ export default function Login() {
             type: 'success',
             icon: <FaCheck />,
           });
+          localStorage.setItem('token', res.data.token);
           setTimeout(() => {
             navigate('/');
           }, 1000);
