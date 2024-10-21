@@ -5,6 +5,9 @@ import { styles } from '../../helper/styles';
 
 export default function DashboardLayout({ children }) {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (!user) return window.location.replace('/login');
 
   return (
     <>

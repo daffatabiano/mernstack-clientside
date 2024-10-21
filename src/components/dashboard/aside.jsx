@@ -5,7 +5,13 @@ import { listsAside } from '../../helper/constants';
 export default function AsideDashboard({ children }) {
   const navigate = useNavigate();
   const { pathname } = window.location;
-  console.log(pathname);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    navigate('/login');
+  };
 
   return (
     <aside className={styles.aside}>
@@ -23,7 +29,9 @@ export default function AsideDashboard({ children }) {
           </li>
         ))}
       </ul>
-      <button className={styles.button}>Logout</button>
+      <button type="button" onClick={handleLogout} className={styles.button}>
+        Logout
+      </button>
     </aside>
   );
 }

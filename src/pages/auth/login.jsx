@@ -44,6 +44,7 @@ export default function Login() {
           localStorage.setItem('token', res.data.token);
           setTimeout(() => {
             navigate('/');
+            localStorage.setItem('user', JSON.stringify(res.data.data));
           }, 1000);
         }, 1000);
       } else {
