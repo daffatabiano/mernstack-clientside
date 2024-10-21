@@ -5,8 +5,11 @@ import AuthLayout from './layout';
 import { FaCheck } from 'react-icons/fa';
 import { MdError } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Login() {
+  const dataRegister = useSelector((state) => state.user);
+  console.log(dataRegister);
   const navigate = useNavigate();
   const { login } = useAuth();
   const [notify, setNotify] = useState({
@@ -26,7 +29,8 @@ export default function Login() {
       if (res.status === 200) {
         setNotify({
           isShown: true,
-          message: res.data.message,
+          message:
+            res.data.message + ', Welcome Back ' + res.data.data.name + '!',
           type: 'success',
           icon: <FaCheck />,
         });
@@ -79,7 +83,7 @@ export default function Login() {
   return (
     <AuthLayout>
       <h1 className="text-3xl md:text-5xl flex-col  font-bold flex justify-center md:justify-start">
-        Login
+        Sign In
         <span className="font-normal text-gray-400 text-sm md:text-lg mt-2">
           Enter your credentials, to access your account
         </span>
@@ -98,7 +102,7 @@ export default function Login() {
           <p>{notify.message}</p>
         </div>
       )}
-      <form onSubmit={handleLogin} className="flex flex-col gap-2 mt-4">
+      <form onSubmit={handleLogin} className={styles.formAuth}>
         <label htmlFor="email">
           Email
           <input
@@ -106,6 +110,7 @@ export default function Login() {
             name="email"
             placeholder="example@ex.com"
             className={styles.input}
+            defaultValue={dataRegister?.user ? dataRegister?.user?.email : ''}
           />
         </label>
         <label htmlFor="password">
