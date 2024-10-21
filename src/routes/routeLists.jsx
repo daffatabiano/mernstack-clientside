@@ -1,5 +1,10 @@
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
+import Dashboard from '../pages/dashboard';
+import AnalyticsDashboard from '../pages/dashboard/analytics';
+import MenuDashboard from '../pages/dashboard/menu';
+import Profile from '../pages/dashboard/profile';
+import OrderDashboard from '../pages/dashboard/order';
 import Home from '../pages/home';
 
 export const routeLists = [
@@ -17,5 +22,30 @@ export const routeLists = [
     path: '/register',
     name: 'Register',
     element: <Register />,
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: '/dashboard/profile',
+    name: 'Profile',
+    element: <Profile />,
+  },
+  {
+    path: '/dashboard/menu',
+    name: 'Menu',
+    element: <MenuDashboard />,
+  },
+  {
+    path: '/dashboard/analytics',
+    name: 'Analytics',
+    element: <AnalyticsDashboard />,
+  },
+  {
+    path: '/dashboard/order',
+    name: 'Order',
+    element: <OrderDashboard />,
   },
 ];
