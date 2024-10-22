@@ -6,7 +6,7 @@ export default function NavbarDashboard() {
   console.log(user.age);
 
   return (
-    <nav className="w-full h-18 bg-slate-800 p-4 fixed top-0 right-0 left-0 ">
+    <nav className="w-full h-1/8 bg-slate-800 p-4 fixed top-0 right-0 left-0 ">
       <div className="w-full h-full ps-72 flex justify-between items-center">
         <h1 className="text-white font-bold text-xl">Admin Control</h1>
         <Link to={'/dashboard/profile'} className="flex gap-4 items-center">

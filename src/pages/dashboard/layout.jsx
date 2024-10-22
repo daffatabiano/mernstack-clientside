@@ -27,7 +27,7 @@ export default function DashboardLayout({ children }) {
       <main className={styles.main}>
         <AsideDashboard />
         <NavbarDashboard />
-        <section className="w-full h-full ps-72 pt-20">{children}</section>
+        <section className="w-full h-full ps-[20%] pt-[6%]">{children}</section>
       </main>
     </>
   );

@@ -15,7 +15,7 @@ export default function AsideDashboard({ children }) {
 
   return (
     <aside className={styles.aside}>
-      <img src="/logo.svg" alt="" className="w-32" />
+      <img src="/logo.svg" alt="" className="w-2/3" />
       <ul className="flex flex-col gap-4">
         {listsAside.map((item) => (
           <li

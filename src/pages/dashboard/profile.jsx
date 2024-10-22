@@ -38,6 +38,24 @@ export default function ProfileDashboard() {
       gender: e.target.gender.value,
     };
 
+    if (body.password !== body.confirmPassword) {
+      return setUpdateNotif({
+        isShown: true,
+        message: 'Passwords do not match',
+        type: 'error',
+        icon: <MdErrorOutline />,
+      });
+    }
+
+    if (!body) {
+      return setUpdateNotif({
+        isShown: true,
+        message: 'No data provided',
+        type: 'error',
+        icon: <MdErrorOutline />,
+      });
+    }
+
     try {
       const res = await axios.put(`${url}/user/${user._id}`, body, {
         headers: {
@@ -45,8 +63,6 @@ export default function ProfileDashboard() {
           Authorization: token,
         },
       });
-
-      console.log(res);
 
       if (res.status === 200) {
         localStorage.setItem('user', JSON.stringify(res.data.data));
@@ -56,6 +72,18 @@ export default function ProfileDashboard() {
           type: 'success',
           icon: <FaCheck />,
         });
+
+        setTimeout(() => {
+          setShowEdit(false);
+          setTimeout(() => {
+            setUpdateNotif({
+              isShown: false,
+              message: '',
+              type: '',
+              icon: '',
+            });
+          }, 1000);
+        }, 2000);
       } else {
         setUpdateNotif({
           isShown: true,
@@ -76,11 +104,11 @@ export default function ProfileDashboard() {
           showEdit ? 'block' : 'hidden'
         }`}>
         <div
-          className={`absolute w-52 h-24 top-5 right-5 bg-white p-2 rounded border-b-8 ${
+          className={`absolute top-5 right-5 bg-white p-4 rounded border-b-8 ${
             updateNotif.type === 'error' ? 'border-red-500' : 'border-green-500'
           } ${updateNotif.isShown ? 'block' : 'hidden'}`}>
           <div
-            className={`flex items-center gap-2 font-bold ${
+            className={`flex items-center gap-4 ${
               updateNotif.type === 'error' ? 'text-red-500' : 'text-green-500'
             }`}>
             {updateNotif.icon}
@@ -175,12 +203,15 @@ export default function ProfileDashboard() {
 
       <DashboardLayout>
         <section className="p-4 h-full w-full flex gap-5">
-          <div className="">
+          <div className="w-1/3">
             <h1 className="text-2xl font-bold capitalize pb-2">
-              Hello, <i className="text-indigo-500 capitalize">{user.name}</i>{' '}
+              Hello,{' '}
+              <i className="text-indigo-500 capitalize">
+                {user.name.split(' ')[0]}
+              </i>{' '}
               Welcome Back !
             </h1>
-            <div className="p-4 w-80 gap-4 rounded flex flex-col items-center bg-white">
+            <div className="p-4 w-full h-[90%] gap-4 rounded flex flex-col items-center bg-white">
               <h2 className="text-2xl text-indigo-500">Account Information</h2>
 
               <img
@@ -225,7 +256,7 @@ export default function ProfileDashboard() {
               </button>
             </div>
           </div>
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-4 w-2/3">
             <h1 className="text-2xl font-bold text-end uppercase">
               Performance
             </h1>
