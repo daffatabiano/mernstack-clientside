@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import AsideDashboard from '../../components/dashboard/aside';
 import NavbarDashboard from '../../components/dashboard/navbar';
 import { styles } from '../../helper/styles';
+import { FaFingerprint } from 'react-icons/fa';
 
 export default function DashboardLayout({ children }) {
   const navigate = useNavigate();
@@ -28,6 +29,11 @@ export default function DashboardLayout({ children }) {
         <AsideDashboard />
         <NavbarDashboard />
         <section className="w-full h-full ps-[20%] pt-[6%]">{children}</section>
+        <div className="fixed text-white rounded-full bottom-10 right-10 bg-slate-800 p-4 hover:bg-slate-700">
+          <i>
+            <FaFingerprint />
+          </i>
+        </div>
       </main>
     </>
   );

@@ -24,3 +24,39 @@ export const listsAside = [
     icon: <FaChartPie />,
   },
 ];
+
+export const listsSubmenu = [
+  {
+    name: 'All',
+  },
+  {
+    name: 'Beverages',
+  },
+  {
+    name: 'Desserts',
+  },
+  {
+    name: 'Foods',
+  },
+  {
+    name: 'Appetizers',
+  },
+  {
+    name: 'Cocktails',
+  },
+  {
+    name: 'Drinks',
+  },
+  {
+    name: 'Salads',
+  },
+  {
+    name: 'Coffee',
+  },
+  {
+    name: 'Tea',
+  },
+  {
+    name: 'Other',
+  },
+];

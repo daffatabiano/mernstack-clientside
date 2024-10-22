@@ -8,7 +8,7 @@ import { MdErrorOutline } from 'react-icons/md';
 
 const reusable = {
   styles: {
-    card_information: 'w-full bg-white p-4 h-full rounded flex flex-col ',
+    card_information: 'w-full bg-white p-2 h-full rounded flex flex-col ',
   },
 };
 
@@ -202,14 +202,14 @@ export default function ProfileDashboard() {
       </div>
 
       <DashboardLayout>
-        <section className="p-4 h-full w-full flex gap-5">
+        <section className="p-4 h-full w-full flex gap-5 items-center">
           <div className="w-1/3">
             <h1 className="text-2xl font-bold capitalize pb-2">
               Hello,{' '}
               <i className="text-indigo-500 capitalize">
                 {user.name.split(' ')[0]}
               </i>{' '}
-              Welcome Back !
+              Keep Spirit!
             </h1>
             <div className="p-4 w-full h-[90%] gap-4 rounded flex flex-col items-center bg-white">
               <h2 className="text-2xl text-indigo-500">Account Information</h2>
@@ -260,18 +260,38 @@ export default function ProfileDashboard() {
             <h1 className="text-2xl font-bold text-end uppercase">
               Performance
             </h1>
+
             <div className="flex flex-col gap-4 h-full">
               <div className={reusable.styles.card_information}>
                 <h1 className="text-2xl">Attendance</h1>
+                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                  <img
+                    src="/images/attendance.png"
+                    className="w-24 h-24"
+                    alt=""
+                  />
+                  <p className=""> You don&apos;t have any attendance yet,</p>
+                </div>
               </div>
               <div className={reusable.styles.card_information}>
                 <h1 className="text-2xl">Working Hours</h1>
-              </div>
-              <div className={reusable.styles.card_information}>
-                <h1 className="text-2xl">Achievments</h1>
                 <div className="flex flex-col justify-center items-center h-full w-full gap-2">
                   <img
-                    src="/images/tropy-lost.png"
+                    src="/images/working-hours.png"
+                    className="w-24 h-24"
+                    alt=""
+                  />
+                  <p className="">
+                    {' '}
+                    You don&apos;t have any working hours yet,
+                  </p>
+                </div>
+              </div>
+              <div className={reusable.styles.card_information}>
+                <h1 className="text-2xl">Achievements</h1>
+                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                  <img
+                    src="/images/achievements.png"
                     className="w-24 h-24"
                     alt=""
                   />
