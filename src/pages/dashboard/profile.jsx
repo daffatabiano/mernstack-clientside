@@ -3,6 +3,14 @@ import { styles } from '../../helper/styles';
 import DashboardLayout from './layout';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaCheck } from 'react-icons/fa';
+import { MdErrorOutline } from 'react-icons/md';
+
+const reusable = {
+  styles: {
+    card_information: 'w-full bg-white p-4 h-full rounded flex flex-col ',
+  },
+};
 
 export default function ProfileDashboard() {
   const url = import.meta.env.VITE_API_URL;
@@ -10,6 +18,12 @@ export default function ProfileDashboard() {
   const token = localStorage.getItem('token');
   const [showEdit, setShowEdit] = useState(false);
   const navigate = useNavigate();
+  const [updateNotif, setUpdateNotif] = useState({
+    isShown: false,
+    message: '',
+    type: '',
+    icon: '',
+  });
 
   if (!user) return window.location.replace('/login');
 
@@ -32,9 +46,23 @@ export default function ProfileDashboard() {
         },
       });
 
+      console.log(res);
+
       if (res.status === 200) {
         localStorage.setItem('user', JSON.stringify(res.data.data));
-        setShowEdit(false);
+        setUpdateNotif({
+          isShown: true,
+          message: res.data.message,
+          type: 'success',
+          icon: <FaCheck />,
+        });
+      } else {
+        setUpdateNotif({
+          isShown: true,
+          message: res.data.message,
+          type: 'error',
+          icon: <MdErrorOutline />,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -47,8 +75,20 @@ export default function ProfileDashboard() {
         className={`bg-slate-800/50 h-screen w-full flex justify-center items-center fixed top-0 right-0 left-0 z-50 ${
           showEdit ? 'block' : 'hidden'
         }`}>
-        <div className="w-1/3 max-h-[90%] overflow-auto bg-white rounded-lg p-4 flex flex-col justify-center items-center">
-          <h1 className="text-2xl font-bold">Edit Profile</h1>
+        <div
+          className={`absolute w-52 h-24 top-5 right-5 bg-white p-2 rounded border-b-8 ${
+            updateNotif.type === 'error' ? 'border-red-500' : 'border-green-500'
+          } ${updateNotif.isShown ? 'block' : 'hidden'}`}>
+          <div
+            className={`flex items-center gap-2 font-bold ${
+              updateNotif.type === 'error' ? 'text-red-500' : 'text-green-500'
+            }`}>
+            {updateNotif.icon}
+            <p>{updateNotif.message}</p>
+          </div>
+        </div>
+        <div className="w-1/3 max-h-[90%] overflow-y-auto bg-white rounded-lg p-4 flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold pt-12">Edit Profile</h1>
           <form onSubmit={handleEdit}>
             <img
               src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -125,50 +165,93 @@ export default function ProfileDashboard() {
                 onClick={() => setShowEdit(!showEdit)}>
                 Close
               </button>
-              <button
-                className={styles.button}
-                type="submit"
-                onClick={() => setShowEdit(!showEdit)}>
+              <button className={styles.button} type="submit">
                 Update
               </button>
             </div>
           </form>
         </div>
       </div>
+
       <DashboardLayout>
-        <section className="p-4 h-full w-full">
-          <h1 className="text-2xl font-bold capitalize pb-2">
-            Hello, {user.name} Welcome Back !
-          </h1>
-          <div className="p-4 w-80 gap-4 rounded flex flex-col items-center bg-white">
-            <h2 className="text-2xl">Account Information</h2>
+        <section className="p-4 h-full w-full flex gap-5">
+          <div className="">
+            <h1 className="text-2xl font-bold capitalize pb-2">
+              Hello, <i className="text-indigo-500 capitalize">{user.name}</i>{' '}
+              Welcome Back !
+            </h1>
+            <div className="p-4 w-80 gap-4 rounded flex flex-col items-center bg-white">
+              <h2 className="text-2xl text-indigo-500">Account Information</h2>
 
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              alt=""
-              className="w-20 h-20 rounded-full"
-            />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                alt=""
+                className="w-20 h-20 rounded-full"
+              />
 
-            <div className="flex flex-col gap-2  bg-slate-100 p-2">
-              <p>
-                <span className="font-bold">Email: </span>
-                {user.email}
-              </p>
-              <p>
-                <span className="font-bold">Age: </span>
-                {user.age}
-              </p>
-              <p>
-                <span className="font-bold">Gender: </span>
-                {user.gender}
-              </p>
+              <div className="flex flex-col gap-4 w-full bg-slate-100 p-4 rounded">
+                <p>
+                  <span className="font-bold text-indigo-500">NIK: </span>
+                  {'1234567890'}
+                </p>
+                <p>
+                  <span className="font-bold text-indigo-500">Email: </span>
+                  {user.email}
+                </p>
+                <p>
+                  <span className="font-bold text-indigo-500">Age: </span>
+                  {user.age}
+                </p>
+                <p>
+                  <span className="font-bold text-indigo-500">Gender: </span>
+                  {user.gender}
+                </p>
+                <p>
+                  <span className="font-bold text-indigo-500">Role: </span>
+                  {'Cashier'}
+                </p>
+                <p>
+                  <span className="font-bold text-indigo-500">
+                    Works Period:{' '}
+                  </span>
+                  {'1 year'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEdit(true)}
+                className={` ${styles.button}`}>
+                Edit
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowEdit(true)}
-              className={` ${styles.button}`}>
-              Edit
-            </button>
+          </div>
+          <div className="flex flex-col gap-4 w-full">
+            <h1 className="text-2xl font-bold text-end uppercase">
+              Performance
+            </h1>
+            <div className="flex flex-col gap-4 h-full">
+              <div className={reusable.styles.card_information}>
+                <h1 className="text-2xl">Attendance</h1>
+              </div>
+              <div className={reusable.styles.card_information}>
+                <h1 className="text-2xl">Working Hours</h1>
+              </div>
+              <div className={reusable.styles.card_information}>
+                <h1 className="text-2xl">Achievments</h1>
+                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                  <img
+                    src="/images/tropy-lost.png"
+                    className="w-24 h-24"
+                    alt=""
+                  />
+                  <p className="">
+                    {' '}
+                    You have not achieved any achievements yet,
+                    <span className="text-indigo-500"> keep working hard</span>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </DashboardLayout>
