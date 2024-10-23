@@ -3,20 +3,33 @@ import { listsSubmenu } from '../../helper/constants';
 import { styles } from '../../helper/styles';
 import DashboardLayout from './layout';
 import usePost from '../../hooks/usePost';
-import { FaPercent } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle, FaPercent } from 'react-icons/fa';
+import { RiArrowGoBackFill } from 'react-icons/ri';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
   const [products, setProducts] = useState([]);
   const { createProduct } = usePost();
+  const [shownInputPicture, setShownInputPicture] = useState({
+    isShown: false,
+    type: '',
+    image: '',
+  });
+
+  const [notify, setNotify] = useState({
+    isShown: false,
+    message: '',
+    type: '',
+    icon: '',
+  });
 
   const handleAdd = async (e) => {
     e.preventDefault();
     const body = {
       category: e.target.category.value,
       image: e.target.image.value || '/images/empty-food.png',
-      foodname: e.target.foodname.value,
-      description: e.target.description.value,
+      name: e.target.name.value,
+      discount: e.target.discount.value,
       price: e.target.price.value,
     };
 
@@ -39,7 +52,11 @@ export default function MenuDashboard() {
           <form onSubmit={handleAdd} className="flex flex-col gap-4">
             <label htmlFor="Name">
               Category
-              <select name="category" id="category" className={styles.input}>
+              <select
+                required
+                name="category"
+                id="category"
+                className={styles.input}>
                 {listsSubmenu.map((item) => {
                   return (
                     <option key={item.name} value={item.name}>
@@ -51,26 +68,90 @@ export default function MenuDashboard() {
             </label>
             <label htmlFor="image">
               Image
-              <div className="w-full flex justify-center items-center">
+              <div className="w-full flex justify-center items-center relative">
+                <button
+                  type="button"
+                  onClick={() => setShownInputPicture({ isShown: false })}
+                  className={`absolute top-0 right-0 p-1 flex items-center gap-1 ${
+                    !shownInputPicture.isShown && 'hidden'
+                  }`}>
+                  <i>
+                    <RiArrowGoBackFill />
+                  </i>
+                  Back
+                </button>
                 <img
-                  src="/images/empty-food.png"
+                  src={
+                    shownInputPicture.image
+                      ? shownInputPicture.image
+                      : '/images/empty-food.png'
+                  }
                   alt=""
                   className="w-[150px] h-[100px] object-cover rounded"
                 />
-                <input
-                  type="file"
-                  name="image"
-                  id="image"
-                  required
-                  className={styles.input}
-                />
+                <div
+                  className={`flex gap-2 items-center ${
+                    shownInputPicture.isShown && 'hidden'
+                  }`}>
+                  <button
+                    onClick={() =>
+                      setShownInputPicture({
+                        isShown: true,
+                        type: 'link',
+                      })
+                    }
+                    type="button"
+                    className="px-4 py-2 bg-red-500 text-white rounded">
+                    Link
+                  </button>
+                  <p>or</p>
+                  <button
+                    onClick={() =>
+                      setShownInputPicture({
+                        isShown: true,
+                        type: 'file',
+                      })
+                    }
+                    type="button"
+                    className="px-4 py-2 bg-red-500 text-white rounded">
+                    Input
+                  </button>
+                </div>
+                {shownInputPicture.isShown &&
+                  (shownInputPicture.type === 'link' ? (
+                    <>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          shownInputPicture.image = e.target.value;
+                        }}
+                        id="image"
+                        className={styles.input}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => (shownInputPicture.isShown = false)}
+                        className="p-1 absolute bottom-0 right-0 bg-green-500 text-white rounded">
+                        <FaCheckCircle />
+                      </button>
+                    </>
+                  ) : (
+                    <input
+                      required
+                      type="file"
+                      name="image"
+                      id="image"
+                      className={styles.input}
+                    />
+                  ))}
               </div>
             </label>
             <label htmlFor="food-name">
               Food Name
               <input
                 type="text"
-                name="foodname"
+                name="name"
                 id="food-name"
                 required
                 className={styles.input}
@@ -131,7 +212,7 @@ export default function MenuDashboard() {
             <div className="w-[10%]">
               <button
                 type="button"
-                className={styles.button}
+                className="px-4 py-2 rounded-lg bg-indigo-500 text-white"
                 onClick={() => setShownAdd(true)}>
                 Add +
               </button>

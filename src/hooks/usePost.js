@@ -4,7 +4,7 @@ const usePost = () => {
   const url = import.meta.env.VITE_API_URL;
 
   const createProduct = async (body) => {
-    const res = await axios.post(`${url}/products`, body, {
+    const res = await axios.post(`${url}/product`, body, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
