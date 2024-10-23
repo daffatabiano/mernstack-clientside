@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux';
 
 export default function Login() {
   const dataRegister = useSelector((state) => state.user);
-  console.log(dataRegister);
   const navigate = useNavigate();
   const { login } = useAuth();
   const [notify, setNotify] = useState({

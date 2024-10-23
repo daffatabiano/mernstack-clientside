@@ -15,8 +15,8 @@ const usePost = () => {
     return res;
   };
 
-  const updateProduct = async (body) => {
-    const res = await axios.put(`${url}/products/${body._id}`, body, {
+  const updateProduct = async (id, body) => {
+    const res = await axios.put(`${url}/product/${id}`, body, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

@@ -1,33 +1,21 @@
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-const useGet = () => {
+const useFetch = (endpoint) => {
   const url = import.meta.env.VITE_API_URL;
+  const [data, setData] = useState(null);
 
-  const getUser = async () => {
-    const res = await axios.get(`${url}/users`);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`${url}/${endpoint}`);
 
-    return res;
-  };
+      setData(res.data);
+    };
 
-  const getProducts = async () => {
-    const res = await axios.get(`${url}/products`);
+    fetchData();
+  }, [endpoint]);
 
-    return res;
-  };
-
-  const getOrders = async () => {
-    const res = await axios.get(`${url}/orders`);
-
-    return res;
-  };
-
-  const getProductsById = async (id) => {
-    const res = await axios.get(`${url}/products/${id}`);
-
-    return res;
-  };
-
-  return { getUser, getProducts, getOrders, getProductsById };
+  return { data };
 };
 
-export default useGet;
+export default useFetch;

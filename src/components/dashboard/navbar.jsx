@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 export default function NavbarDashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
 
-  console.log(user.age);
 
   return (
     <nav className="w-full h-1/8 bg-slate-800 p-4 fixed top-0 right-0 left-0 ">

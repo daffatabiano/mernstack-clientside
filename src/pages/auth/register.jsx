@@ -31,7 +31,6 @@ export default function Register() {
     e.preventDefault();
     try {
       const res = await register(body);
-      console.log(res);
       if (res.status === 200) {
         dispatch(login(res.data.data));
         setNotify({
@@ -69,8 +68,6 @@ export default function Register() {
       }, 3000);
     }
   };
-
-  console.log(sections);
 
   return (
     <AuthLayout>
