@@ -226,8 +226,6 @@ export default function MenuDashboard() {
     }
   };
 
-  console.table(status, 'product');
-
   return (
     <>
       {/* Modals Add Products */}
