@@ -1,5 +1,6 @@
 import axios from 'axios';
 const url = import.meta.env.VITE_API_URL;
+const localUrl = import.meta.env.VITE_LOCAL_URL;
 
 const useAuth = () => {
   const login = async (body) => {

@@ -91,9 +91,30 @@ export default function ProfileDashboard() {
           type: 'error',
           icon: <MdErrorOutline />,
         });
+        setTimeout(() => {
+          setUpdateNotif({
+            isShown: false,
+            message: '',
+            type: '',
+            icon: '',
+          });
+        }, 2000);
       }
     } catch (error) {
-      console.log(error);
+      setUpdateNotif({
+        isShown: true,
+        message: error.response.data.message,
+        type: 'error',
+        icon: <MdErrorOutline />,
+      });
+      setTimeout(() => {
+        setUpdateNotif({
+          isShown: false,
+          message: '',
+          type: '',
+          icon: '',
+        });
+      }, 2000);
     }
   };
 

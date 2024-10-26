@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { styles } from '../../helper/styles';
 import { listsAside } from '../../helper/constants';
 
-export default function AsideDashboard({ children }) {
+export default function AsideDashboard() {
   const navigate = useNavigate();
   const { pathname } = window.location;
 
@@ -20,8 +20,8 @@ export default function AsideDashboard({ children }) {
         {listsAside.map((item) => (
           <li
             key={item.name}
-            className={`flex gap-4 items-center hover:bg-slate-200 rounded p-4 ${
-              pathname === item.path ? 'bg-slate-200' : ''
+            className={`flex gap-4 items-center hover:bg-slate-200 hover:transform hover:scale-110 rounded p-4 ${
+              pathname === item.path ? 'bg-slate-200 transform scale-110' : ''
             }`}
             onClick={() => navigate(item.path)}>
             <i className="text-2xl">{item.icon}</i>

@@ -18,18 +18,21 @@ export default function Login() {
     icon: '',
   });
   const handleLogin = async (e) => {
+    e.preventDefault();
+    const body = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
     try {
-      e.preventDefault();
-      const body = {
-        email: e.target.email.value,
-        password: e.target.password.value,
-      };
       const res = await login(body);
-      if (res.status === 200) {
+      if (res?.status === 200) {
         setNotify({
           isShown: true,
           message:
-            res.data.message + ', Welcome Back ' + res.data.data.name + '!',
+            res?.data?.message +
+            ', Welcome Back ' +
+            res?.data?.data?.name +
+            '!',
           type: 'success',
           icon: <FaCheck />,
         });
@@ -40,16 +43,16 @@ export default function Login() {
             type: 'success',
             icon: <FaCheck />,
           });
-          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('token', res?.data?.token);
           setTimeout(() => {
-            navigate('/');
-            localStorage.setItem('user', JSON.stringify(res.data.data));
+            navigate('/dashboard');
+            localStorage.setItem('user', JSON.stringify(res?.data?.data));
           }, 1000);
         }, 1000);
       } else {
         setNotify({
           isShown: true,
-          message: res.data.message,
+          message: res?.data?.message,
           type: 'error',
           icon: <MdError />,
         });
@@ -65,7 +68,7 @@ export default function Login() {
     } catch (error) {
       setNotify({
         isShown: true,
-        message: error.response.data.message,
+        message: error?.response.data.message,
         type: 'error',
         icon: <MdError />,
       });

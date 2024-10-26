@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <>
-      <div className="md:hidden flex fixed justify-center items-center top-0 right-0 left-0 w-screen h-screen bg-slate-800/50">
+      <div className="md:hidden flex fixed justify-center items-center top-0 right-0 left-0 min-w-screen min-h-screen w-full h-full bg-slate-800/50">
         <div className="w-1/2 flex gap-4 flex-col p-4 justify-between items-center bg-white rounded">
           <h1 className="text-red-500 text-center font-bold">
             Sorry, this page is not available on mobile

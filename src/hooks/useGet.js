@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 const useFetch = (endpoint) => {
   const url = import.meta.env.VITE_API_URL;
+  const localUrl = import.meta.env.VITE_LOCAL_URL;
   const [data, setData] = useState(null);
 
   useEffect(() => {
