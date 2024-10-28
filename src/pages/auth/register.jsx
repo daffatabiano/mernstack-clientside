@@ -25,7 +25,7 @@ export default function Register() {
       email: e.target.email.value,
       password: e.target.password.value,
       confirmPassword: e.target.confirmPassword.value,
-      age: e.target.age.value,
+      born_date: e.target.age.value,
       gender: e.target.gender.value,
     };
     e.preventDefault();
@@ -147,9 +147,13 @@ export default function Register() {
             sections !== 1 ? 'translate-x-[0%]' : 'translate-x-[100%] hidden'
           }`}>
           <label htmlFor="">
-            Age
+            Born Date
             <input
-              type="number"
+              type="date"
+              min="1"
+              max="99"
+              step="1"
+              pattern="\d{4}-\d{2}-\d{2}"
               name="age"
               placeholder="Age"
               className={styles.input}

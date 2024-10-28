@@ -1,12 +1,12 @@
-import { FaChartPie } from 'react-icons/fa';
-import { RiDashboardHorizontalFill, RiHome6Line } from 'react-icons/ri';
+import { FaChartPie, FaUserCog } from 'react-icons/fa';
+import { RiDashboardHorizontalFill } from 'react-icons/ri';
 import { TbMessage2Down } from 'react-icons/tb';
 
 export const listsAside = [
   {
-    name: 'Dashboard',
-    path: '/dashboard',
-    icon: <RiHome6Line />,
+    name: 'User Control',
+    path: '/dashboard/absence',
+    icon: <FaUserCog />,
   },
   {
     name: 'Menu',
@@ -55,8 +55,5 @@ export const listsSubmenu = [
   },
   {
     name: 'Tea',
-  },
-  {
-    name: 'Other',
   },
 ];

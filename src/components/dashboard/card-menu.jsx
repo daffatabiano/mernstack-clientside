@@ -6,24 +6,26 @@ export default function CardMenu(prop) {
   return (
     <div
       key={item?._id}
-      className={`bg-white drop-shadow-md h-fit rounded-lg ${
-        !item.status && 'bg-slate-500/55 opacity-80'
+      className={`bg-white drop-shadow-md h-[500px] rounded-lg flex flex-col justify-between  hover:shadow-lg transition-all ${
+        !item.status && 'bg-slate-500/50 cursor-not-allowed'
       }`}>
-      <div className="w-full h-60 relative">
+      <div className="w-full h-60 relative overflow-hidden rounded-t-lg">
         {!item?.status && (
           <img
             src="/images/sold.png"
             alt="sold-picture"
-            className="w-full h-full object-cover absolute "
+            className="w-full h-full object-cover absolute z-10"
           />
         )}
         <img
           src={item?.image || '/images/empty-food.png'}
           alt=""
-          className="w-full h-full object-cover object-center"
+          className={`w-full h-full object-cover hover:scale-110 transition-all duration-300 object-center ${
+            !item?.status && 'grayscale'
+          }`}
         />
       </div>
-      <div className="p-4">
+      <div className={`p-4 ${!item?.status && 'opacity-50'}`}>
         <p className="text-xl flex justify-between items-center font-bold capitalize text-indigo-700">
           {item?.name}{' '}
           <span

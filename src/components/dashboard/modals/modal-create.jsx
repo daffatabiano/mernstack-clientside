@@ -113,7 +113,7 @@ export default function ModalCreate(prop) {
                         shownInputPicture.image = e.target.value;
                       }}
                       id="image"
-                      className={styles.input}
+                      className={`${styles.input} lowercase`}
                       required
                     />
                     <button

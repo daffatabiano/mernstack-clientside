@@ -118,6 +118,23 @@ export default function ProfileDashboard() {
     }
   };
 
+  const ageYear = new Date().getFullYear() - user.born_date.split('-')[0];
+  const ageMonth = new Date().getMonth() - user.born_date.split('-')[1];
+  const age = `${ageYear} years, ${ageMonth} months`;
+  const yearsPeriod = new Date().getFullYear() - user.createdAt.split('-')[0];
+  const monthsPeriod = new Date().getMonth() - user.createdAt.split('-')[1];
+  const getHours = user.createdAt.split('-')[2].split('T')[1].split(':')[0];
+  const dayHoursPeriod = new Date().getHours() - Number(getHours);
+  const workPeriods = (y, m, h) => {
+    if (yearsPeriod > 0) {
+      return `${y} years ${m} months`;
+    } else if (monthsPeriod > 0) {
+      return `${m} months ${h} hours`;
+    } else if (dayHoursPeriod > 0) {
+      return `${h} hours`;
+    }
+  };
+
   return (
     <>
       <div
@@ -193,7 +210,6 @@ export default function ProfileDashboard() {
                   <option value="female" selected={user.gender !== 'male'}>
                     Female
                   </option>
-                  <option value="other">Other</option>
                 </select>
               </label>
               <label htmlFor="age">
@@ -252,7 +268,7 @@ export default function ProfileDashboard() {
                 </p>
                 <p>
                   <span className="font-bold text-indigo-500">Age: </span>
-                  {user.age}
+                  {age}
                 </p>
                 <p>
                   <span className="font-bold text-indigo-500">Gender: </span>
@@ -266,7 +282,7 @@ export default function ProfileDashboard() {
                   <span className="font-bold text-indigo-500">
                     Works Period:{' '}
                   </span>
-                  {'1 year'}
+                  {workPeriods(yearsPeriod, monthsPeriod, dayHoursPeriod)}
                 </p>
               </div>
               <button

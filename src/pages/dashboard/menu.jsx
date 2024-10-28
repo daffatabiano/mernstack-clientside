@@ -12,6 +12,7 @@ import CardMenu from '../../components/dashboard/card-menu';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
+import { CiSquarePlus } from 'react-icons/ci';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
@@ -51,7 +52,7 @@ export default function MenuDashboard() {
       image: e?.target?.image?.value
         ? e?.target?.image?.value
         : '/images/empty-food.png',
-      name: e?.target.name.value,
+      name: e?.target.name.value.toLowerCase(),
       discount: e?.target?.discount?.value,
       price: e?.target?.price?.value,
     };
@@ -275,8 +276,8 @@ export default function MenuDashboard() {
       <DashboardLayout>
         <div className="w-full h-full p-4">
           {/* Header */}
-          <div className="flex gap-2 items-center px-2">
-            <div className="w-[90%] h-12 gap-4 flex overflow-x-auto overflow-y-hidden">
+          <div className="flex items-center border-2 rounded-lg border-slate-300">
+            <div className="w-[90%] h-12 gap-4 p-2 scrollbar-header-menu flex overflow-x-auto overflow-y-hidden">
               {listsSubmenu.map((item) => (
                 <h1
                   key={item.name}
@@ -288,12 +289,14 @@ export default function MenuDashboard() {
                 </h1>
               ))}
             </div>
-            <div className="w-[10%]">
+            <div className="w-[10%] h-12">
               <button
                 type="button"
-                className="px-4 py-2 rounded-lg bg-indigo-500 text-white"
+                className="w-full h-full flex justify-center items-center bg-slate-300 text-white"
                 onClick={() => setShownAdd(true)}>
-                Add +
+                <i className="text-4xl">
+                  <CiSquarePlus />
+                </i>
               </button>
             </div>
           </div>

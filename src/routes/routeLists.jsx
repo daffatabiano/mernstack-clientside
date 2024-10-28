@@ -6,6 +6,7 @@ import MenuDashboard from '../pages/dashboard/menu';
 import Profile from '../pages/dashboard/profile';
 import OrderDashboard from '../pages/dashboard/order';
 import Home from '../pages/home';
+import AbsenceDashboard from '../pages/dashboard/absence';
 
 export const routeLists = [
   {
@@ -47,5 +48,10 @@ export const routeLists = [
     path: '/dashboard/order',
     name: 'Order',
     element: <OrderDashboard />,
+  },
+  {
+    path: '/dashboard/absence',
+    name: 'Absence',
+    element: <AbsenceDashboard />,
   },
 ];
