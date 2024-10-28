@@ -7,12 +7,18 @@ import Profile from '../pages/dashboard/profile';
 import OrderDashboard from '../pages/dashboard/order';
 import Home from '../pages/home';
 import AbsenceDashboard from '../pages/dashboard/absence';
+import Menu from '../pages/menu';
 
 export const routeLists = [
   {
     path: '/',
     name: 'Home',
     element: <Home />,
+  },
+  {
+    path: '/menu',
+    name: 'Menu',
+    element: <Menu />,
   },
   {
     path: '/login',
