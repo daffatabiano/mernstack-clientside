@@ -23,7 +23,7 @@ export default function Menu() {
     data: {},
   });
 
-  const Totalcart = useSelector((state) => state.cart.getCart);
+  const Totalcart = useSelector((state) => state?.cart?.getCart);
 
   const productsByFilter = products?.filter((item) => {
     if (toCategoryMenu.menu.name === 'All' || toCategoryMenu.menu.name === '') {
