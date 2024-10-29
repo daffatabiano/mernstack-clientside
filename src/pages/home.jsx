@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaKey, FaLock, FaUnlock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,13 @@ export default function Home() {
   const [unlock, setUnlock] = useState(false);
   const [section, setSection] = useState(1);
   const navigate = useNavigate();
+  const key = localStorage.getItem('key');
+
+  useEffect(() => {
+    if (key) {
+      navigate('/menu');
+    }
+  }, [key, navigate]);
 
   return (
     <>
@@ -80,7 +87,10 @@ export default function Home() {
               <button
                 type="button"
                 disabled={!unlock}
-                onClick={() => navigate('/menu')}
+                onClick={() => {
+                  navigate('/menu');
+                  localStorage.setItem('key', 'true');
+                }}
                 className={`w-full p-4 rounded-lg font-semibold bg-white mt-2 text-indigo-500 `}>
                 Get Special Price 💸
               </button>

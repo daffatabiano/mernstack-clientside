@@ -28,32 +28,23 @@ export const listsAside = [
 export const listsSubmenu = [
   {
     name: 'All',
+    image:
+      'https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg',
   },
   {
-    name: 'Beverages',
-  },
-  {
-    name: 'Desserts',
-  },
-  {
-    name: 'Foods',
-  },
-  {
-    name: 'Appetizers',
-  },
-  {
-    name: 'Cocktails',
-  },
-  {
-    name: 'Drinks',
+    name: 'Burgers',
+    image: '/images/burger-bg.jpg',
   },
   {
     name: 'Salads',
+    image: '/images/salads-bg.jpg',
   },
   {
     name: 'Coffee',
+    image: '/images/coffee-bg.png',
   },
   {
     name: 'Tea',
+    image: '/images/tea-bg.jpg',
   },
 ];
