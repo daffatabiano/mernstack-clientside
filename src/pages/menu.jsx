@@ -5,7 +5,7 @@ import CardCategory from '../components/card-category';
 import { useState } from 'react';
 import { listsSubmenu } from '../helper/constants';
 import useFetch from '../hooks/useGet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/reducers/cartReducers';
 
 export default function Menu() {
@@ -22,7 +22,8 @@ export default function Menu() {
     isShown: false,
     data: {},
   });
-  const cart = JSON.parse(localStorage.getItem('cart'));
+
+  const Totalcart = useSelector((state) => state.cart.getCart);
 
   const productsByFilter = products?.filter((item) => {
     if (toCategoryMenu.menu.name === 'All' || toCategoryMenu.menu.name === '') {
@@ -73,6 +74,7 @@ export default function Menu() {
                 />
               </label>
               <button
+                type="button"
                 onClick={() => {
                   dispatch(
                     addToCart({
@@ -167,12 +169,14 @@ export default function Menu() {
       )}
 
       <div className="fixed right-2 bottom-2 ">
-        <button className="rounded-full text-lg relative bg-indigo-500 p-4">
+        <button
+          type="button"
+          className="rounded-full text-lg relative bg-indigo-500 p-4">
           <i className="text-white">
             <FaCartPlus />
           </i>
           <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-            {Number(cart?.quantity)}
+            {Totalcart}
           </span>
         </button>
       </div>
