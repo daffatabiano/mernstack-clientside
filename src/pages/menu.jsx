@@ -172,7 +172,7 @@ export default function Menu() {
             <FaCartPlus />
           </i>
           <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-            {Number(cart.quantity)}
+            {Number(cart?.quantity)}
           </span>
         </button>
       </div>
