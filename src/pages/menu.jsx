@@ -18,12 +18,14 @@ export default function Menu() {
   const [quantity, setQuantity] = useState(1);
   const products = data?.data;
   const dispatch = useDispatch();
+  const [showDrawer, setShowDrawer] = useState(false);
   const [onModals, setOnModals] = useState({
     isShown: false,
     data: {},
   });
 
   const Totalcart = useSelector((state) => state?.cart?.getCart);
+  const dataOrder = JSON.parse(localStorage.getItem('cart'));
 
   const productsByFilter = products?.filter((item) => {
     if (toCategoryMenu.menu.name === 'All' || toCategoryMenu.menu.name === '') {
@@ -33,10 +35,32 @@ export default function Menu() {
     }
   });
 
+  const formatIDR = (price) => {
+    return Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const totalShopItems = (price, discount, quantity) => {
+    const newPrice = Number(price) - Number(price * discount) / 100;
+    const total = newPrice * quantity;
+
+    return total;
+  };
+
+  const totalPrice = dataOrder?.map((item) => {
+    const total = totalShopItems(item.price, item.discount, item.quantity);
+
+    return total;
+  });
+
   return (
     <div className="bg-slate-200/50 min-w-screen w-full h-screen flex flex-col justify-center items-center">
       {onModals.isShown && (
-        <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[9999]">
+        <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
           <div className="bg-white rounded-lg w-full p-2">
             <img
               src={onModals.data?.image}
@@ -118,6 +142,7 @@ export default function Menu() {
           />
         ))}
       </div>
+
       {toCategoryMenu.closeCategory && (
         <div className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
           {listsSubmenu.map((item, i) => (
@@ -145,41 +170,95 @@ export default function Menu() {
           <img
             src={toCategoryMenu.menu.image}
             alt={`image-of-${toCategoryMenu.menu.name}`}
-            className="w-full h-1/6 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
+            className="w-full h-1/5 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
           />
 
           <div className="w-[90%] min-h-[90%] h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
-            {productsByFilter?.map((product) => (
-              <CardMenu
-                key={product._id}
-                image={product.image}
-                title={product.name}
-                price={product.price}
-                discount={product.discount}
-                onClick={() => {
-                  setOnModals({
-                    isShown: true,
-                    data: product,
-                  });
-                }}
-              />
-            ))}
+            {productsByFilter.length !== 0 || !productsByFilter ? (
+              productsByFilter?.map((product) => (
+                <CardMenu
+                  key={product._id}
+                  image={product.image}
+                  title={product.name}
+                  price={product.price}
+                  discount={product.discount}
+                  onClick={() => {
+                    setOnModals({
+                      isShown: true,
+                      data: product,
+                    });
+                  }}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col h-full w-full justify-center items-center">
+                <img src="/images/empty-products.png" alt="" />
+                <h1 className="text-2xl text-center font-bold text-indigo-500">
+                  {toCategoryMenu.menu.name} is currently Unavailable
+                </h1>
+              </div>
+            )}
           </div>
         </>
       )}
 
-      <div className="fixed right-2 bottom-2 ">
-        <button
-          type="button"
-          className="rounded-full text-lg relative bg-indigo-500 p-4">
-          <i className="text-white">
-            <FaCartPlus />
-          </i>
-          <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-            {Totalcart}
-          </span>
-        </button>
+      <div
+        className={`h-screen w-full md:w-2/5 z-[999] bg-indigo-500 p-2 fixed top-0 right-0 transition-transform duration-300  ${
+          showDrawer ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+        <div className="flex flex-col gap-2 overflow-y-auto">
+          {dataOrder.map((item) => (
+            <>
+              <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
+                <p className="flex gap-2 items-center">
+                  <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
+                    {item.quantity}x
+                  </span>
+                  {item.name}
+                </p>
+                <p>
+                  {formatIDR(
+                    totalShopItems(item.price, item.discount, item.quantity)
+                  )}
+                </p>
+              </div>
+            </>
+          ))}
+          <hr />
+          <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
+            <p className="flex gap-2 items-center">
+              <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
+                {Totalcart}x
+              </span>
+              Total
+            </p>
+            <p>{formatIDR(totalPrice.reduce((a, b) => a + b, 0))}</p>
+          </div>
+        </div>
       </div>
+
+      {toCategoryMenu.closeCategory && (
+        <div
+          className={`fixed z-[9999] transition-transform duration-400 ${
+            showDrawer ? 'left-0 bottom-2' : 'right-2 bottom-2'
+          }`}>
+          <button
+            onClick={() => setShowDrawer((curr) => !curr)}
+            type="button"
+            className={`${
+              showDrawer
+                ? 'bg-white rounded-e-full'
+                : 'bg-indigo-500 rounded-full'
+            } text-lg relative  p-4`}>
+            <i className={` ${showDrawer ? 'text-indigo-500' : 'text-white'}`}>
+              <FaCartPlus />
+            </i>
+            <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
+              {Totalcart}
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
