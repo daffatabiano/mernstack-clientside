@@ -225,14 +225,19 @@ export default function Menu() {
             </>
           ))}
           <hr />
-          <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
-            <p className="flex gap-2 items-center">
-              <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                {Totalcart}x
-              </span>
-              Total
-            </p>
-            <p>{formatIDR(totalPrice.reduce((a, b) => a + b, 0))}</p>
+          <div className="flex flex-col gap-2 justify-between items-center">
+            <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
+              <p className="flex gap-2 items-center">
+                <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
+                  {Totalcart}x
+                </span>
+                Total
+              </p>
+              <p>{formatIDR(totalPrice.reduce((a, b) => a + b, 0))}</p>
+            </div>
+            <button className="bg-white w-32 flex justify-center items-center float-right p-2 rounded-lg">
+              Pay Now
+            </button>
           </div>
         </div>
       </div>
