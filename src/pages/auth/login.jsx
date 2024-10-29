@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styles } from '../../helper/styles';
 import useAuth from '../../hooks/auth/useAuth';
 import AuthLayout from './layout';
@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function Login() {
+  const tokenExist = localStorage.getItem('token');
   const dataRegister = useSelector((state) => state.user);
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -17,6 +18,13 @@ export default function Login() {
     type: '',
     icon: '',
   });
+
+  useEffect(() => {
+    if (tokenExist) {
+      navigate('/');
+    }
+  }, [tokenExist, navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     const body = {
@@ -25,6 +33,7 @@ export default function Login() {
     };
     try {
       const res = await login(body);
+      console.log(res);
       if (res?.status === 200) {
         setNotify({
           isShown: true,
@@ -45,7 +54,7 @@ export default function Login() {
           });
           localStorage.setItem('token', res?.data?.token);
           setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/');
             localStorage.setItem('user', JSON.stringify(res?.data?.data));
           }, 1000);
         }, 1000);

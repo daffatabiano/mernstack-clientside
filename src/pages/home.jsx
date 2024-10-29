@@ -7,6 +7,13 @@ export default function Home() {
   const [section, setSection] = useState(1);
   const navigate = useNavigate();
   const key = localStorage.getItem('key');
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
 
   useEffect(() => {
     if (key) {
@@ -31,7 +38,7 @@ export default function Home() {
                 Help , Me please !
               </p>
             </div>
-            <div className="w-full">
+            <div className="w-full md:w-1/3">
               <button
                 type="button"
                 disabled={!unlock}
@@ -60,7 +67,7 @@ export default function Home() {
                 Congratulations !
               </p>
             </div>
-            <div className="w-full">
+            <div className="w-full md:w-1/3">
               <button
                 type="button"
                 onClick={() => setSection(3)}
@@ -83,7 +90,7 @@ export default function Home() {
                 enjoy your discount !
               </p>
             </div>
-            <div className="w-full">
+            <div className="w-full md:w-1/3">
               <button
                 type="button"
                 disabled={!unlock}

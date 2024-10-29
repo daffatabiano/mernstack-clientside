@@ -118,11 +118,11 @@ export default function ProfileDashboard() {
     }
   };
 
-  const ageYear = new Date().getFullYear() - user.born_date.split('-')[0];
-  const ageMonth = new Date().getMonth() - user.born_date.split('-')[1];
+  const ageYear = new Date().getFullYear() - user.born_date?.split('-')[0];
+  const ageMonth = new Date().getMonth() - user.born_date?.split('-')[1];
   const age = `${ageYear} years, ${ageMonth} months`;
-  const yearsPeriod = new Date().getFullYear() - user.createdAt.split('-')[0];
-  const monthsPeriod = new Date().getMonth() - user.createdAt.split('-')[1];
+  const yearsPeriod = new Date().getFullYear() - user.createdAt?.split('-')[0];
+  const monthsPeriod = new Date().getMonth() - user.createdAt?.split('-')[1];
   const getHours = user.createdAt.split('-')[2].split('T')[1].split(':')[0];
   const dayHoursPeriod = new Date().getHours() - Number(getHours);
   const workPeriods = (y, m, h) => {
@@ -130,7 +130,7 @@ export default function ProfileDashboard() {
       return `${y} years ${m} months`;
     } else if (monthsPeriod > 0) {
       return `${m} months ${h} hours`;
-    } else if (dayHoursPeriod > 0) {
+    } else {
       return `${h} hours`;
     }
   };

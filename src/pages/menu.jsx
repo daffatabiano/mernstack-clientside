@@ -7,6 +7,7 @@ import { listsSubmenu } from '../helper/constants';
 import useFetch from '../hooks/useGet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/reducers/cartReducers';
+import { useNavigate } from 'react-router-dom';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
@@ -23,6 +24,7 @@ export default function Menu() {
     isShown: false,
     data: {},
   });
+  const navigate = useNavigate();
 
   const Totalcart = useSelector((state) => state?.cart?.getCart);
   const dataOrder = JSON.parse(localStorage.getItem('cart'));
@@ -57,9 +59,18 @@ export default function Menu() {
     return total;
   });
 
+  const handlePayment = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+
+    alert('Payment Success');
+  };
+
   return (
-    <div className="bg-slate-200/50 min-w-screen w-full h-screen flex flex-col justify-center items-center">
-      {onModals.isShown && (
+    <div className="bg-slate-200/50 md:min-h-screen min-w-screen w-full h-screen flex flex-col justify-center items-center">
+      {onModals?.isShown && (
         <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
           <div className="bg-white rounded-lg w-full p-2">
             <img
@@ -124,10 +135,10 @@ export default function Menu() {
       )}
 
       <div
-        className={`w-full h-full p-4 flex flex-col gap-2 justify-center items-center ${
+        className={`w-full h-full p-4 flex flex-col md:w-1/3 gap-2 justify-center items-center ${
           toCategoryMenu.closeCategory && 'hidden'
         }`}>
-        {listsSubmenu.map((item, index) => (
+        {listsSubmenu?.map((item, index) => (
           <CardCategory
             onClick={() => {
               setToCategoryMenu({
@@ -143,7 +154,7 @@ export default function Menu() {
         ))}
       </div>
 
-      {toCategoryMenu.closeCategory && (
+      {toCategoryMenu?.closeCategory && (
         <div className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
           {listsSubmenu.map((item, i) => (
             <ButtonHeaderMenu
@@ -165,16 +176,16 @@ export default function Menu() {
         </div>
       )}
 
-      {toCategoryMenu.closeCategory && (
+      {toCategoryMenu?.closeCategory && (
         <>
           <img
             src={toCategoryMenu.menu.image}
             alt={`image-of-${toCategoryMenu.menu.name}`}
-            className="w-full h-1/5 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
+            className="w-full h-1/5 md:h-1/3 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
           />
 
-          <div className="w-[90%] min-h-[90%] h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
-            {productsByFilter.length !== 0 || !productsByFilter ? (
+          <div className="w-[90%] md:w-1/2 min-h-[90%] md:gap-4 h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
+            {productsByFilter?.length !== 0 || !productsByFilter ? (
               productsByFilter?.map((product) => (
                 <CardMenu
                   key={product._id}
@@ -194,7 +205,7 @@ export default function Menu() {
               <div className="flex flex-col h-full w-full justify-center items-center">
                 <img src="/images/empty-products.png" alt="" />
                 <h1 className="text-2xl text-center font-bold text-indigo-500">
-                  {toCategoryMenu.menu.name} is currently Unavailable
+                  {toCategoryMenu?.menu.name} is currently Unavailable
                 </h1>
               </div>
             )}
@@ -207,7 +218,7 @@ export default function Menu() {
           showDrawer ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="flex flex-col gap-2 overflow-y-auto">
-          {dataOrder.map((item) => (
+          {dataOrder?.map((item) => (
             <>
               <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
                 <p className="flex gap-2 items-center">
@@ -233,9 +244,12 @@ export default function Menu() {
                 </span>
                 Total
               </p>
-              <p>{formatIDR(totalPrice.reduce((a, b) => a + b, 0))}</p>
+              <p>{formatIDR(totalPrice?.reduce((a, b) => a + b, 0))}</p>
             </div>
-            <button className="bg-white w-32 flex justify-center items-center float-right p-2 rounded-lg">
+            <button
+              type="button"
+              onClick={handlePayment}
+              className="bg-white w-32 flex justify-center items-center float-right p-2 rounded-lg">
               Pay Now
             </button>
           </div>
