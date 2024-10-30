@@ -38,6 +38,10 @@ export default function Menu() {
   });
 
   const formatIDR = (price) => {
+    if (!price) {
+      return `Rp. 0`;
+    }
+
     return Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
@@ -217,41 +221,56 @@ export default function Menu() {
         className={`h-screen w-full md:w-2/5 z-[999] bg-indigo-500 p-2 fixed top-0 right-0 transition-transform duration-300  ${
           showDrawer ? 'translate-x-0' : 'translate-x-full'
         }`}>
-        <div className="flex flex-col gap-2 overflow-y-auto">
-          {dataOrder?.map((item) => (
-            <>
-              <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
+        <div
+          className={`flex flex-col h-full gap-2 overflow-y-auto ${
+            dataOrder?.length === 0 || (!dataOrder ? 'justify-end' : '')
+          }`}>
+          {dataOrder?.length === 0 || !dataOrder ? (
+            <div className="flex flex-col h-full justify-center items-center">
+              <img src="/images/empty-cart.png" alt="" />
+              <h1 className="text-2xl text-center font-bold text-white">
+                Your cart is empty
+              </h1>
+            </div>
+          ) : (
+            dataOrder?.map((item) => (
+              <>
+                <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
+                  <p className="flex gap-2 items-center">
+                    <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
+                      {item.quantity}x
+                    </span>
+                    {item.name}
+                  </p>
+
+                  <p>
+                    {formatIDR(
+                      totalShopItems(item.price, item.discount, item.quantity)
+                    )}
+                  </p>
+                </div>
+              </>
+            ))
+          )}
+          <div className="flex flex-col h-full gap-2 w-full justify-end">
+            <hr className="my-2" />
+            <div className="flex flex-col gap-2 justify-between items-center">
+              <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
                 <p className="flex gap-2 items-center">
                   <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                    {item.quantity}x
+                    {Totalcart || 0}x
                   </span>
-                  {item.name}
+                  Total
                 </p>
-                <p>
-                  {formatIDR(
-                    totalShopItems(item.price, item.discount, item.quantity)
-                  )}
-                </p>
+                <p>{formatIDR(totalPrice?.reduce((a, b) => a + b, 0))}</p>
               </div>
-            </>
-          ))}
-          <hr />
-          <div className="flex flex-col gap-2 justify-between items-center">
-            <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
-              <p className="flex gap-2 items-center">
-                <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                  {Totalcart}x
-                </span>
-                Total
-              </p>
-              <p>{formatIDR(totalPrice?.reduce((a, b) => a + b, 0))}</p>
+              <button
+                type="button"
+                onClick={handlePayment}
+                className="bg-white w-32 flex justify-center items-center text-indigo-500 p-2 rounded-lg">
+                Pay Now
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={handlePayment}
-              className="bg-white w-32 flex justify-center items-center float-right p-2 rounded-lg">
-              Pay Now
-            </button>
           </div>
         </div>
       </div>
@@ -259,7 +278,7 @@ export default function Menu() {
       {toCategoryMenu.closeCategory && (
         <div
           className={`fixed z-[9999] transition-transform duration-400 ${
-            showDrawer ? 'left-0 bottom-2' : 'right-2 bottom-2'
+            showDrawer ? 'left-0 bottom-2 md:left-[60%]' : 'right-2 bottom-2'
           }`}>
           <button
             onClick={() => setShowDrawer((curr) => !curr)}
