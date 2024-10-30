@@ -2,12 +2,18 @@ import { FaCartPlus } from 'react-icons/fa6';
 import CardMenu from '../components/card-menu';
 import ButtonHeaderMenu from '../components/button-header-menu';
 import CardCategory from '../components/card-category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { listsSubmenu } from '../helper/constants';
 import useFetch from '../hooks/useGet';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../redux/reducers/cartReducers';
+import {
+  addToCart,
+  clearCart,
+  increaseQuantity,
+  removeFromCart,
+} from '../redux/reducers/cartReducers';
 import { useNavigate } from 'react-router-dom';
+import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
@@ -26,8 +32,13 @@ export default function Menu() {
   });
   const navigate = useNavigate();
 
-  const Totalcart = useSelector((state) => state?.cart?.getCart);
-  const dataOrder = JSON.parse(localStorage.getItem('cart'));
+  const dataOrder = useSelector((state) => state?.cart?.cart);
+
+  useEffect(() => {
+    if (dataOrder) {
+      localStorage.setItem('cart', JSON.stringify(dataOrder));
+    }
+  }, [dataOrder]);
 
   const productsByFilter = products?.filter((item) => {
     if (toCategoryMenu.menu.name === 'All' || toCategoryMenu.menu.name === '') {
@@ -71,6 +82,11 @@ export default function Menu() {
       return alert('Payment Gateway On Building ... ');
     }
   };
+
+  const totalQuantity = dataOrder?.reduce(
+    (total, item) => Number(total) + Number(item.quantity),
+    0
+  );
 
   return (
     <div className="bg-slate-200/50 md:min-h-screen min-w-screen w-full h-screen flex flex-col justify-center items-center">
@@ -237,9 +253,21 @@ export default function Menu() {
               <>
                 <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
                   <p className="flex gap-2 items-center">
-                    <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                      {item.quantity}x
-                    </span>
+                    <div className="p-1 px-2 rounded-lg flex items-center gap-1 text-xl text-indigo-500 bg-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => dispatch(increaseQuantity(item._id))}
+                        className="text-emerald-500">
+                        <CiSquarePlus />
+                      </button>
+                      <p>{item.quantity}x </p>
+                      <button
+                        type="button"
+                        onClick={() => dispatch(removeFromCart(item._id))}
+                        className="text-red-500">
+                        <CiSquareMinus />
+                      </button>
+                    </div>
                     {item.name}
                   </p>
 
@@ -252,13 +280,19 @@ export default function Menu() {
               </>
             ))
           )}
-          <div className="flex flex-col h-full gap-2 w-full justify-end">
+          <div className="flex flex-col h-full gap-1 w-full justify-end">
+            <p
+              type="button"
+              onClick={() => dispatch(clearCart())}
+              className="text-white underline text-sm text-end w-fit hover:text-red-600 cursor-pointer">
+              clear cart
+            </p>
             <hr className="my-2" />
             <div className="flex flex-col gap-2 justify-between items-center">
               <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
                 <p className="flex gap-2 items-center">
                   <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                    {Totalcart || 0}x
+                    {totalQuantity || 0}x
                   </span>
                   Total
                 </p>
@@ -292,7 +326,7 @@ export default function Menu() {
               <FaCartPlus />
             </i>
             <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-              {Totalcart}
+              {totalQuantity}
             </span>
           </button>
         </div>
