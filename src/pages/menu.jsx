@@ -67,9 +67,9 @@ export default function Menu() {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
+    } else {
+      return alert('Payment Gateway On Building ... ');
     }
-
-    alert('Payment Success');
   };
 
   return (
