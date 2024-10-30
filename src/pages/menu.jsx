@@ -72,11 +72,11 @@ export default function Menu() {
     <div className="bg-slate-200/50 md:min-h-screen min-w-screen w-full h-screen flex flex-col justify-center items-center">
       {onModals?.isShown && (
         <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
-          <div className="bg-white rounded-lg w-full p-2">
+          <div className="bg-white rounded-lg w-full md:w-fit p-2">
             <img
               src={onModals.data?.image}
               alt=""
-              className="w-full object-cover object-center rounded-lg"
+              className="w-full md:h-60 md:object-contain object-cover object-center rounded-lg"
             />
             <div className="flex flex-col gap-2">
               <label
