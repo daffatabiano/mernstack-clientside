@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addToCart,
   clearCart,
+  decreaseQuantity,
   increaseQuantity,
-  removeFromCart,
 } from '../redux/reducers/cartReducers';
 import { useNavigate } from 'react-router-dom';
 import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
@@ -263,7 +263,7 @@ export default function Menu() {
                       <p>{item.quantity}x </p>
                       <button
                         type="button"
-                        onClick={() => dispatch(removeFromCart(item._id))}
+                        onClick={() => dispatch(decreaseQuantity(item._id))}
                         className="text-red-500">
                         <CiSquareMinus />
                       </button>
