@@ -14,6 +14,7 @@ import {
 } from '../redux/reducers/cartReducers';
 import { useNavigate } from 'react-router-dom';
 import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
+import axios from 'axios';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
@@ -33,6 +34,7 @@ export default function Menu() {
   const navigate = useNavigate();
 
   const dataOrder = useSelector((state) => state?.cart?.cart);
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (dataOrder) {
@@ -74,12 +76,69 @@ export default function Menu() {
     return total;
   });
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     const token = localStorage.getItem('token');
+
     if (!token) {
       navigate('/login');
     } else {
-      return alert('Payment Gateway On Building ... ');
+      const body = {
+        amount: totalPrice?.reduce((total, item) => total + item, 0),
+        data: dataOrder,
+      };
+      try {
+        const res = await axios.post(`${url}/order`, body, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res);
+        if (res.status === 200) {
+          try {
+            const body = {
+              id: res?.data?.data?._id,
+              amount: Number(res?.data?.data?.amount),
+            };
+
+            console.log(body);
+
+            const resTransactions = await axios.post(`${url}/midtrans`, body, {
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: btoa(import.meta.env.CLIENT_KEY + ':'),
+              },
+            });
+            window.snap.pay(resTransactions?.data?.token, {
+              onSuccess: function (result) {
+                console.log(result);
+                dispatch(clearCart());
+                localStorage.removeItem('cart');
+                navigate('/history');
+              },
+              onPending: function (result) {
+                console.log(result);
+                dispatch(clearCart());
+                localStorage.removeItem('cart');
+                navigate('/history');
+              },
+              onError: function (result) {
+                console.log(result);
+                navigate('/error');
+              },
+              onClose: function () {
+                alert('you closed the popup without finishing the payment');
+              },
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -87,6 +146,22 @@ export default function Menu() {
     (total, item) => Number(total) + Number(item.quantity),
     0
   );
+
+  useEffect(() => {
+    const snapScriptUrl = import.meta.env.VITE_SNAP_SCRIPT_URL;
+
+    let script = document.createElement('script');
+    script.src = snapScriptUrl;
+
+    const midTransClientKey = import.meta.env.CLIENT_KEY;
+    script.setAttribute('data-client-key', midTransClientKey);
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="bg-slate-200/50 md:min-h-screen min-w-screen w-full h-screen flex flex-col justify-center items-center">
@@ -325,9 +400,11 @@ export default function Menu() {
             <i className={` ${showDrawer ? 'text-indigo-500' : 'text-white'}`}>
               <FaCartPlus />
             </i>
-            <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-              {totalQuantity}
-            </span>
+            {totalQuantity > 0 && (
+              <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
+                {totalQuantity}
+              </span>
+            )}
           </button>
         </div>
       )}

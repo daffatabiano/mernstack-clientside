@@ -1,6 +1,10 @@
+import useFetch from '../../hooks/useGet';
 import DashboardLayout from './layout';
 
 export default function OrderDashboard() {
+  const { data } = useFetch('orders');
+  const orders = data.data;
+
   return (
     <DashboardLayout>
       <div className="w-full h-full p-4 flex flex-col justify-center items-center">
