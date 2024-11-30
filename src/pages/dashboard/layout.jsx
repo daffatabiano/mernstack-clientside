@@ -3,6 +3,7 @@ import AsideDashboard from '../../components/dashboard/aside';
 import NavbarDashboard from '../../components/dashboard/navbar';
 import { styles } from '../../helper/styles';
 import { FaFingerprint } from 'react-icons/fa';
+import { CiWarning } from 'react-icons/ci';
 
 export default function DashboardLayout({ children }) {
   const navigate = useNavigate();
@@ -13,12 +14,16 @@ export default function DashboardLayout({ children }) {
   return (
     <>
       <div className="md:hidden flex fixed justify-center items-center top-0 right-0 left-0 min-w-screen min-h-screen w-full h-full bg-slate-800/50">
-        <div className="w-1/2 flex gap-4 flex-col p-4 justify-between items-center bg-white rounded">
-          <h1 className="text-red-500 text-center font-bold">
+        <div className="w-4/5 flex flex-col border border-slate-400  justify-between items-center bg-white rounded-lg">
+          <h1 className="text-red-500 flex flex-col gap-2 justify-center text-center p-4 font-bold">
+            <i className="text-4xl font-bold text-center m-auto">
+              <CiWarning />
+            </i>
             Sorry, this page is not available on mobile
           </h1>
+          <hr className="w-full h-[2px] bg-slate-400" />
           <button
-            className={styles.button}
+            className="py-2 px-4"
             type="button"
             onClick={() => navigate('/')}>
             Go Home
