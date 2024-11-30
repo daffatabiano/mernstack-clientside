@@ -48,3 +48,5 @@ export const listsSubmenu = [
     image: '/images/tea-bg.jpg',
   },
 ];
+
+export const listsOrder = ['All', 'Pending', 'Delivered', 'Cancelled'];

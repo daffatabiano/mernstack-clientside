@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { listsSubmenu } from '../../helper/constants';
-import { styles } from '../../helper/styles';
 import DashboardLayout from './layout';
 import usePost from '../../hooks/usePost';
 import { FaCheck } from 'react-icons/fa';
@@ -12,7 +11,6 @@ import CardMenu from '../../components/dashboard/card-menu';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
-import { CiSquarePlus } from 'react-icons/ci';
 import MenuHeader from '../../components/dashboard/menuHeader';
 
 export default function MenuDashboard() {
@@ -234,7 +232,7 @@ export default function MenuDashboard() {
     }
   };
 
-  const filterProductsByCategory = products.filter(
+  const filterProducts = products.filter(
     (item) => item.category === showByCategory
   );
 
@@ -289,7 +287,7 @@ export default function MenuDashboard() {
           <div
             className={`w-full h-full ${
               products?.length === 0 ||
-              (filterProductsByCategory?.length === 0 && showByCategory !== '')
+              (filterProducts?.length === 0 && showByCategory !== '')
                 ? 'flex justify-center items-center'
                 : 'grid grid-cols-3 gap-4 p-4 grid-rows-auto'
             }`}>
@@ -310,9 +308,8 @@ export default function MenuDashboard() {
                 </p>
               </div>
             ) : showByCategory ? (
-              filterProductsByCategory?.length !== 0 ||
-              !filterProductsByCategory ? (
-                filterProductsByCategory?.map((item) => (
+              filterProducts?.length !== 0 || !filterProducts ? (
+                filterProducts?.map((item) => (
                   <CardMenu
                     item={item}
                     priceAfterDiscount={priceAfterDiscount}
