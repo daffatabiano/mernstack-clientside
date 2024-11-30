@@ -49,4 +49,17 @@ export const listsSubmenu = [
   },
 ];
 
-export const listsOrder = ['All', 'Pending', 'Delivered', 'Cancelled'];
+export const listsOrder = [
+  {
+    name: 'All',
+  },
+  {
+    name: 'Pending',
+  },
+  {
+    name: 'Completed',
+  },
+  {
+    name: 'Cancelled',
+  },
+];

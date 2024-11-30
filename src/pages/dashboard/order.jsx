@@ -56,12 +56,17 @@ export default function OrderDashboard() {
             submenu={listsOrder}
             setShowByCategory={setShowByCategory}
             setShownAdd={setShownAdd}
+            addButton={false}
           />
         </div>
 
         {orders?.length === 0 ? (
           <div className="w-full h-full p-4 flex flex-col justify-center items-center">
-            <img src="/images/coming-soon.png" alt="" />
+            <img
+              src="/videos/notfound.gif"
+              alt="notfound-animation"
+              className="w-full"
+            />
             <h1 className="text-3xl italic font-bold tracking-widest text-amber-400">
               Under Construction !
             </h1>
