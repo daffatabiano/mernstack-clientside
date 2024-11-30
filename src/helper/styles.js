@@ -1,5 +1,5 @@
 export const styles = {
-  main: 'hidden md:block w-full h-screen flex justify-center items-center bg-gray-100',
+  main: 'hidden md:block w-full min-h-screen flex justify-center items-center bg-gray-100',
   container:
     'w-full h-full p-6 bg-white rounded-lg drop-shadow-lg shadow-slate-800',
   input:

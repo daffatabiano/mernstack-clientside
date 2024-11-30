@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="min-w-screen min-h-screen transition-all transform duration-300 w-full h-full p-2 bg-indigo-500 flex justify-center items-center flex-col">
+      <div className="min-w-screen min-h-screen transition-all transform duration-300 w-full h-full p-2 bg-gradient-to-r from-sky-900 to-sky-600 flex justify-center items-center flex-col">
         {section === 1 && (
           <>
             <div className="flex flex-col justify-center items-center gap-4">

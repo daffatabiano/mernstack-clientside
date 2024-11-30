@@ -1,9 +1,23 @@
+import { useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useGet';
 import DashboardLayout from './layout';
 
 export default function OrderDashboard() {
   const { data } = useFetch('orders');
+  const { data: tableData } = useFetch('tables');
   const orders = data?.data;
+  const navigate = useNavigate();
+
+  const parsingOrderId = (id) => {
+    const slicingId = id.slice(0, 8);
+    return slicingId.toUpperCase();
+  };
+
+  const goToDetails = (id) => {
+    return () => {
+      navigate(`/dashboard/order/${id}`);
+    };
+  };
 
   return (
     <DashboardLayout>
@@ -17,10 +31,14 @@ export default function OrderDashboard() {
       ) : (
         <div className="grid grid-cols-4 gap-2 overflow-auto mt-2 px-2">
           {orders?.map((order) => (
-            <div
-              className="text-wrap bg-white rounded-lg p-4 drop-shadow-sm"
+            <button
+              type="button"
+              onClick={goToDetails(order._id)}
+              className="text-wrap bg-white rounded-lg p-4 drop-shadow-sm hover:transform hover:scale-105 transition-all duration-300"
               key={order._id}>
-              <h1>{order?._id}</h1>
+              <h1 className="text-indigo-500 font-semibold">
+                # {parsingOrderId(order._id)}
+              </h1>
               <p>
                 {new Intl.NumberFormat('id-ID', {
                   style: 'currency',
@@ -29,7 +47,7 @@ export default function OrderDashboard() {
                   maximumFractionDigits: 0,
                 }).format(order?.amount)}
               </p>
-            </div>
+            </button>
           ))}
         </div>
       )}

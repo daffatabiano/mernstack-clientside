@@ -13,6 +13,7 @@ import ModalCreate from '../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
 import { CiSquarePlus } from 'react-icons/ci';
+import MenuHeader from '../../components/dashboard/menuHeader';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
@@ -276,30 +277,12 @@ export default function MenuDashboard() {
       <DashboardLayout>
         <div className="w-full h-full p-4">
           {/* Header */}
-          <div className="flex items-center border-2 rounded-lg border-indigo-500">
-            <div className="w-[90%] h-12 gap-4 p-2 scrollbar-header-menu flex overflow-x-auto overflow-y-hidden">
-              {listsSubmenu.map((item) => (
-                <h1
-                  key={item.name}
-                  onClick={() =>
-                    setShowByCategory(item.name === 'All' ? '' : item.name)
-                  }
-                  className={styles.submenu}>
-                  {item.name}
-                </h1>
-              ))}
-            </div>
-            <div className="w-[10%] h-12">
-              <button
-                type="button"
-                className="w-full h-full flex justify-center items-center bg-indigo-500 text-white"
-                onClick={() => setShownAdd(true)}>
-                <i className="text-4xl">
-                  <CiSquarePlus />
-                </i>
-              </button>
-            </div>
-          </div>
+          <MenuHeader
+            submenu={listsSubmenu}
+            setShowByCategory={setShowByCategory}
+            setShownAdd={setShownAdd}
+          />
+
           {/* End Header */}
 
           {/* Content */}
