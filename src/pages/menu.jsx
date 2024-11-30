@@ -164,250 +164,254 @@ export default function Menu() {
   }, []);
 
   return (
-    <div className="bg-slate-200/50 md:min-h-screen min-w-screen w-full h-screen flex flex-col justify-center items-center">
-      {onModals?.isShown && (
-        <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
-          <div className="bg-white rounded-lg w-full md:w-fit p-2">
-            <img
-              src={onModals.data?.image}
-              alt=""
-              className="w-full md:h-60 md:object-contain object-cover object-center rounded-lg"
-            />
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor=""
-                className="font-bold text-indigo-500 text-2xl text-center">
-                {onModals.data?.name}
-              </label>
-              <label
-                htmlFor=""
-                className="font-bold  flex flex-col gap-2 justify-center items-center">
-                Notes
-                <textarea
-                  onChange={(e) => setNotes(e.target.value)}
-                  id=""
-                  cols="30"
-                  rows="3"
-                  className=" resize-none bg-slate-200/50 p-2 font-normal rounded-lg focus:outline-none"
-                />
-              </label>
-              <label
-                htmlFor=""
-                className="font-bold flex flex-col gap-2 justify-center items-center">
-                Quantity
-                <input
-                  type="number"
-                  onChange={(e) => setQuantity(e.target.value)}
-                  id=""
-                  className="bg-slate-200/50 w-12 p-2 font-normal text-center rounded-lg focus:outline-none"
-                  defaultValue={1}
-                />
-              </label>
-              <button
-                type="button"
-                onClick={() => {
-                  dispatch(
-                    addToCart({
-                      ...onModals.data,
-                      notes,
-                      quantity,
-                    })
-                  );
-                  setOnModals({
-                    ...onModals,
-                    isShown: false,
-                  });
-                }}
-                className="w-full flex justify-center mt-4 items-center bg-indigo-500 text-white py-2 rounded-md gap-2">
-                <i className="text-2xl">
-                  <FaCartPlus />
-                </i>
-                Add to cart
-              </button>
+    <div className="bg-slate-200/50 h-full">
+      <div className=" md:min-h-screen min-w-screen overflow-hidden w-full h-full flex flex-col justify-center items-center">
+        {/* Modals Order */}
+        {onModals?.isShown && (
+          <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
+            <div className="bg-white rounded-lg w-full md:w-fit p-2">
+              <img
+                src={onModals.data?.image}
+                alt=""
+                className="w-full md:h-60 md:object-contain object-cover object-center rounded-lg"
+              />
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="font-bold text-indigo-500 text-2xl text-center">
+                  {onModals.data?.name}
+                </label>
+                <label
+                  htmlFor=""
+                  className="font-bold  flex flex-col gap-2 justify-center items-center">
+                  Notes
+                  <textarea
+                    onChange={(e) => setNotes(e.target.value)}
+                    id=""
+                    cols="30"
+                    rows="3"
+                    className=" resize-none bg-slate-200/50 p-2 font-normal rounded-lg focus:outline-none"
+                  />
+                </label>
+                <label
+                  htmlFor=""
+                  className="font-bold flex flex-col gap-2 justify-center items-center">
+                  Quantity
+                  <input
+                    type="number"
+                    onChange={(e) => setQuantity(e.target.value)}
+                    id=""
+                    className="bg-slate-200/50 w-12 p-2 font-normal text-center rounded-lg focus:outline-none"
+                    defaultValue={1}
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch(
+                      addToCart({
+                        ...onModals.data,
+                        notes,
+                        quantity,
+                      })
+                    );
+                    setOnModals({
+                      ...onModals,
+                      isShown: false,
+                    });
+                  }}
+                  className="w-full flex justify-center mt-4 items-center bg-indigo-500 text-white py-2 rounded-md gap-2">
+                  <i className="text-2xl">
+                    <FaCartPlus />
+                  </i>
+                  Add to cart
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div
-        className={`w-full h-full p-4 flex flex-col md:w-1/3 gap-2 justify-center items-center ${
-          toCategoryMenu.closeCategory && 'hidden'
-        }`}>
-        {listsSubmenu?.map((item, index) => (
-          <CardCategory
-            onClick={() => {
-              setToCategoryMenu({
-                ...toCategoryMenu,
-                closeCategory: !toCategoryMenu.closeCategory,
-                menu: item,
-              });
-            }}
-            img={item.image}
-            category={item?.name}
-            key={index}
-          />
-        ))}
-      </div>
-
-      {toCategoryMenu?.closeCategory && (
-        <div className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
-          {listsSubmenu.map((item, i) => (
-            <ButtonHeaderMenu
-              key={i}
-              title={item?.name}
-              active={item.name === toCategoryMenu.menu.name}
+        <div
+          className={`w-full h-full p-4 flex flex-col md:w-1/3 gap-2 justify-center items-center ${
+            toCategoryMenu.closeCategory && 'hidden'
+          }`}>
+          {listsSubmenu?.map((item, index) => (
+            <CardCategory
               onClick={() => {
                 setToCategoryMenu({
                   ...toCategoryMenu,
-                  menu: {
-                    ...item,
-                    image: item.image,
-                    nama: item.name === 'All' ? '' : item.name,
-                  },
+                  closeCategory: !toCategoryMenu.closeCategory,
+                  menu: item,
                 });
               }}
+              img={item.image}
+              category={item?.name}
+              key={index}
             />
           ))}
         </div>
-      )}
 
-      {toCategoryMenu?.closeCategory && (
-        <>
-          <img
-            src={toCategoryMenu.menu.image}
-            alt={`image-of-${toCategoryMenu.menu.name}`}
-            className="w-full h-1/5 md:h-1/3 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
-          />
+        {toCategoryMenu?.closeCategory && (
+          <div className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
+            {listsSubmenu.map((item, i) => (
+              <ButtonHeaderMenu
+                key={i}
+                title={item?.name}
+                active={item.name === toCategoryMenu.menu.name}
+                onClick={() => {
+                  setToCategoryMenu({
+                    ...toCategoryMenu,
+                    menu: {
+                      ...item,
+                      image: item.image,
+                      nama: item.name === 'All' ? '' : item.name,
+                    },
+                  });
+                }}
+              />
+            ))}
+          </div>
+        )}
 
-          <div className="w-[90%] md:w-1/2 min-h-[90%] md:gap-4 h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
-            {productsByFilter?.length !== 0 || !productsByFilter ? (
-              productsByFilter?.map((product) => (
-                <CardMenu
-                  key={product._id}
-                  image={product.image}
-                  title={product.name}
-                  price={product.price}
-                  discount={product.discount}
-                  onClick={() => {
-                    setOnModals({
-                      isShown: true,
-                      data: product,
-                    });
-                  }}
-                />
-              ))
-            ) : (
-              <div className="flex flex-col h-full w-full justify-center items-center">
-                <img src="/images/empty-products.png" alt="" />
-                <h1 className="text-2xl text-center font-bold text-indigo-500">
-                  {toCategoryMenu?.menu.name} is currently Unavailable
+        {toCategoryMenu?.closeCategory && (
+          <>
+            <img
+              src={toCategoryMenu.menu.image}
+              alt={`image-of-${toCategoryMenu.menu.name}`}
+              className="w-full h-1/5 md:h-1/3 opacity-50 object-cover object-center fixed top-0 left-0 rounded-b-lg"
+            />
+
+            <div className="w-[90%] md:w-1/2 min-h-[90%] md:gap-4 h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
+              {productsByFilter?.length !== 0 || !productsByFilter ? (
+                productsByFilter?.map((product) => (
+                  <CardMenu
+                    key={product._id}
+                    image={product.image}
+                    title={product.name}
+                    price={product.price}
+                    discount={product.discount}
+                    onClick={() => {
+                      setOnModals({
+                        isShown: true,
+                        data: product,
+                      });
+                    }}
+                  />
+                ))
+              ) : (
+                <div className="flex flex-col h-full w-full justify-center items-center">
+                  <img src="/images/empty-products.png" alt="" />
+                  <h1 className="text-2xl text-center font-bold text-indigo-500">
+                    {toCategoryMenu?.menu.name} is currently Unavailable
+                  </h1>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        <div
+          className={`h-screen w-full md:w-2/5 z-[999] bg-indigo-500 p-2 fixed top-0 right-0 transition-transform duration-300  ${
+            showDrawer ? 'translate-x-0' : 'translate-x-full'
+          }`}>
+          <div
+            className={`flex flex-col h-full gap-2 overflow-y-auto ${
+              dataOrder?.length === 0 || (!dataOrder ? 'justify-end' : '')
+            }`}>
+            {dataOrder?.length === 0 || !dataOrder ? (
+              <div className="flex flex-col h-full justify-center items-center">
+                <img src="/images/empty-cart.png" alt="" />
+                <h1 className="text-2xl text-center font-bold text-white">
+                  Your cart is empty
                 </h1>
               </div>
+            ) : (
+              dataOrder?.map((item) => (
+                <>
+                  <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
+                    <p className="flex gap-2 items-center">
+                      <div className="p-1 px-2 rounded-lg flex items-center gap-1 text-xl text-indigo-500 bg-slate-100">
+                        <button
+                          type="button"
+                          onClick={() => dispatch(increaseQuantity(item._id))}
+                          className="text-emerald-500">
+                          <CiSquarePlus />
+                        </button>
+                        <p>{item.quantity}x </p>
+                        <button
+                          type="button"
+                          onClick={() => dispatch(decreaseQuantity(item._id))}
+                          className="text-red-500">
+                          <CiSquareMinus />
+                        </button>
+                      </div>
+                      {item.name}
+                    </p>
+
+                    <p>
+                      {formatIDR(
+                        totalShopItems(item.price, item.discount, item.quantity)
+                      )}
+                    </p>
+                  </div>
+                </>
+              ))
             )}
-          </div>
-        </>
-      )}
-
-      <div
-        className={`h-screen w-full md:w-2/5 z-[999] bg-indigo-500 p-2 fixed top-0 right-0 transition-transform duration-300  ${
-          showDrawer ? 'translate-x-0' : 'translate-x-full'
-        }`}>
-        <div
-          className={`flex flex-col h-full gap-2 overflow-y-auto ${
-            dataOrder?.length === 0 || (!dataOrder ? 'justify-end' : '')
-          }`}>
-          {dataOrder?.length === 0 || !dataOrder ? (
-            <div className="flex flex-col h-full justify-center items-center">
-              <img src="/images/empty-cart.png" alt="" />
-              <h1 className="text-2xl text-center font-bold text-white">
-                Your cart is empty
-              </h1>
-            </div>
-          ) : (
-            dataOrder?.map((item) => (
-              <>
-                <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg ">
-                  <p className="flex gap-2 items-center">
-                    <div className="p-1 px-2 rounded-lg flex items-center gap-1 text-xl text-indigo-500 bg-slate-100">
-                      <button
-                        type="button"
-                        onClick={() => dispatch(increaseQuantity(item._id))}
-                        className="text-emerald-500">
-                        <CiSquarePlus />
-                      </button>
-                      <p>{item.quantity}x </p>
-                      <button
-                        type="button"
-                        onClick={() => dispatch(decreaseQuantity(item._id))}
-                        className="text-red-500">
-                        <CiSquareMinus />
-                      </button>
-                    </div>
-                    {item.name}
-                  </p>
-
-                  <p>
-                    {formatIDR(
-                      totalShopItems(item.price, item.discount, item.quantity)
-                    )}
-                  </p>
-                </div>
-              </>
-            ))
-          )}
-          <div className="flex flex-col h-full gap-1 w-full justify-end">
-            <p
-              type="button"
-              onClick={() => dispatch(clearCart())}
-              className="text-white underline text-sm text-end w-fit hover:text-red-600 cursor-pointer">
-              clear cart
-            </p>
-            <hr className="my-2" />
-            <div className="flex flex-col gap-2 justify-between items-center">
-              <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
-                <p className="flex gap-2 items-center">
-                  <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
-                    {totalQuantity || 0}x
-                  </span>
-                  Total
-                </p>
-                <p>{formatIDR(totalPrice?.reduce((a, b) => a + b, 0))}</p>
-              </div>
-              <button
+            <div className="flex flex-col h-full gap-1 w-full justify-end">
+              <p
                 type="button"
-                onClick={handlePayment}
-                className="bg-white w-32 flex justify-center items-center text-indigo-500 p-2 rounded-lg">
-                Pay Now
-              </button>
+                onClick={() => dispatch(clearCart())}
+                className="text-white underline text-sm text-end w-fit hover:text-red-600 cursor-pointer">
+                clear cart
+              </p>
+              <hr className="my-2" />
+              <div className="flex flex-col gap-2 justify-between items-center">
+                <div className="bg-white w-full flex gap-2 justify-between items-center p-2 h-20  rounded-lg">
+                  <p className="flex gap-2 items-center">
+                    <span className="p-1 px-2 rounded-lg text-xl text-indigo-500 bg-slate-100">
+                      {totalQuantity || 0}x
+                    </span>
+                    Total
+                  </p>
+                  <p>{formatIDR(totalPrice?.reduce((a, b) => a + b, 0))}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handlePayment}
+                  className="bg-white w-32 flex justify-center items-center text-indigo-500 p-2 rounded-lg">
+                  Pay Now
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {toCategoryMenu.closeCategory && (
-        <div
-          className={`fixed z-[9999] transition-transform duration-400 ${
-            showDrawer ? 'left-0 bottom-2 md:left-[60%]' : 'right-2 bottom-2'
-          }`}>
-          <button
-            onClick={() => setShowDrawer((curr) => !curr)}
-            type="button"
-            className={`${
-              showDrawer
-                ? 'bg-white rounded-e-full'
-                : 'bg-indigo-500 rounded-full'
-            } text-lg relative  p-4`}>
-            <i className={` ${showDrawer ? 'text-indigo-500' : 'text-white'}`}>
-              <FaCartPlus />
-            </i>
-            {totalQuantity > 0 && (
-              <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
-                {totalQuantity}
-              </span>
-            )}
-          </button>
-        </div>
-      )}
+        {toCategoryMenu.closeCategory && (
+          <div
+            className={`fixed z-[9999] transition-transform duration-400 ${
+              showDrawer ? 'left-0 bottom-2 md:left-[60%]' : 'right-2 bottom-2'
+            }`}>
+            <button
+              onClick={() => setShowDrawer((curr) => !curr)}
+              type="button"
+              className={`${
+                showDrawer
+                  ? 'bg-white rounded-e-full'
+                  : 'bg-indigo-500 rounded-full'
+              } text-lg relative  p-4`}>
+              <i
+                className={` ${showDrawer ? 'text-indigo-500' : 'text-white'}`}>
+                <FaCartPlus />
+              </i>
+              {totalQuantity > 0 && (
+                <span className="absolute text-white text-xs top-0 right-0 bg-red-500 rounded-full px-1">
+                  {totalQuantity}
+                </span>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

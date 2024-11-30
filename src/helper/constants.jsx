@@ -32,19 +32,19 @@ export const listsSubmenu = [
       'https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg',
   },
   {
-    name: 'Burgers',
+    name: 'Burger' + "'s",
     image: '/images/burger-bg.jpg',
   },
   {
-    name: 'Salads',
+    name: 'Salad' + "'s",
     image: '/images/salads-bg.jpg',
   },
   {
-    name: 'Coffee',
+    name: 'Coffee' + "'s",
     image: '/images/coffee-bg.png',
   },
   {
-    name: 'Tea',
+    name: 'Tea' + "'s",
     image: '/images/tea-bg.jpg',
   },
 ];

@@ -11,7 +11,7 @@ import CardMenu from '../../components/dashboard/card-menu';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
-import MenuHeader from '../../components/dashboard/menuHeader';
+import MenuHeader from '../../components/dashboard/MenuHeader';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
