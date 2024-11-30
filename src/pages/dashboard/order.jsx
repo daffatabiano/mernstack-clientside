@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useGet';
 import DashboardLayout from './layout';
-import MenuHeader from '../../components/dashboard/menuHeader';
+import MenuHeader from '../../components/dashboard/MenuHeader';
 import { listsOrder } from '../../helper/constants';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import { useState } from 'react';
