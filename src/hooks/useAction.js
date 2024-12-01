@@ -2,71 +2,92 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearCart } from '../redux/reducers/cartReducers';
+import { makeId } from '../../utils/throttle';
 
 export default function useAction() {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
+  const { pathname } = window.location;
 
-  const handlePayment = async (totalPrice, dataOrder) => {
+  const getTableId = (url) => {
+    const words = url.split('/');
+    const index = words.findIndex((word) =>
+      word.toLowerCase().includes('table')
+    );
+
+    if (index !== -1) {
+      console.log(words, 'thisiswordiondd');
+      return words.slice(index + 3)[0];
+    }
+    return '';
+  };
+
+  const handlePayment = async (totalPrice, dataOrder, message) => {
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (!token) {
       navigate('/login');
     } else {
       const body = {
         amount: totalPrice?.reduce((total, item) => total + item, 0),
-        data: dataOrder,
+        id: makeId(10),
+        name: user?.name,
+        email: user?.email,
+        phone: user?.phone || '',
       };
+
+      if (body.amount === 0) {
+        message('Your cart is empty');
+      }
+
       try {
-        const res = await axios.post(`${url}/order`, body, {
+        const res = await axios.post(`${url}/midtrans`, body, {
           headers: {
-            Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            Authorization: btoa(import.meta.env.CLIENT_KEY + ':'),
           },
         });
-        if (res.status === 200) {
-          try {
-            const body = {
-              id: res?.data?.data?._id,
-              amount: Number(res?.data?.data?.amount),
-            };
+        const tokenTransaction = res?.data?.token;
 
-            const resTransactions = await axios.post(`${url}/midtrans`, body, {
+        window.snap.pay(tokenTransaction, {
+          onSuccess: async function (result) {
+            const bodyOrder = {
+              tableId: getTableId(pathname, 'table ID'),
+            };
+            console.log(result);
+            const res = await axios.post(`${url}/order`, body, {
               headers: {
-                'Content-Type': 'application/json',
                 Accept: 'application/json',
-                Authorization: btoa(import.meta.env.CLIENT_KEY + ':'),
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
               },
             });
-            window.snap.pay(resTransactions?.data?.token, {
-              onSuccess: function (result) {
-                console.log(result);
+            if (res.status === 200) {
+              message('Order Success');
+
+              setTimeout(() => {
                 dispatch(clearCart());
                 localStorage.removeItem('cart');
                 navigate('/order');
-              },
-              onPending: function (result) {
-                console.log(result);
-                dispatch(clearCart());
-                localStorage.removeItem('cart');
-                navigate('/history');
-              },
-              onError: function (result) {
-                console.log(result);
-                navigate('/error');
-              },
-              onClose: function () {
-                alert('you closed the popup without finishing the payment');
-              },
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      } catch (err) {
-        console.log(err);
+                message('Order Processing ...');
+              }, 1000);
+            }
+          },
+          onPending: function (result) {
+            console.log(result);
+          },
+          onError: function (result) {
+            console.log(result);
+          },
+          onClose: function () {
+            console.log('payment closed');
+          },
+        });
+      } catch (error) {
+        console.log(error);
       }
     }
   };

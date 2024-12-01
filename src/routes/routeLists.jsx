@@ -19,7 +19,7 @@ export const routeLists = [
     element: <Home />,
   },
   {
-    path: '/menu',
+    path: '/menu/*',
     name: 'Menu',
     element: <Menu />,
   },

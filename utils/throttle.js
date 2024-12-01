@@ -17,3 +17,23 @@ export const formatIDR = (price) => {
     maximumFractionDigits: 0,
   }).format(price);
 };
+
+export const makeId = (length) => {
+  let result = '';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charLength = characters.length;
+  for (let i = 0; i < length; i += 1) {
+    result += characters.charAt(Math.floor(Math.random() * charLength));
+  }
+  return result;
+};
+
+export const getTableId = (url) => {
+  const words = url.split('/');
+  const index = words.findIndex((word) => word.toLowerCase().includes('table'));
+  if (index !== -1) {
+    return words.slice(index + 3)[0];
+  }
+  return '';
+};
