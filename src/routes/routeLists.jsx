@@ -8,6 +8,9 @@ import OrderDashboard from '../pages/dashboard/order';
 import Home from '../pages/home';
 import AbsenceDashboard from '../pages/dashboard/absence';
 import Menu from '../pages/menu';
+import Order from '../pages/menu/order';
+import Coupon from '../pages/menu/coupon';
+import Account from '../pages/menu/account';
 
 export const routeLists = [
   {
@@ -59,5 +62,20 @@ export const routeLists = [
     path: '/dashboard/absence',
     name: 'Absence',
     element: <AbsenceDashboard />,
+  },
+  {
+    path: '/order',
+    name: 'Order',
+    element: <Order />,
+  },
+  {
+    path: '/coupon',
+    name: 'Coupon',
+    element: <Coupon />,
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    element: <Account />,
   },
 ];

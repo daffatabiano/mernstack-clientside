@@ -16,6 +16,7 @@ import CardCategory from '../../components/card-category';
 import ButtonHeaderMenu from '../../components/button-header-menu';
 import useFetch from '../../hooks/useGet';
 import CardMenu from '../../components/card-menu';
+import { formatIDR, totalShopItems } from '../../../utils/throttle';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
@@ -51,26 +52,6 @@ export default function Menu() {
     }
   });
 
-  const formatIDR = (price) => {
-    if (!price) {
-      return `Rp. 0`;
-    }
-
-    return Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const totalShopItems = (price, discount, quantity) => {
-    const newPrice = Number(price) - Number(price * discount) / 100;
-    const total = newPrice * quantity;
-
-    return total;
-  };
-
   const totalPrice = dataOrder?.map((item) => {
     const total = totalShopItems(item.price, item.discount, item.quantity);
 
@@ -95,15 +76,12 @@ export default function Menu() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res);
         if (res.status === 200) {
           try {
             const body = {
               id: res?.data?.data?._id,
               amount: Number(res?.data?.data?.amount),
             };
-
-            console.log(body);
 
             const resTransactions = await axios.post(`${url}/midtrans`, body, {
               headers: {

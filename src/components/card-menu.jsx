@@ -37,7 +37,7 @@ export default function CardMenu(prop) {
         />
       </div>
       <div className="w-full h-full ">
-        <p className={`text-2xl  text-indigo-800 ${discount !== 0 && 'w-3/4'}`}>
+        <p className={`text-lg  text-indigo-800 ${discount !== 0 && 'w-3/4'}`}>
           {title}
         </p>
         <div className="flex items-center gap-2">
