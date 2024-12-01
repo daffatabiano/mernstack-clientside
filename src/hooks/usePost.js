@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const usePost = () => {
   const url = import.meta.env.VITE_API_URL;
-  const local = import.meta.env.VITE_LOCAL_URL;
 
   const createProduct = async (body) => {
     const res = await axios.post(`${url}/product`, body, {
