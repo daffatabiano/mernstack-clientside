@@ -7,7 +7,7 @@ export default function CardMenu(prop) {
     <div
       key={item?._id}
       className={`bg-white drop-shadow-md h-[500px] rounded-lg flex flex-col justify-between  hover:shadow-lg transition-all ${
-        !item.status && 'bg-slate-500/50 cursor-not-allowed'
+        !item?.status && 'bg-slate-500/50 cursor-not-allowed'
       }`}>
       <div className="w-full h-60 relative overflow-hidden rounded-t-lg">
         {!item?.status && (
@@ -30,7 +30,7 @@ export default function CardMenu(prop) {
           {item?.name}{' '}
           <span
             className={`font-normal text-sm p-1 rounded ${
-              item.status
+              item?.status
                 ? 'text-green-500 bg-green-100'
                 : 'text-red-500 bg-red-100 opacity-70'
             }`}>
@@ -48,7 +48,7 @@ export default function CardMenu(prop) {
         </p>
         <div
           className={`${
-            !item.status && 'hidden'
+            !item?.status && 'hidden'
           } text-green-500 bg-green-100 w-full flex gap-2 items-center`}>
           <span className=" flex gap-1 items-center  p-1 rounded">
             <i className="text-lg">

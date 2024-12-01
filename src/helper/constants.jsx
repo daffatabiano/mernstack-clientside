@@ -1,6 +1,8 @@
 import { FaChartPie, FaUserCog } from 'react-icons/fa';
-import { RiDashboardHorizontalFill } from 'react-icons/ri';
+import { RiCoupon2Line, RiDashboardHorizontalFill } from 'react-icons/ri';
 import { TbMessage2Down } from 'react-icons/tb';
+import { MdOutlineAccountCircle, MdRestaurantMenu } from 'react-icons/md';
+import { GrNotes } from 'react-icons/gr';
 
 export const listsAside = [
   {
@@ -61,5 +63,32 @@ export const listsOrder = [
   },
   {
     name: 'Cancelled',
+  },
+];
+
+export const listsMenuBar = [
+  {
+    name: 'menu',
+    link: '/menu',
+    icon: <MdRestaurantMenu />,
+  },
+  {
+    name: 'order',
+    link: '/order',
+    icon: <GrNotes />,
+  },
+  {
+    name: '',
+    icon: '',
+  },
+  {
+    name: 'coupon',
+    link: '/coupon',
+    icon: <RiCoupon2Line />,
+  },
+  {
+    name: 'account',
+    link: '/account',
+    icon: <MdOutlineAccountCircle />,
   },
 ];
