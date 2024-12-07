@@ -23,19 +23,15 @@ export default function useAction() {
     return '';
   };
 
-  const handlePayment = async (totalPrice, dataOrder, message) => {
+  const handlePayment = async (totalPrice, message) => {
     const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
 
     if (!token) {
       navigate('/login');
     } else {
       const body = {
-        amount: totalPrice?.reduce((total, item) => total + item, 0),
         id: makeId(10),
-        name: user?.name,
-        email: user?.email,
-        phone: user?.phone || '',
+        amount: totalPrice?.reduce((total, item) => total + item, 0),
       };
 
       if (body.amount === 0) {
@@ -47,6 +43,7 @@ export default function useAction() {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
+            cache: 'no-cache',
             Authorization: btoa(import.meta.env.CLIENT_KEY + ':'),
           },
         });

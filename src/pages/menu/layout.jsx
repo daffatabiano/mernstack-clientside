@@ -123,7 +123,7 @@ export default function LayoutMenu(prop) {
       </div>
 
       {toCategoryMenu.closeCategory && (
-        <div className="fixed  bottom-0 w-full md:w-1/2">
+        <div className="fixed  bottom-0 w-full md:w-1/3">
           <div className=" flex z-[100] justify-between w-full rounded-lg bg-indigo-500 py-1">
             {listsMenuBar.map((item, i) => {
               const { name, icon, link } = item;

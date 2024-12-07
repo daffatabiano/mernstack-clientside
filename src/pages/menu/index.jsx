@@ -78,6 +78,7 @@ export default function Menu() {
       totalQuantity={totalQuantity}
       totalPrice={totalPrice}>
       {/* Modals Order */}
+
       {onModals?.isShown && (
         <div className="fixed p-2 bg-slate-800/40 flex justify-center items-center w-full h-full min-h-screen min-w-screen z-[100]">
           <div className="bg-white rounded-lg w-full md:w-fit p-2">
@@ -192,7 +193,7 @@ export default function Menu() {
             className="w-full h-1/5 md:h-1/3 md:w-2/3  opacity-50 object-cover object-center fixed top-0 left-0 md:left-1/2 md:-translate-x-1/2 rounded-b-lg"
           />
 
-          <div className="w-[90%] md:w-1/2 min-h-[90%] md:gap-4 h-full p-2 rounded-lg mt-32 bg-white overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
+          <div className="w-[90%] md:w-1/3 min-h-[90%] md:gap-4 h-full p-2 rounded-lg mt-32 bg-white/30 backdrop-blur-lg overflow-y-auto absolute flex flex-col gap-2 shadow-lg">
             {productsByFilter?.length !== 0 || !productsByFilter ? (
               productsByFilter?.map((product) => (
                 <CardMenu
