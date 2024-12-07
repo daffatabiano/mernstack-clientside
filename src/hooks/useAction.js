@@ -25,6 +25,7 @@ export default function useAction() {
 
   const handlePayment = async (totalPrice, message) => {
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (!token) {
       navigate('/login');
@@ -32,6 +33,10 @@ export default function useAction() {
       const body = {
         id: makeId(10),
         amount: totalPrice?.reduce((total, item) => total + item, 0),
+        firstName: user?.name?.split(' ')[0],
+        lastName: user?.name?.split(' ')[1] || '',
+        email: user?.email,
+        phone: user?.phone,
       };
 
       if (body.amount === 0) {
