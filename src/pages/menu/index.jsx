@@ -8,7 +8,7 @@ import CardCategory from '../../components/card-category';
 import ButtonHeaderMenu from '../../components/button-header-menu';
 import useFetch from '../../hooks/useGet';
 import CardMenu from '../../components/card-menu';
-import { totalShopItems } from '../../../utils/throttle';
+import { totalShopItems } from '../../utils/throttle';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({

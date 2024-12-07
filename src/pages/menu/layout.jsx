@@ -1,7 +1,7 @@
 import { FaCartPlus } from 'react-icons/fa';
 import { listsMenuBar } from '../../helper/constants';
 import { Link } from 'react-router-dom';
-import { formatIDR, totalShopItems } from '../../../utils/throttle';
+import { formatIDR, totalShopItems } from '../../utils/throttle';
 import { CiSquareMinus, CiSquarePlus } from 'react-icons/ci';
 import {
   clearCart,
