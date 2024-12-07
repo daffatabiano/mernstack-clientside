@@ -2,26 +2,13 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearCart } from '../redux/reducers/cartReducers';
-import { makeId } from '../../utils/throttle';
+import { getTableId, makeId } from '../utils/throttle';
 
 export default function useAction() {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
   const { pathname } = window.location;
-
-  const getTableId = (url) => {
-    const words = url.split('/');
-    const index = words.findIndex((word) =>
-      word.toLowerCase().includes('table')
-    );
-
-    if (index !== -1) {
-      console.log(words, 'thisiswordiondd');
-      return words.slice(index + 3)[0];
-    }
-    return '';
-  };
 
   const handlePayment = async (totalPrice, message) => {
     const token = localStorage.getItem('token');
@@ -56,8 +43,14 @@ export default function useAction() {
 
         window.snap.pay(tokenTransaction, {
           onSuccess: async function (result) {
+            const orderData = JSON.parse(localStorage.getItem('cart'));
             const bodyOrder = {
-              tableId: getTableId(pathname, 'table ID'),
+              tableId: getTableId(pathname),
+              name: user?.name,
+              amount: totalPrice?.reduce((total, item) => total + item, 0),
+              data: orderData,
+              email: user?.email,
+              status: 'pending',
             };
             console.log(result);
             const res = await axios.post(`${url}/order`, body, {
