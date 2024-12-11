@@ -30,7 +30,13 @@ export default function LayoutMenu(prop) {
     <div className="min-h-screen min-w-screen overflow-hidden w-full h-full flex flex-col justify-center items-center">
       {children}
       <div
-        className={`h-screen w-full md:w-2/5 z-[999] bg-indigo-500 fixed top-0 right-0 transition-transform duration-300  ${
+        onClick={() => setShowDrawer(false)}
+        className={`h-full w-full fixed inset-0 z-[98] bg-black opacity-50 ${
+          showDrawer ? 'block' : 'hidden'
+        }`}
+      />
+      <div
+        className={`h-screen w-full md:w-2/5 z-[99] bg-indigo-500 fixed top-0 right-0 transition-transform duration-300  ${
           showDrawer ? 'translate-x-0' : 'translate-x-full'
         }`}>
         <div className="w-full h-full  p-2">
