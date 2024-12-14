@@ -7,13 +7,19 @@ import ButtonHeaderMenu from '../../components/button-header-menu';
 import useFetch from '../../hooks/useGet';
 import CardMenu from '../../components/card-menu';
 import { totalShopItems } from '../../utils/throttle';
-import ModalMenu from '../../components/ModalMenu';
+import ModalMenu from '../../components/modals/ModalMenu';
+import { useSearchParams } from 'react-router-dom';
+import ModalWrapper from '../../components/modals/Wrapper';
+import ModalCard from '../../components/modals/Card';
+import ModalPhoneInput from '../../components/modals/ModalPhoneInput';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
     closeCategory: false,
     menu: {},
   });
+  const [searchParams] = useSearchParams();
+  const tableId = searchParams.get('tableId');
   const { data } = useFetch('products');
   const [notes, setNotes] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -23,8 +29,12 @@ export default function Menu() {
     isShown: false,
     data: {},
   });
-
   const dataOrder = useSelector((state) => state?.cart?.cart);
+
+  if (tableId) {
+    localStorage.setItem('tableId', tableId);
+    return <ModalPhoneInput />;
+  }
 
   useEffect(() => {
     if (dataOrder) {
