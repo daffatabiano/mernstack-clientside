@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { clearCart } from '../redux/reducers/cartReducers';
 import { getTableId, makeId } from '../utils/throttle';
 
@@ -8,6 +8,9 @@ export default function useAction() {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const tableId = searchParams.get('tableId');
+  console.log(tableId);
   const { pathname } = window.location;
 
   const handlePayment = async (totalPrice, message) => {
