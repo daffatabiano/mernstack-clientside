@@ -10,7 +10,6 @@ export default function useAction() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const tableId = searchParams.get('tableId');
-  console.log(tableId);
   const { pathname } = window.location;
 
   const handlePayment = async (totalPrice, message) => {
@@ -89,5 +88,43 @@ export default function useAction() {
       }
     }
   };
-  return { handlePayment };
+
+  const sendOtp = async (phone) => {
+    try {
+      const res = await axios.post(
+        `${url}/send-otp`,
+        { phone: phone },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
+
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const verifyOtp = async (phone, code) => {
+    try {
+      const res = await axios.post(
+        `${url}/verify-otp`,
+        { phone: phone, code: code },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        }
+      );
+
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return { handlePayment, sendOtp, verifyOtp };
 }
