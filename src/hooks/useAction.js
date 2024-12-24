@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { clearCart } from '../redux/reducers/cartReducers';
 import { getTableId, makeId } from '../utils/throttle';
 
@@ -89,36 +89,28 @@ export default function useAction() {
     }
   };
 
-  const sendOtp = async (phone) => {
+  const sendOtp = async (body) => {
     try {
-      const res = await axios.post(
-        `${url}/send-otp`,
-        { phone: phone },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        }
-      );
+      const res = await axios.post(`${url}/send-otp`, body, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
 
       return res;
     } catch (err) {
       console.log(err);
     }
   };
-  const verifyOtp = async (phone, code) => {
+  const verifyOtp = async (body) => {
     try {
-      const res = await axios.post(
-        `${url}/verify-otp`,
-        { phone: phone, code: code },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        }
-      );
+      const res = await axios.post(`${url}/verify-otp`, body, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
 
       return res;
     } catch (err) {
