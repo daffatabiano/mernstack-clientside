@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { styles } from '../../helper/styles';
 import ModalCard from './Card';
 import ModalWrapper from './Wrapper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAction from '../../hooks/useAction';
 
 export default function ModalPhoneInput() {
@@ -10,6 +10,8 @@ export default function ModalPhoneInput() {
   const [username, setUsername] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isCode, setIsCode] = useState('');
+  const [countdownOtp, setCountdownOtp] = useState(300);
+  const queryTableId = localStorage.getItem('tableId');
   const [isOpenInput, setIsOpenInput] = useState({
     isEmail: {
       shown: false,
@@ -20,7 +22,6 @@ export default function ModalPhoneInput() {
       value: '',
     },
   });
-
   const { sendOtp, verifyOtp } = useAction();
 
   const handleSendOtp = () => {
@@ -56,7 +57,7 @@ export default function ModalPhoneInput() {
             if (res.status === 200) {
               localStorage.setItem('token', res.data.token);
               localStorage.setItem('user', JSON.stringify(res.data.user));
-              navigate('/home');
+              navigate('/menu/tableId=');
             }
           })
           .catch((err) => console.log(err));
@@ -84,18 +85,25 @@ export default function ModalPhoneInput() {
       <ModalCard>
         {isValid ? (
           <div>
-            <h1>
+            <h1 className="text-xl text-indigo-500 p-2 bg-indigo-500/10 rounded-lg">
               {' '}
-              Hi Your{' '}
+              Hi{' '}
               {isOpenInput.isEmail.shown
-                ? `Email is ${isOpenInput.isEmail.value}`
-                : `Phone is ${isOpenInput.isPhone.value}`}
+                ? `${isOpenInput.isEmail.value}`
+                : `${isOpenInput.isPhone.value}`}
+              ,
             </h1>
+            <p className="text-sm p-2">
+              {' '}
+              we&apos;ve sent you a otp code into your{' '}
+              {isOpenInput.isEmail.shown ? 'email' : 'phone'} , please check it.
+            </p>
             <input
               type="text"
               onChange={(e) => setIsCode(e.target.value)}
               value={isCode}
               className={styles.input}
+              placeholder="OTP Code"
             />
             <button
               type="button"
@@ -103,11 +111,35 @@ export default function ModalPhoneInput() {
               onClick={handleVerifyOtp}>
               Verify
             </button>
+            <button
+              type="link"
+              className="text-indigo-500 text-sm text-center hover:text-indigo-600 w-full"
+              onClick={handleSendOtp}>
+              Resend OTP
+            </button>
           </div>
         ) : (
           <>
             <div className="flex flex-col gap-2">
-              <h1 className={`${styles.fontTitle}`}>Input Your Number Phone</h1>
+              <h1
+                className={`${
+                  styles.fontTitle
+                } !text-slate-500 text-center !text-lg ${
+                  isOpenInput.isEmail.shown || isOpenInput.isPhone.shown
+                    ? 'block'
+                    : 'hidden'
+                }`}>
+                {isOpenInput.isEmail.shown ? 'Email' : 'Phone Number'}
+              </h1>
+              <h1
+                className={`py-2 text-center font-bold text-indigo-500 ${
+                  isOpenInput.isEmail.shown || isOpenInput.isPhone.shown
+                    ? 'hidden'
+                    : 'block'
+                }`}>
+                Choose Verification OTP methods
+              </h1>
+              <hr />
               <div
                 className={
                   isOpenInput.isPhone.shown || isOpenInput.isEmail.shown
@@ -125,7 +157,7 @@ export default function ModalPhoneInput() {
                   }>
                   Phone Number
                 </button>
-                or
+                <i className="text-indigo-500">~OR~</i>
                 <button
                   type="button"
                   className={`${styles.button}`}
@@ -167,13 +199,35 @@ export default function ModalPhoneInput() {
             </div>
             <button
               type="button"
-              className={`${styles.button} ${
+              className={`${styles.button}  ${
                 isOpenInput.isEmail.shown || isOpenInput.isPhone.shown
                   ? ''
                   : 'hidden'
               }`}
               onClick={handleSendOtp}>
               Send Otp
+            </button>
+            <button
+              type="link"
+              className={`text-center text-sm text-slate-500 w-full ${
+                isOpenInput.isEmail.shown || isOpenInput.isPhone.shown
+                  ? ''
+                  : 'hidden'
+              }`}
+              onClick={() =>
+                isOpenInput.isEmail.shown
+                  ? setIsOpenInput({
+                      ...isOpenInput,
+                      isPhone: { shown: true },
+                      isEmail: { shown: false },
+                    })
+                  : setIsOpenInput({
+                      ...isOpenInput,
+                      isPhone: { shown: false },
+                      isEmail: { shown: true },
+                    })
+              }>
+              {isOpenInput.isEmail.shown ? 'number phone' : 'email'}
             </button>
           </>
         )}
