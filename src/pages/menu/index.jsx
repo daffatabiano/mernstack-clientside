@@ -9,9 +9,6 @@ import CardMenu from '../../components/card-menu';
 import { totalShopItems } from '../../utils/throttle';
 import ModalMenu from '../../components/modals/ModalMenu';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import ModalWrapper from '../../components/modals/Wrapper';
-import ModalCard from '../../components/modals/Card';
-import ModalPhoneInput from '../../components/modals/ModalPhoneInput';
 
 export default function Menu() {
   const [toCategoryMenu, setToCategoryMenu] = useState({
