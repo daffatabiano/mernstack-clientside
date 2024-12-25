@@ -55,9 +55,10 @@ export default function ModalPhoneInput() {
         })
           .then((res) => {
             if (res.status === 200) {
-              localStorage.setItem('token', res.data.token);
-              localStorage.setItem('user', JSON.stringify(res.data.user));
-              navigate('/menu/tableId=');
+              console.log(res);
+              localStorage.setItem('tokenCust', res.data.token);
+              localStorage.setItem('user', JSON.stringify(res.data.data));
+              navigate(`/menu?tableId=${queryTableId}`);
             }
           })
           .catch((err) => console.log(err));
@@ -78,6 +79,29 @@ export default function ModalPhoneInput() {
     } else {
       alert('OTP must be 6 digits');
     }
+  };
+
+  useEffect(() => {
+    if (isValid && handleSendOtp) {
+      const timer = setInterval(() => {
+        setCountdownOtp((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [handleSendOtp]);
+
+  console.log(countdownOtp);
+
+  const formatTime = (sc) => {
+    const minutes = Math.floor(sc / 60);
+    const remainingSeconds = sc % 60;
+    return `${minutes}: ${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
   return (
@@ -111,12 +135,20 @@ export default function ModalPhoneInput() {
               onClick={handleVerifyOtp}>
               Verify
             </button>
-            <button
-              type="link"
-              className="text-indigo-500 text-sm text-center hover:text-indigo-600 w-full"
-              onClick={handleSendOtp}>
-              Resend OTP
-            </button>
+            <div className="flex w-full text-nowrap justify-center gap-2 pt-2">
+              <button
+                type="link"
+                disabled={countdownOtp !== 0}
+                className={`text-indigo-500 text-sm text-center hover:text-indigo-600 ${
+                  countdownOtp !== 0 && '!text-slate-300'
+                }`}
+                onClick={handleSendOtp}>
+                Resend OTP
+              </button>
+              <p className={`text-slate-400 ${countdownOtp === 0 && 'hidden'}`}>
+                {formatTime(countdownOtp)}
+              </p>
+            </div>
           </div>
         ) : (
           <>
