@@ -8,7 +8,7 @@ import useFetch from '../../hooks/useGet';
 import CardMenu from '../../components/card-menu';
 import { totalShopItems } from '../../utils/throttle';
 import ModalMenu from '../../components/modals/ModalMenu';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ModalWrapper from '../../components/modals/Wrapper';
 import ModalCard from '../../components/modals/Card';
 import ModalPhoneInput from '../../components/modals/ModalPhoneInput';
@@ -30,10 +30,12 @@ export default function Menu() {
     data: {},
   });
   const dataOrder = useSelector((state) => state?.cart?.cart);
+  const navigate = useNavigate();
+  const tokenCust = localStorage.getItem('tokenCust');
 
-  if (tableId) {
+  if (!tokenCust && tableId) {
     localStorage.setItem('tableId', tableId);
-    return <ModalPhoneInput />;
+    return navigate('/otp');
   }
 
   useEffect(() => {
