@@ -11,6 +11,7 @@ import Menu from '../pages/menu';
 import Order from '../pages/menu/order';
 import Coupon from '../pages/menu/coupon';
 import Account from '../pages/menu/account';
+import ModalPhoneInput from '../components/modals/ModalPhoneInput';
 
 export const routeLists = [
   {
@@ -22,6 +23,11 @@ export const routeLists = [
     path: '/menu',
     name: 'Menu',
     element: <Menu />,
+  },
+  {
+    path: '/otp',
+    name: 'OTP',
+    element: <ModalPhoneInput />,
   },
   {
     path: '/login',
