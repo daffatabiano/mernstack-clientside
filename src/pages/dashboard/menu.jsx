@@ -2,23 +2,20 @@ import { useState } from 'react';
 import { listsSubmenu } from '../../helper/constants';
 import DashboardLayout from './layout';
 import usePost from '../../hooks/usePost';
-import { FaCheck } from 'react-icons/fa';
 import useFetch from '../../hooks/useGet';
 import useDelete from '../../hooks/useDelete';
-import { MdError } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
 import CardMenu from '../../components/dashboard/card-menu';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
 import MenuHeader from '../../components/dashboard/MenuHeader';
+import { priceAfterDiscount } from '../../helper/helper';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
   const { createProduct, updateProduct } = usePost();
   const { data } = useFetch('products');
   const { deleteProduct } = useDelete();
-  const navigate = useNavigate();
   const [status, setStatus] = useState(false);
   const [showByCategory, setShowByCategory] = useState('');
   const [showDelete, setShowDelete] = useState({
@@ -37,11 +34,10 @@ export default function MenuDashboard() {
   });
   const { data: product } = useFetch(`products/${showEdit.id}`);
 
+  const [showToast, setShowToast] = useState(false);
   const [notify, setNotify] = useState({
-    isShown: false,
-    message: '',
     type: '',
-    icon: '',
+    message: '',
   });
 
   const handleAdd = async (e) => {
@@ -57,118 +53,53 @@ export default function MenuDashboard() {
     };
 
     try {
-      const res = await createProduct(body);
-      if (res.status === 200) {
-        setNotify({
-          isShown: true,
-          message: res.data.message,
-          type: 'success',
-          icon: <FaCheck />,
-        });
-        setTimeout(() => {
+      await createProduct(body).then((res) => {
+        if (res.status === 200) {
+          setShowToast(true);
           setNotify({
-            isShown: false,
-            message: '',
-            type: '',
-            icon: '',
+            message: res.data.message,
+            type: 'success',
           });
-          setTimeout(() => {
-            navigate(0);
-          }, 0);
-        }, 2000);
-      } else {
-        setNotify({
-          isShown: true,
-          message: res.data.message,
-          type: 'error',
-          icon: <MdError />,
-        });
-        setTimeout(() => {
+          data?.refetch();
+        } else {
+          setShowToast(true);
           setNotify({
-            isShown: false,
-            message: '',
-            type: '',
-            icon: '',
+            message: res.data.message,
+            type: 'error',
           });
-        }, 2000);
-      }
+        }
+      });
     } catch (err) {
+      setShowToast(true);
       setNotify({
-        isShown: true,
         message: err.response.data.message,
         type: 'error',
-        icon: <MdError />,
       });
-      setTimeout(() => {
-        setNotify({
-          isShown: false,
-          message: '',
-          type: '',
-          icon: '',
-        });
-      }, 2000);
     }
-  };
-
-  const priceAfterDiscount = (price, discount) => {
-    const newPrice = Number(price) - Number(price * discount) / 100;
-    return Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-    }).format(newPrice);
   };
 
   const deleteProductHandler = async (id) => {
     try {
       const res = await deleteProduct(id);
       if (res.status === 200) {
+        setShowToast(true);
         setNotify({
-          isShown: true,
           message: res.data.message,
           type: 'success',
-          icon: <FaCheck />,
         });
-        setTimeout(() => {
-          setNotify({
-            isShown: false,
-            message: '',
-            type: '',
-            icon: '',
-          });
-          setTimeout(() => {
-            navigate(0);
-          }, 1000);
-        }, 2000);
+        data?.refetch();
       } else {
+        setShowToast(true);
         setNotify({
-          isShown: true,
           message: res.data.message,
           type: 'error',
-          icon: <MdError />,
-        });
-        setTimeout(() => {
-          setNotify({
-            isShown: false,
-            message: '',
-            type: '',
-            icon: '',
-          });
         });
       }
     } catch (err) {
+      setShowToast(true);
       setNotify({
-        isShown: true,
         message: err.response.data.message,
         type: 'error',
-        icon: <MdError />,
-      });
-      setTimeout(() => {
-        setNotify({
-          isShown: false,
-          message: '',
-          type: '',
-          icon: '',
-        });
       });
     }
   };
@@ -186,10 +117,8 @@ export default function MenuDashboard() {
 
     if (body.discount > 100) {
       return setNotify({
-        isShown: true,
         message: 'Discount cannot be more than 100%',
         type: 'error',
-        icon: <MdError />,
       });
     }
 
@@ -197,37 +126,28 @@ export default function MenuDashboard() {
       const res = await updateProduct(showEdit.id, body);
 
       if (res.status === 200) {
+        setShowToast(true);
         setNotify({
-          isShown: true,
           message: res.data.message,
           type: 'success',
-          icon: <FaCheck />,
         });
-        setTimeout(() => {
-          setNotify({
-            isShown: false,
-            message: '',
-            type: '',
-            icon: '',
-          });
-          setTimeout(() => {
-            navigate(0);
-          }, 1000);
-        }, 2000);
+        setShowEdit({
+          isShown: false,
+          id: '',
+        });
+        data?.refetch();
       } else {
+        setShowToast(true);
         setNotify({
-          isShown: true,
           message: res.data.message,
           type: 'error',
-          icon: <MdError />,
         });
       }
     } catch (err) {
+      setShowToast(true);
       setNotify({
-        isShown: true,
         message: err.response.data.message,
         type: 'error',
-        icon: <MdError />,
       });
     }
   };
@@ -243,7 +163,9 @@ export default function MenuDashboard() {
         setShownAdd={setShownAdd}
         shownAdd={shownAdd}
         handleAdd={handleAdd}
-        notify={notify}
+        isNotify={notify}
+        setShowToast={setShowToast}
+        showToast={showToast}
         shownInputPicture={shownInputPicture}
         setShownInputPicture={setShownInputPicture}
       />
@@ -254,7 +176,9 @@ export default function MenuDashboard() {
         showDelete={showDelete}
         setShowDelete={setShowDelete}
         deleteProductHandler={deleteProductHandler}
-        notify={notify}
+        isNotify={notify}
+        setShowToast={setShowToast}
+        showToast={showToast}
       />
       {/* End Modals delete Product */}
 
@@ -265,7 +189,9 @@ export default function MenuDashboard() {
         handleEdit={handleEdit}
         product={product}
         setStatus={setStatus}
-        notify={notify}
+        isNotify={notify}
+        setShowToast={setShowToast}
+        showToast={showToast}
         shownInputPicture={shownInputPicture}
         setShownInputPicture={setShownInputPicture}
       />
