@@ -49,7 +49,7 @@ export default function ModalPhoneInput() {
           setShowToast(true);
           setIsNotify({
             type: 'error',
-            message: err.response.data.message,
+            message: err.response.data.message || err.message,
           });
           console.log(err);
         });
@@ -69,11 +69,11 @@ export default function ModalPhoneInput() {
           }
         })
         .catch((err) => {
-          setShowToast(true),
-            setIsNotify({
-              type: 'error',
-              message: err.response.data.message,
-            });
+          setShowToast(true), console.log(err);
+          setIsNotify({
+            type: 'error',
+            message: err.response.data.message,
+          });
           console.log(err);
         });
     }
@@ -135,7 +135,11 @@ export default function ModalPhoneInput() {
           });
       }
     } else {
-      alert('OTP must be 6 digits');
+      setShowToast(true);
+      setIsNotify({
+        type: 'error',
+        message: 'Please enter a valid code',
+      });
     }
   };
 
