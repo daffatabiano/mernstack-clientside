@@ -54,7 +54,7 @@ export default function Login() {
           });
           localStorage.setItem('token', res?.data?.token);
           setTimeout(() => {
-            navigate('/');
+            navigate('/dashboard');
             localStorage.setItem('user', JSON.stringify(res?.data?.data));
           }, 1000);
         }, 1000);
@@ -97,7 +97,7 @@ export default function Login() {
       <h1 className="text-3xl md:text-5xl flex-col  font-bold flex justify-center md:justify-start">
         Sign In
         <span className="font-normal text-gray-400 text-sm md:text-lg mt-2">
-          Enter your credentials, to access your account
+          Enter your credentials, to access Admin dashboard
         </span>
       </h1>
       {notify.isShown && (
