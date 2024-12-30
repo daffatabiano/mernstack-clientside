@@ -1,14 +1,29 @@
-import { FaChartPie, FaUserCog } from 'react-icons/fa';
+import { FaChartPie, FaPeopleCarry, FaUserCog } from 'react-icons/fa';
 import { RiCoupon2Line, RiDashboardHorizontalFill } from 'react-icons/ri';
 import { TbMessage2Down } from 'react-icons/tb';
-import { MdOutlineAccountCircle, MdRestaurantMenu } from 'react-icons/md';
+import {
+  MdOutlineAccountCircle,
+  MdOutlinePeople,
+  MdRestaurantMenu,
+} from 'react-icons/md';
 import { GrNotes } from 'react-icons/gr';
 
 export const listsAside = [
   {
     name: 'User Control',
-    path: '/dashboard/absence',
     icon: <FaUserCog />,
+    child: [
+      {
+        name: 'Staff',
+        path: '/dashboard/staff-control',
+        icon: <FaPeopleCarry />,
+      },
+      {
+        name: 'Customer',
+        path: '/dashboard/customer-control',
+        icon: <MdOutlinePeople />,
+      },
+    ],
   },
   {
     name: 'Menu',
