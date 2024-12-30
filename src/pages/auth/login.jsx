@@ -33,7 +33,6 @@ export default function Login() {
     };
     try {
       const res = await login(body);
-      console.log(res);
       if (res?.status === 200) {
         setNotify({
           isShown: true,
