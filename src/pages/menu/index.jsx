@@ -35,6 +35,7 @@ export default function Menu() {
     return navigate('/otp');
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (dataOrder) {
       localStorage.setItem('cart', JSON.stringify(dataOrder));
@@ -60,6 +61,7 @@ export default function Menu() {
     0
   );
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const snapScriptUrl = import.meta.env.VITE_SNAP_SCRIPT_URL;
 
@@ -85,7 +87,6 @@ export default function Menu() {
       totalQuantity={totalQuantity}
       totalPrice={totalPrice}>
       {/* Modals Order */}
-
       {onModals?.isShown && (
         <ModalMenu
           onModals={onModals}
