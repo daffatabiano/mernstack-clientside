@@ -51,7 +51,6 @@ export default function ModalPhoneInput() {
             type: 'error',
             message: err.response.data.message || err.message,
           });
-          console.log(err);
         });
     } else if (isOpenInput.isPhone.shown) {
       sendOtp({
@@ -95,9 +94,9 @@ export default function ModalPhoneInput() {
                 message: res.data.message,
               });
               localStorage.setItem('tokenCust', res.data.token);
-              localStorage.setItem('user', JSON.stringify(res.data.data));
+              localStorage.setItem('customer', JSON.stringify(res.data.data));
               setTimeout(() => {
-                navigate(`/menu?tableId=${queryTableId}`);
+                navigate(`/`);
               }, 1000);
             }
           })
