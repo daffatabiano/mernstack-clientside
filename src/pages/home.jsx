@@ -6,8 +6,9 @@ export default function Home() {
   const [unlock, setUnlock] = useState(false);
   const [section, setSection] = useState(1);
   const navigate = useNavigate();
-  const key = localStorage.getItem('key');
-  const token = localStorage.getItem('token');
+  const tokenCust = localStorage.getItem('tokenCust');
+  const customer = JSON.parse(localStorage.getItem('customer'));
+  const voucherCheck = customer.voucher.length;
   const [isIntroPlaying, setIsIntroPlaying] = useState(true);
 
   useEffect(() => {
@@ -20,21 +21,21 @@ export default function Home() {
   }, [isIntroPlaying]);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
+    if (!tokenCust) {
+      navigate('/otp');
     }
-  }, [token, navigate]);
+  }, [tokenCust, navigate]);
 
   useEffect(() => {
-    if (key) {
+    if (voucherCheck) {
       navigate('/menu');
     }
-  }, [key, navigate]);
+  }, [voucherCheck, navigate]);
 
   return (
     <>
       {isIntroPlaying ? (
-        <div className="min-w-screen min-h-screen md:w-1/2 md:h-1/2 transition-all transform duration-300 w-full h-full flex justify-center items-center flex-col">
+        <div className="min-w-screen min-h-screen m-auto md:w-1/2 md:h-1/2 transition-all transform duration-300 w-full h-full flex justify-center items-center flex-col">
           <video
             autoPlay
             loop
