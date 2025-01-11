@@ -12,9 +12,16 @@ import { useDispatch } from 'react-redux';
 import useAction from '../../hooks/useAction';
 
 export default function LayoutMenu(prop) {
+  const categoryMenuDefault = () => {
+    return {
+      closeCategory: true,
+      menu: {},
+    };
+  };
+
   const {
     children,
-    toCategoryMenu,
+    toCategoryMenu = categoryMenuDefault(),
     setShowDrawer,
     showDrawer,
     totalQuantity,
