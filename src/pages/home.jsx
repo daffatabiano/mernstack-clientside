@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaKey, FaLock, FaUnlock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { styles } from '../helper/styles';
 
 export default function Home() {
   const [unlock, setUnlock] = useState(false);
@@ -8,17 +9,10 @@ export default function Home() {
   const navigate = useNavigate();
   const tokenCust = localStorage.getItem('tokenCust');
   const customer = JSON.parse(localStorage.getItem('customer'));
-  const voucherCheck = customer.voucher.length;
+  const tableId = localStorage.getItem('tableId');
+  const voucherCheck = customer?.voucher?.length > 0 ? true : false;
   const [isIntroPlaying, setIsIntroPlaying] = useState(true);
-
-  useEffect(() => {
-    if (isIntroPlaying) {
-      const timer = setTimeout(() => {
-        setIsIntroPlaying(false);
-      }, 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [isIntroPlaying]);
+  const [sectionPlayer, setSectionPlayer] = useState(1);
 
   useEffect(() => {
     if (!tokenCust) {
@@ -26,26 +20,62 @@ export default function Home() {
     }
   }, [tokenCust, navigate]);
 
-  useEffect(() => {
-    if (voucherCheck) {
-      navigate('/menu');
-    }
-  }, [voucherCheck, navigate]);
-
   return (
     <>
-      {isIntroPlaying ? (
+      {isIntroPlaying && (
         <div className="min-w-screen min-h-screen m-auto md:w-1/2 md:h-1/2 transition-all transform duration-300 w-full h-full flex justify-center items-center flex-col">
-          <video
-            autoPlay
-            loop
-            muted
-            onEnded={() => setIsIntroPlaying(false)}
-            className="w-full h-full">
-            <source src="/videos/opening.mp4" type="video/mp4" />
-          </video>
+          {sectionPlayer === 1 ? (
+            <video
+              autoPlay
+              onEnded={() =>
+                setSectionPlayer((sectionPlayer) => sectionPlayer + 1)
+              }
+              className="w-full h-full">
+              <source src="/videos/opening.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <div className="w-full h-full flex flex-col gap-2 p-4 justify-center items-center bg-slate-200 text-black rounded-lg animate-scale-in">
+              <div className="flex flex-col gap-2 place-items-center">
+                <p className="text-sm">Currently you are in</p>
+                <h4 className="text-xl">Table</h4>
+                <h1 className="text-3xl text-semibold">
+                  <span className="text-sky-500 !text-[12px]">No.</span>
+                  {tableId}
+                </h1>
+              </div>
+              <p className=" animate-fade-in delay-1000">
+                Hello {customer.name || customer.email || customer.phone},
+                Welcome to our Restaurant
+              </p>
+              <div className=" animate-fade-in delay-1500 flex flex-col gap-1">
+                <p
+                  className={`text-sm ${
+                    voucherCheck ? 'text-emerald-500' : 'text-slate-500'
+                  } `}>
+                  {voucherCheck
+                    ? 'You have a new voucher'
+                    : 'click the button below to go to the menu'}
+                </p>
+                <button
+                  className={styles.button}
+                  type="button"
+                  onClick={() => {
+                    if (voucherCheck) {
+                      setIsIntroPlaying(false);
+                    } else {
+                      navigate('/menu');
+                    }
+                  }}>
+                  <span className="animate-fade-in delay-2000">
+                    {voucherCheck ? 'Claim Voucher' : 'Go to Menu'}
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
+      )}
+      {voucherCheck && (
         <>
           <div className="min-w-screen min-h-screen transition-all transform duration-300 w-full h-full p-2 bg-gradient-to-r from-sky-900 to-sky-600 flex justify-center items-center flex-col">
             {section === 1 && (
