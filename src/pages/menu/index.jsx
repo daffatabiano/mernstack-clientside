@@ -43,10 +43,15 @@ export default function Menu() {
   }, [dataOrder]);
 
   const productsByFilter = products?.filter((item) => {
-    if (toCategoryMenu.menu.name === 'All' || toCategoryMenu.menu.name === '') {
-      return item;
-    } else {
-      return item.category === toCategoryMenu.menu.name;
+    if (item.status) {
+      if (
+        toCategoryMenu.menu.name === 'All' ||
+        toCategoryMenu.menu.name === ''
+      ) {
+        return item;
+      } else {
+        return item.category === toCategoryMenu.menu.name;
+      }
     }
   });
 
@@ -119,23 +124,60 @@ export default function Menu() {
       </div>
 
       {toCategoryMenu?.closeCategory && (
-        <div className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
+        <div
+          ref={(container) => {
+            if (container) {
+              const activeIndex = listsSubmenu.findIndex(
+                (item) => item.name === toCategoryMenu.menu.name
+              );
+              const activeButton = container.children[activeIndex];
+              if (activeButton) {
+                container.scrollLeft =
+                  activeButton.offsetLeft -
+                  container.offsetWidth / 2 +
+                  activeButton.offsetWidth / 2;
+              }
+            }
+          }}
+          className="fixed top-2 w-full px-4 h-12 flex justify-center z-10 overflow-x-auto scrollbar-header-menu">
           {listsSubmenu.map((item, i) => (
-            <ButtonHeaderMenu
+            <div
               key={i}
-              title={item?.name}
-              active={item.name === toCategoryMenu.menu.name}
-              onClick={() => {
-                setToCategoryMenu({
-                  ...toCategoryMenu,
-                  menu: {
-                    ...item,
-                    image: item.image,
-                    nama: item.name === 'All' ? '' : item.name,
-                  },
-                });
-              }}
-            />
+              className={`${
+                item.name === toCategoryMenu.menu.name
+                  ? 'z-20 opacity-100'
+                  : 'blur-[1px]'
+              } flex-shrink-0`}>
+              <ButtonHeaderMenu
+                title={item?.name}
+                active={item.name === toCategoryMenu.menu.name}
+                onClick={() => {
+                  setToCategoryMenu({
+                    ...toCategoryMenu,
+                    menu: {
+                      ...item,
+                      image: item.image,
+                      nama: item.name === 'All' ? '' : item.name,
+                    },
+                  });
+                }}
+              />
+            </div>
+            // <ButtonHeaderMenu
+            //   key={i}
+            //   title={item?.name}
+            //   active={item.name === toCategoryMenu.menu.name}
+            //   onClick={() => {
+            //     setToCategoryMenu({
+            //       ...toCategoryMenu,
+            //       menu: {
+            //         ...item,
+            //         image: item.image,
+            //         nama: item.name === 'All' ? '' : item.name,
+            //       },
+            //     });
+            //   }}
+            // />
           ))}
         </div>
       )}
