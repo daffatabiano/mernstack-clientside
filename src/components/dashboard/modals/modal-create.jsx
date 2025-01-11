@@ -121,10 +121,10 @@ export default function ModalCreate(prop) {
                     name="image"
                     id="image"
                     onChange={(e) => {
-                      shownInputPicture.image = URL.createObjectURL(
-                        `uploads/${e.target.files[0]}`
-                      );
-                      console.log(shownInputPicture.image);
+                      setShownInputPicture({
+                        ...shownInputPicture,
+                        image: URL.createObjectURL(e.target.files[0]),
+                      });
                     }}
                     className={styles.input}
                   />
