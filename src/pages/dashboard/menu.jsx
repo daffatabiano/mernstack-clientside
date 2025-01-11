@@ -104,6 +104,8 @@ export default function MenuDashboard() {
     }
   };
 
+  console.log(shownInputPicture);
+
   const handleEdit = async (e) => {
     e.preventDefault();
     const body = {
