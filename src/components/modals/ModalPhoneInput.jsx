@@ -11,7 +11,6 @@ export default function ModalPhoneInput() {
   const [isValid, setIsValid] = useState(false);
   const [isCode, setIsCode] = useState('');
   const [countdownOtp, setCountdownOtp] = useState(300);
-  const queryTableId = localStorage.getItem('tableId');
   const [showToast, setShowToast] = useState(false);
   const [isNotify, setIsNotify] = useState({
     type: '',
@@ -121,7 +120,7 @@ export default function ModalPhoneInput() {
               });
               localStorage.setItem('token', res.data.token);
               localStorage.setItem('user', JSON.stringify(res.data.user));
-              navigate('/home');
+              navigate('/');
             }
           })
           .catch((err) => {
