@@ -34,12 +34,10 @@ export default function NavbarDashboard() {
             </span>
             {time.toLocaleTimeString('it-IT')}
           </p>
-          <Link to={'/dashboard/profile'} className="flex gap-4 items-center">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              alt=""
-              className="w-12 h-12 rounded-full"
-            />
+          <Link
+            to={'/admin-panel/dashboard/profile'}
+            className="flex gap-4 items-center">
+            <img src={user.image} alt="" className="w-12 h-12 rounded-full" />
             <p className="flex flex-col text-white">
               {user.name}
               <span>{user.email}</span>
