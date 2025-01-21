@@ -5,12 +5,9 @@ import { styles } from '../../helper/styles';
 import { FaFingerprint } from 'react-icons/fa';
 import { CiWarning } from 'react-icons/ci';
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout(prop) {
+  const { children } = prop;
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
-
-  if (!user) return window.location.replace('/login');
-
   return (
     <>
       <div className="md:hidden flex fixed justify-center items-center top-0 right-0 left-0 min-w-screen min-h-screen w-full h-full bg-slate-800/50">
