@@ -21,12 +21,14 @@ export default function AsideDashboard() {
       <ul className="flex flex-col gap-4">
         <li
           className={`flex gap-4 items-center transition-all duration-100 hover:uppercase hover:bg-slate-200 hover:transform hover:scale-110 rounded p-4 ${
-            pathname === '/dashboard' ? 'bg-slate-200 transform scale-110' : ''
+            pathname === '/admin-panel/dashboard'
+              ? 'bg-slate-200 transform scale-110'
+              : ''
           }`}>
           <i className="text-2xl">
             <RiHome6Line />
           </i>
-          <Link to={'/dashboard'}>Dashboard</Link>
+          <Link to={'/admin-panel/dashboard'}>Dashboard</Link>
         </li>
         <hr />
         <p className="text-xl font-bold text-slate-500 ">Interface</p>
