@@ -14,6 +14,7 @@ export default function ModalCreate(prop) {
     isNotify,
     shownInputPicture,
     setShownInputPicture,
+    handleUpload,
   } = prop;
 
   return (
@@ -120,12 +121,7 @@ export default function ModalCreate(prop) {
                     type="file"
                     name="image"
                     id="image"
-                    onChange={(e) => {
-                      setShownInputPicture({
-                        ...shownInputPicture,
-                        image: URL.createObjectURL(e.target.files[0]),
-                      });
-                    }}
+                    onChange={handleUpload}
                     className={styles.input}
                   />
                 ))}
