@@ -10,6 +10,7 @@ import ModalDelete from '../../components/dashboard/modals/modal-delete';
 import ModalUpdate from '../../components/dashboard/modals/modal-update';
 import MenuHeader from '../../components/dashboard/MenuHeader';
 import { priceAfterDiscount } from '../../helper/helper';
+import useUpload from '../../hooks/useUpload';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
@@ -40,13 +41,16 @@ export default function MenuDashboard() {
     message: '',
   });
 
+  const { upload } = useUpload();
+
   const handleAdd = async (e) => {
     e.preventDefault();
     const body = {
       category: e?.target?.category?.value,
-      image: e?.target?.image?.value
-        ? e?.target?.image?.value
-        : '/images/empty-food.png',
+      image:
+        shownInputPicture.image.length !== 0
+          ? shownInputPicture.image
+          : e?.target?.image?.value,
       name: e?.target.name.value.toLowerCase(),
       discount: e?.target?.discount?.value,
       price: e?.target?.price?.value,
@@ -60,7 +64,10 @@ export default function MenuDashboard() {
             message: res.data.message,
             type: 'success',
           });
-          data?.refetch();
+          setTimeout(() => {
+            data();
+            setShownAdd(false);
+          }, 1000);
         } else {
           setShowToast(true);
           setNotify({
@@ -87,7 +94,7 @@ export default function MenuDashboard() {
           message: res.data.message,
           type: 'success',
         });
-        data?.refetch();
+        data();
       } else {
         setShowToast(true);
         setNotify({
@@ -103,8 +110,6 @@ export default function MenuDashboard() {
       });
     }
   };
-
-  console.log(shownInputPicture);
 
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -154,6 +159,19 @@ export default function MenuDashboard() {
     }
   };
 
+  const handleUpload = async (e) => {
+    try {
+      const file = e.target.files[0];
+      const url = await upload(file);
+      setShownInputPicture({
+        ...shownInputPicture,
+        image: url.data.imageUrl,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const filterProducts = products.filter(
     (item) => item.category === showByCategory
   );
@@ -170,6 +188,7 @@ export default function MenuDashboard() {
         showToast={showToast}
         shownInputPicture={shownInputPicture}
         setShownInputPicture={setShownInputPicture}
+        handleUpload={handleUpload}
       />
       {/* End Modals Add Products */}
 
