@@ -12,6 +12,7 @@ import Order from '../pages/menu/order';
 import Coupon from '../pages/menu/coupon';
 import Account from '../pages/menu/account';
 import ModalPhoneInput from '../components/modals/ModalPhoneInput';
+import { AdminProtect } from './protectedRoutes';
 
 export const routeLists = [
   {
@@ -40,34 +41,58 @@ export const routeLists = [
     element: <Register />,
   },
   {
-    path: '/dashboard',
+    path: '/admin-panel/dashboard',
     name: 'Dashboard',
-    element: <Dashboard />,
+    element: (
+      <AdminProtect>
+        <Dashboard />
+      </AdminProtect>
+    ),
   },
   {
-    path: '/dashboard/profile',
+    path: '/admin-panel/dashboard/profile',
     name: 'Profile',
-    element: <Profile />,
+    element: (
+      <AdminProtect>
+        <Profile />
+      </AdminProtect>
+    ),
   },
   {
-    path: '/dashboard/menu',
+    path: '/admin-panel/dashboard/menu',
     name: 'Menu',
-    element: <MenuDashboard />,
+    element: (
+      <AdminProtect>
+        <MenuDashboard />
+      </AdminProtect>
+    ),
   },
   {
-    path: '/dashboard/analytics',
+    path: '/admin-panel/dashboard/analytics',
     name: 'Analytics',
-    element: <AnalyticsDashboard />,
+    element: (
+      <AdminProtect>
+        <AnalyticsDashboard />
+      </AdminProtect>
+    ),
   },
   {
-    path: '/dashboard/order',
+    path: '/admin-panel/dashboard/order',
     name: 'Order',
-    element: <OrderDashboard />,
+    element: (
+      <AdminProtect>
+        <OrderDashboard />
+      </AdminProtect>
+    ),
   },
   {
-    path: '/dashboard/absence',
+    path: '/admin-panel/dashboard/absence',
     name: 'Absence',
-    element: <AbsenceDashboard />,
+    element: (
+      <AdminProtect>
+        <AbsenceDashboard />
+      </AdminProtect>
+    ),
   },
   {
     path: '/order',
