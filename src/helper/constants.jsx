@@ -15,29 +15,29 @@ export const listsAside = [
     child: [
       {
         name: 'Staff',
-        path: '/dashboard/staff-control',
+        path: '/admin-panel/dashboard/staff-control',
         icon: <FaPeopleCarry />,
       },
       {
         name: 'Customer',
-        path: '/dashboard/customer-control',
+        path: '/admin-panel/dashboard/customer-control',
         icon: <MdOutlinePeople />,
       },
     ],
   },
   {
     name: 'Menu',
-    path: '/dashboard/menu',
+    path: '/admin-panel/dashboard/menu',
     icon: <RiDashboardHorizontalFill />,
   },
   {
     name: 'Order',
-    path: '/dashboard/order',
+    path: '/admin-panel/dashboard/order',
     icon: <TbMessage2Down />,
   },
   {
     name: 'Analytics',
-    path: '/dashboard/analytics',
+    path: '/admin-panel/dashboard/analytics',
     icon: <FaChartPie />,
   },
 ];
