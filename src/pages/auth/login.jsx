@@ -53,7 +53,8 @@ export default function Login() {
           });
           localStorage.setItem('token', res?.data?.token);
           setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/admin-panel/dashboard');
+            console.log(res);
             localStorage.setItem('user', JSON.stringify(res?.data?.data));
           }, 1000);
         }, 1000);
