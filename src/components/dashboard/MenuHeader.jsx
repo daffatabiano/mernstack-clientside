@@ -1,17 +1,21 @@
-import { CiSquarePlus } from 'react-icons/ci';
 import { styles } from '../../helper/styles';
+import { useSearchParams } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
 
 export default function MenuHeader(prop) {
-  const { submenu, setShowByCategory, setShownAdd, addButton = true } = prop;
+  const { submenu, setShownAdd, addButton = true } = prop;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <div className="flex items-center border-2 rounded-full overflow-hidden border-indigo-500">
-      <div className="w-[90%] h-12 gap-4 p-2 scrollbar-header-menu flex overflow-x-auto overflow-y-hidden">
-        {submenu.map((item) => (
+    <div className="flex items-center ps-1 w-full rounded-full overflow-hidden max-w-[75%] ">
+      <div className=" gap-4 p-2 scrollbar-header-menu flex overflow-x-auto overflow-y-hidden">
+        {submenu?.map((item) => (
           <h1
             key={item.name}
             onClick={() =>
-              setShowByCategory(item.name === 'All' ? '' : item.name)
+              setSearchParams({
+                category: item.name === 'All' ? '' : item.name,
+              })
             }
             className={styles.submenu}>
             {item.name}
@@ -19,16 +23,12 @@ export default function MenuHeader(prop) {
         ))}
       </div>
       {addButton && (
-        <div className="w-[10%] h-12">
-          <button
-            type="button"
-            className="w-full h-full flex justify-center items-center bg-indigo-500 text-white"
-            onClick={() => setShownAdd(true)}>
-            <i className="text-4xl">
-              <CiSquarePlus />
-            </i>
-          </button>
-        </div>
+        <button
+          type="button"
+          className="w-fit h-fit ms-5 p-2 rounded-full flex justify-center items-center bg-base-dark text-base-light"
+          onClick={() => setShownAdd(true)}>
+          <FaPlus />
+        </button>
       )}
     </div>
   );
