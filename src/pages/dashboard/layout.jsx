@@ -28,9 +28,9 @@ export default function DashboardLayout(prop) {
         </div>
       </div>
       <main className={styles.main}>
-        <AsideDashboard />
         <NavbarDashboard />
-        <section className="w-full h-full ps-[20%] pt-[6%]">{children}</section>
+        <AsideDashboard />
+        <section className="w-full h-full ps-[20%]">{children}</section>
         <div className="fixed text-white rounded-full bottom-10 right-10 bg-slate-800 p-4 hover:bg-slate-700">
           <i>
             <FaFingerprint />
