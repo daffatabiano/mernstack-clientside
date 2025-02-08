@@ -30,5 +30,91 @@ const deleteReducers = createApi({
         if (arg.callback) arg.callback();
       },
     }),
+    ordersDelete: builder.mutation({
+      query: () => ({
+        url: `/orders/cashier/clear-history-orders`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        await handleQueryLifecycle({
+          dispatch,
+          queryFulfilled,
+          successTitle: 'Delete Success',
+          errorTitle: 'Delete Failed',
+        });
+        if (arg.callback) arg.callback();
+      },
+    }),
+    productDelete: builder.mutation({
+      query: (id) => ({
+        url: `product/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        await handleQueryLifecycle({
+          dispatch,
+          queryFulfilled,
+          successTitle: 'Delete Success',
+          errorTitle: 'Delete Failed',
+        });
+        if (arg.callback) arg.callback();
+      },
+    }),
+    userDelete: builder.mutation({
+      query: (id) => ({
+        url: `user/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        await handleQueryLifecycle({
+          dispatch,
+          queryFulfilled,
+          successTitle: 'Delete Success',
+          errorTitle: 'Delete Failed',
+        });
+        if (arg.callback) arg.callback();
+      },
+    }),
+    vouchersDelete: builder.mutation({
+      query: (id) => ({
+        url: `delete-all-vouchers/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        await handleQueryLifecycle({
+          dispatch,
+          queryFulfilled,
+          successTitle: 'Delete Success',
+          errorTitle: 'Delete Failed',
+        });
+        if (arg.callback) arg.callback();
+      },
+    }),
+    voucherDelete: builder.mutation({
+      query: (id) => ({
+        url: `delete-voucher/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        await handleQueryLifecycle({
+          dispatch,
+          queryFulfilled,
+          successTitle: 'Delete Success',
+          errorTitle: 'Delete Failed',
+        });
+        if (arg.callback) arg.callback();
+      },
+    }),
   }),
 });
+
+export const {
+  useCategoryDeleteMutation,
+  useOrdersDeleteMutation,
+  useProductDeleteMutation,
+  useUserDeleteMutation,
+  useVouchersDeleteMutation,
+  useVoucherDeleteMutation,
+} = deleteReducers;
+export const deleteMiddleware = deleteReducers.middleware;
+export default deleteReducers;
