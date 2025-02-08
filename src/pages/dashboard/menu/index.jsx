@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { listsSubmenu } from '../../../helper/constants';
-import DashboardLayout from '../layout';
 import usePost from '../../../hooks/usePost';
 import useFetch from '../../../hooks/useGet';
-import useDelete from '../../../hooks/useDelete';
 import CardMenu from '../../../components/dashboard/card-menu';
 import ModalCreate from '../../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../../components/dashboard/modals/modal-delete';
@@ -14,12 +12,13 @@ import useUpload from '../../../hooks/useUpload';
 import { useSearchParams } from 'react-router-dom';
 import { useGetAllProductsQuery } from '../../../redux/reducers/api/fetchReducers';
 import Search from 'antd/es/input/Search';
-import { Button, Pagination } from 'antd';
+import { Button, Dropdown, Pagination, Space } from 'antd';
+import { FaAngleDown } from 'react-icons/fa';
+import { GrPowerReset } from 'react-icons/gr';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
   const { updateProduct } = usePost();
-  const { deleteProduct } = useDelete();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [status, setStatus] = useState(false);
@@ -121,7 +120,7 @@ export default function MenuDashboard() {
     (item) => item.category === showByCategory
   );
 
-  console.log(showDelete);
+  console.log(category);
 
   return (
     <>
@@ -151,11 +150,62 @@ export default function MenuDashboard() {
             </Button>
           </div>
 
-          <MenuHeader
-            submenu={listsSubmenu}
-            setShowByCategory={setShowByCategory}
-            setShownAdd={setShownAdd}
-          />
+          <div className="flex justify-between w-full">
+            <MenuHeader
+              submenu={listsSubmenu}
+              setShowByCategory={setShowByCategory}
+              setShownAdd={setShownAdd}
+            />
+
+            <div className="flex items-center gap-4">
+              <Button
+                size="large"
+                htmlType="button"
+                onClick={() => setSearchParams({})}>
+                <GrPowerReset />
+              </Button>
+              <div className="flex gap-2">
+                <p>Sort By:</p>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: 'createdAt',
+                        label: 'Newest',
+                        onClick: () => setSearchParams({ sort: 'createdAt' }),
+                      },
+                      {
+                        key: 'name_asc',
+                        label: 'A-Z',
+                        onClick: () => setSearchParams({ sort: 'name_asc' }),
+                      },
+                      {
+                        key: 'name_desc',
+                        label: 'Z-A',
+                        onClick: () => setSearchParams({ sort: 'name_desc' }),
+                      },
+                      {
+                        key: 'price_asc',
+                        label: 'Lowest Price',
+                        onClick: () => setSearchParams({ sort: 'price_asc' }),
+                      },
+                      {
+                        key: 'price_desc',
+                        label: 'Highest Price',
+                        onClick: () => setSearchParams({ sort: 'price_desc' }),
+                      },
+                    ],
+                  }}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      {searchParams.get('sort') || 'Newest'}
+                      <FaAngleDown />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* End Header */}
