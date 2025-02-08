@@ -83,7 +83,7 @@ export default function ModalCreate(prop) {
             required
             name="category"
             id="category"
-            options={category.data}
+            options={category?.data}
             // className={styles.input}
           />
           <label htmlFor="image">
