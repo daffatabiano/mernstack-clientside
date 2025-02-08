@@ -53,7 +53,7 @@ export default function ProfileDashboard() {
     if (typeof cropperRef.current?.cropper !== 'undefined') {
       setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
     }
-    setShowCropModal({ ...showCropModal, shown: false });
+    setShowCropModal({ ...showCropModal, shown: false, section: 1 });
   };
 
   const handleEdit = async (e) => {
@@ -164,69 +164,62 @@ export default function ProfileDashboard() {
         cropperRef={cropperRef}
       />
 
-      <DashboardLayout>
-        <section className="p-4 h-full w-full flex gap-5 items-center">
-          <div className="w-1/3">
-            <h1 className="text-2xl font-bold capitalize pb-2">
-              Hello,{' '}
-              <i className="text-indigo-500 capitalize">
-                {user.name.split(' ')[0]}
-              </i>{' '}
-              Keep Spirit!
-            </h1>
+      <section className="p-4 h-full w-full flex gap-5 items-center">
+        <div className="w-1/3">
+          <h1 className="text-2xl font-bold capitalize pb-2">
+            Hello,{' '}
+            <i className="text-indigo-500 capitalize">
+              {user.name.split(' ')[0]}
+            </i>{' '}
+            Keep Spirit!
+          </h1>
 
-            <CardProfile setShowEdit={setShowEdit} />
-          </div>
-          <div className="flex flex-col gap-4 w-2/3">
-            <h1 className="text-2xl font-bold text-end uppercase">
-              Performance
-            </h1>
+          <CardProfile setShowEdit={setShowEdit} />
+        </div>
+        <div className="flex flex-col gap-4 w-2/3">
+          <h1 className="text-2xl font-bold text-end uppercase">Performance</h1>
 
-            <div className="flex flex-col gap-4 h-full">
-              <div className={reusable.styles.card_information}>
-                <h1 className="text-2xl">Attendance</h1>
-                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
-                  <img
-                    src="/images/attendance.png"
-                    className="w-24 h-24"
-                    alt=""
-                  />
-                  <p className=""> You don&apos;t have any attendance yet,</p>
-                </div>
+          <div className="flex flex-col gap-4 h-full">
+            <div className={reusable.styles.card_information}>
+              <h1 className="text-2xl">Attendance</h1>
+              <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                <img
+                  src="/images/attendance.png"
+                  className="w-24 h-24"
+                  alt=""
+                />
+                <p className=""> You don&apos;t have any attendance yet,</p>
               </div>
-              <div className={reusable.styles.card_information}>
-                <h1 className="text-2xl">Working Hours</h1>
-                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
-                  <img
-                    src="/images/working-hours.png"
-                    className="w-24 h-24"
-                    alt=""
-                  />
-                  <p className="">
-                    {' '}
-                    You don&apos;t have any working hours yet,
-                  </p>
-                </div>
+            </div>
+            <div className={reusable.styles.card_information}>
+              <h1 className="text-2xl">Working Hours</h1>
+              <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                <img
+                  src="/images/working-hours.png"
+                  className="w-24 h-24"
+                  alt=""
+                />
+                <p className=""> You don&apos;t have any working hours yet,</p>
               </div>
-              <div className={reusable.styles.card_information}>
-                <h1 className="text-2xl">Achievements</h1>
-                <div className="flex flex-col justify-center items-center h-full w-full gap-2">
-                  <img
-                    src="/images/achievements.png"
-                    className="w-24 h-24"
-                    alt=""
-                  />
-                  <p className="">
-                    {' '}
-                    You have not achieved any achievements yet,
-                    <span className="text-indigo-500"> keep working hard</span>
-                  </p>
-                </div>
+            </div>
+            <div className={reusable.styles.card_information}>
+              <h1 className="text-2xl">Achievements</h1>
+              <div className="flex flex-col justify-center items-center h-full w-full gap-2">
+                <img
+                  src="/images/achievements.png"
+                  className="w-24 h-24"
+                  alt=""
+                />
+                <p className="">
+                  {' '}
+                  You have not achieved any achievements yet,
+                  <span className="text-indigo-500"> keep working hard</span>
+                </p>
               </div>
             </div>
           </div>
-        </section>
-      </DashboardLayout>
+        </div>
+      </section>
     </>
   );
 }
