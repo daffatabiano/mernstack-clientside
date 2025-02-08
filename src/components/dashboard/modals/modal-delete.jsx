@@ -1,45 +1,21 @@
-import { useState } from 'react';
-import useDelete from '../../../hooks/useDelete';
-import { Toaster } from '../../notif/Toaster';
-import useFetch from '../../../hooks/useGet';
 import { Modal } from 'antd';
+import { useProductDeleteMutation } from '../../../redux/reducers/api/deleteReducers';
+import { useGetAllProductsQuery } from '../../../redux/reducers/api/fetchReducers';
 
 export default function ModalDelete(prop) {
   const { showDelete, setShowDelete } = prop;
-  const { deleteProduct } = useDelete();
-  const { loading, refetch } = useFetch('products');
-  const [notify, setNotify] = useState({
-    type: '',
-    message: '',
+  const [productDelete, { isLoading, isSuccess }] = useProductDeleteMutation();
+  const { refetch } = useGetAllProductsQuery({
+    refetchOnMountOrArgChange: true,
   });
-  const [showToast, setShowToast] = useState(false);
 
   const deleteProductHandler = async (id) => {
     try {
-      const res = await deleteProduct(id);
-      if (res.status === 200) {
-        setShowToast(true);
-        setNotify({
-          message: res.data.message,
-          type: 'success',
-        });
-        setShowDelete({
-          isShown: false,
-        });
-        await refetch();
-      } else {
-        setShowToast(true);
-        setNotify({
-          message: res.data.message,
-          type: 'error',
-        });
-      }
+      await productDelete(id).unwrap();
+      setShowDelete({ isShown: false });
+      await refetch();
     } catch (err) {
-      setShowToast(true);
-      setNotify({
-        message: err?.response?.data?.message || err?.message || err,
-        type: 'error',
-      });
+      console.log(err);
     }
   };
 
@@ -54,7 +30,7 @@ export default function ModalDelete(prop) {
         <div className="flex gap-2 justify-end">
           <button
             type="button"
-            disabled={loading}
+            disabled={isLoading}
             onClick={() => setShowDelete({ isShown: false })}
             className="px-4 py-2 bg-indigo-500 text-white rounded">
             Cancel
@@ -62,7 +38,7 @@ export default function ModalDelete(prop) {
           <button
             onClick={() => deleteProductHandler(showDelete.id)}
             type="button"
-            disabled={loading}
+            disabled={isLoading}
             className="px-4 py-2 bg-red-500 text-white rounded">
             Delete
           </button>
