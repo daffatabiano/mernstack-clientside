@@ -7,6 +7,14 @@ const postReducers = createApi({
   reducerPath: 'post-api',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers.set('authorization', token);
+      }
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     /* ADMIN CONTROL API ENDPOINTS */
