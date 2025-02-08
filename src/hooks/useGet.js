@@ -1,22 +1,30 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const useFetch = (endpoint) => {
   const url = import.meta.env.VITE_API_URL;
-  const localUrl = import.meta.env.VITE_LOCAL_URL;
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${url}/${endpoint}`);
+      setData({ ...res.data });
+      setError(null);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, endpoint]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(`${url}/${endpoint}`);
-
-      setData(res.data);
-    };
-
     fetchData();
-  }, [endpoint]);
+  }, [fetchData]);
 
-  return { data };
+  return { data, loading, error, refetch: fetchData };
 };
 
 export default useFetch;
