@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { FaHome } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+const PLACEHOLDER = import.meta.env.VITE_PLACEHOLDER_IMAGE;
 
-export default function NavbarDashboard() {
-  const navigate = useNavigate();
+export default function NavbarDashboard({}) {
   const user = JSON.parse(localStorage.getItem('user'));
   const [time, setTime] = useState(new Date());
 
@@ -16,35 +15,41 @@ export default function NavbarDashboard() {
   });
 
   return (
-    <nav className="w-full h-1/8 bg-slate-800 p-4 fixed top-0 right-0 left-0  z-10">
-      <div className="w-full h-full ps-72 flex justify-between items-center">
-        <h1 className="text-white font-bold text-xl flex items-center">
-          <span
-            className="text-white me-2 text-md bg-indigo-500 rounded-lg p-1 cursor-pointer hover:bg-indigo-600 transition-all duration-300 hover:scale-105"
-            onClick={() => navigate('/')}>
-            <FaHome />
-          </span>{' '}
-          Admin Control
-        </h1>
-        <div className="flex gap-4 items-center">
-          <p className="text-white border-2 flex gap-2 text-sm items-center border-white rounded-lg  pe-2 ">
-            {' '}
-            <span className="text-md bg-white text-slate-800 font-semibold p-1 ">
-              {time.toLocaleDateString()}
-            </span>
-            {time.toLocaleTimeString('it-IT')}
-          </p>
-          <Link
-            to={'/admin-panel/dashboard/profile'}
-            className="flex gap-4 items-center">
-            <img src={user.image} alt="" className="w-12 h-12 rounded-full" />
-            <p className="flex flex-col text-white">
-              {user.name}
-              <span>{user.email}</span>
+    <>
+      <nav className="w-full h-1/8 bg-white/90 p-4 ps-[22%] sticky top-0 right-0 left-0 z-10 border-b shadow-[0_1px_10px_rgba(0,0,0,0.1)]">
+        <div className="w-full h-full flex justify-between items-center">
+          <h1 className="text-base-dark font-bold text-xl flex items-center">
+            Admin Control
+          </h1>
+          <div className="flex gap-4 items-center">
+            <p className="text-slate-500 border-2 flex gap-2 text-sm items-center border-black rounded-lg  pe-2 ">
+              {' '}
+              <span className="text-md bg-base-dark text-base-light font-semibold p-1 ">
+                {time.toLocaleDateString()}
+              </span>
+              {time.toLocaleTimeString('it-IT')}
             </p>
-          </Link>
+            <Link
+              to={'/admin-panel/dashboard/profile'}
+              className="flex gap-4 items-center">
+              <img
+                src={
+                  user?.image ||
+                  `${PLACEHOLDER}/30/dd6699/ffffff/100x100.png?text=${user?.name
+                    ?.slice(0, 2)
+                    .toUpperCase()}`
+                }
+                alt=""
+                className="w-12 h-12 rounded-full"
+              />
+              <p className="flex flex-col text-base-dark">
+                {user?.name}
+                <span>{user?.email}</span>
+              </p>
+            </Link>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
