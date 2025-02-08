@@ -5,3 +5,7 @@
 .scrollbar-header-menu::-webkit-scrollbar {
   display: none;
 }
+
+/* .ant-spin-dot-item {
+  background-color: white !important;
+} */
