@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useDelete from '../../../hooks/useDelete';
 import { Toaster } from '../../notif/Toaster';
 import useFetch from '../../../hooks/useGet';
+import { Modal } from 'antd';
 
 export default function ModalDelete(prop) {
   const { showDelete, setShowDelete } = prop;
@@ -43,11 +44,12 @@ export default function ModalDelete(prop) {
   };
 
   return (
-    <div
-      className={`w-full h-full fixed unset-0 z-[100] flex justify-center items-center bg-slate-800/50 p-4 ${
-        showDelete.isShown ? 'block' : 'hidden'
-      }`}>
-      <div className="p-4 flex flex-col gap-2 bg-white rounded-lg overflow-auto">
+    <Modal
+      open={showDelete.isShown}
+      onCancel={() => setShowDelete({ isShown: false })}
+      footer={null}
+      centered>
+      <div className="flex flex-col gap-2 bg-white rounded-lg overflow-auto">
         <h1>Are you sure you want to delete this product?</h1>
         <div className="flex gap-2 justify-end">
           <button
@@ -66,6 +68,6 @@ export default function ModalDelete(prop) {
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
