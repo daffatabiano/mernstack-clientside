@@ -2,54 +2,96 @@ import { RiArrowGoBackFill } from 'react-icons/ri';
 import { listsSubmenu } from '../../../helper/constants';
 import { styles } from '../../../helper/styles';
 import { FaCheckCircle, FaPercent } from 'react-icons/fa';
-import { Toaster } from '../../notif/Toaster';
+import { useState } from 'react';
+import useUpload from '../../../hooks/useUpload';
+import { useCreateProductAdminMutation } from '../../../redux/reducers/api/postReducers';
+import {
+  useGetAllProductsQuery,
+  useGetCategoriesQuery,
+} from '../../../redux/reducers/api/fetchReducers';
+import { useSearchParams } from 'react-router-dom';
+import { Button, Input, Modal, Select } from 'antd';
 
 export default function ModalCreate(prop) {
-  const {
-    setShownAdd,
-    shownAdd,
-    handleAdd,
-    showToast,
-    setShowToast,
-    isNotify,
-    shownInputPicture,
-    setShownInputPicture,
-    handleUpload,
-  } = prop;
+  const { setShownAdd, shownAdd, page = 1, pageSize = 10 } = prop;
+  const [shownInputPicture, setShownInputPicture] = useState({
+    isShown: false,
+    type: '',
+    image: '',
+  });
+  const [searchParams] = useSearchParams();
+  const [createProductAdmin, { isLoading, isSuccess }] =
+    useCreateProductAdminMutation();
+  const { refetch } = useGetAllProductsQuery({
+    page: page,
+    limit: pageSize,
+    category: searchParams.get('category') || '',
+    search: searchParams.get('search') || '',
+    sort: searchParams.get('sort') || 'createdAt',
+  });
+  const { data: category } = useGetCategoriesQuery();
+
+  const { upload } = useUpload();
+
+  const handleUpload = async (e) => {
+    try {
+      const file = e.target.files[0];
+      const url = await upload(file);
+      setShownInputPicture({
+        ...shownInputPicture,
+        image: url.data.imageUrl,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    const body = {
+      category: e?.target?.category?.value,
+      image:
+        shownInputPicture.image.length !== 0
+          ? shownInputPicture.image
+          : e?.target?.image?.value,
+      name: e?.target?.name?.value?.toLowerCase(),
+      discount: e?.target?.discount?.value,
+      price: e?.target?.price?.value,
+    };
+
+    try {
+      await createProductAdmin(body).unwrap();
+      if (isSuccess) {
+        setShownAdd(false);
+        await refetch();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
-    <div
-      className={`w-full h-full fixed unset-0 z-20 flex justify-center items-center bg-slate-800/50 p-4 ${
-        shownAdd ? 'block' : 'hidden'
-      }`}>
-      <Toaster
-        showToast={showToast}
-        setShowToast={setShowToast}
-        isStatus={isNotify}
-      />
-      <div className="w-1/2 h-full p-4 bg-white rounded-lg overflow-auto">
+    <Modal
+      title="Create Product"
+      open={shownAdd}
+      footer={false}
+      onClose={() => setShownAdd(false)}>
+      <div className="w-full h-full p-4 bg-white rounded-lg overflow-auto">
         <form onSubmit={handleAdd} className="flex flex-col gap-4">
-          <label htmlFor="Name">
-            Category
-            <select
-              required
-              name="category"
-              id="category"
-              className={styles.input}>
-              {listsSubmenu.map((item) => {
-                return (
-                  <option key={item.name} value={item.name}>
-                    {item.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
+          <label htmlFor="category">Category</label>
+          <Select
+            required
+            name="category"
+            id="category"
+            options={category}
+            className={styles.input}
+          />
           <label htmlFor="image">
             Image
             <div className="w-full flex justify-center gap-4 items-center relative">
               <button
                 type="button"
+                disabled={isLoading}
                 onClick={() => setShownInputPicture({ isShown: false })}
                 className={`absolute top-0 right-0 p-1 flex items-center gap-1 ${
                   !shownInputPicture.isShown && 'hidden'
@@ -72,7 +114,8 @@ export default function ModalCreate(prop) {
                 className={`flex gap-2 items-center ${
                   shownInputPicture.isShown && 'hidden'
                 }`}>
-                <button
+                <Button
+                  disabled={isLoading}
                   onClick={() =>
                     setShownInputPicture({
                       isShown: true,
@@ -82,9 +125,10 @@ export default function ModalCreate(prop) {
                   type="button"
                   className="px-4 py-2 bg-red-500 text-white rounded">
                   Link
-                </button>
+                </Button>
                 <p>or</p>
-                <button
+                <Button
+                  disabled={isLoading}
                   onClick={() =>
                     setShownInputPicture({
                       isShown: true,
@@ -94,7 +138,7 @@ export default function ModalCreate(prop) {
                   type="button"
                   className="px-4 py-2 bg-red-500 text-white rounded">
                   Upload
-                </button>
+                </Button>
               </div>
               {shownInputPicture.isShown &&
                 (shownInputPicture.type === 'link' ? (
@@ -109,6 +153,7 @@ export default function ModalCreate(prop) {
                       required
                     />
                     <button
+                      disabled={isLoading}
                       type="button"
                       onClick={() => (shownInputPicture.isShown = false)}
                       className="p-1 absolute bottom-0 right-0 bg-green-500 text-white rounded">
@@ -127,53 +172,30 @@ export default function ModalCreate(prop) {
                 ))}
             </div>
           </label>
-          <label htmlFor="food-name">
-            Food Name
-            <input
-              type="text"
-              name="name"
-              id="food-name"
-              required
-              className={styles.input}
-            />
-          </label>
-          <label htmlFor="price">
-            Price
-            <input
-              type="number"
-              name="price"
-              id="price"
-              required
-              className={styles.input}
-            />
-          </label>
-          <label htmlFor="discount">
-            Discount
-            <div className="relative ">
-              <input
-                type="number"
-                name="discount"
-                id="discount"
-                className={styles.input}
-              />
-              <div className="absolute right-0 bg-white bottom-0 h-[90%] px-4 rounded-lg flex items-center justify-center">
-                <FaPercent />
-              </div>
-            </div>
-          </label>
-          <div className="w-full flex gap-2">
-            <button
-              type="button"
-              className={styles.button}
+          <label htmlFor="food-name">Food Name</label>
+          <Input type="text" name="name" id="food-name" />
+          <label htmlFor="price">Price</label>
+          <Input type="number" name="price" id="price" />
+          <label htmlFor="discount">Discount</label>
+          <Input
+            type="number"
+            name="discount"
+            id="discount"
+            suffix={<FaPercent />}
+          />
+          <div className="flex gap-4 justify-end">
+            <Button
+              disabled={isLoading}
+              htmlType="button"
               onClick={() => setShownAdd(false)}>
               Close
-            </button>
-            <button type="submit" className={styles.button}>
-              Add
-            </button>
+            </Button>
+            <Button disabled={isLoading} htmlType="submit">
+              {isLoading ? 'Loading...' : 'Create'}
+            </Button>
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
