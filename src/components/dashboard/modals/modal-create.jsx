@@ -83,8 +83,8 @@ export default function ModalCreate(prop) {
             required
             name="category"
             id="category"
-            options={category}
-            className={styles.input}
+            options={category.data}
+            // className={styles.input}
           />
           <label htmlFor="image">
             Image
@@ -173,11 +173,22 @@ export default function ModalCreate(prop) {
             </div>
           </label>
           <label htmlFor="food-name">Food Name</label>
-          <Input type="text" name="name" id="food-name" />
+          <Input
+            className="rounded border-0 bg-gray-100"
+            type="text"
+            name="name"
+            id="food-name"
+          />
           <label htmlFor="price">Price</label>
-          <Input type="number" name="price" id="price" />
+          <Input
+            className="rounded border-0 bg-gray-100"
+            type="number"
+            name="price"
+            id="price"
+          />
           <label htmlFor="discount">Discount</label>
           <Input
+            className="rounded border-0 bg-gray-100"
             type="number"
             name="discount"
             id="discount"
