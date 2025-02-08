@@ -3,6 +3,7 @@ import { listsSubmenu } from '../../../helper/constants';
 import { styles } from '../../../helper/styles';
 import { FaCheckCircle, FaPercent } from 'react-icons/fa';
 import { Toaster } from '../../notif/Toaster';
+import Switch from '../../Switch';
 
 export default function ModalUpdate(prop) {
   const {
@@ -31,7 +32,8 @@ export default function ModalUpdate(prop) {
       <div className="p-4 flex flex-col gap-2 min-w-1/3 h-[95%] bg-white rounded-lg overflow-y-auto overflow-x-hidden">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold text-indigo-500">Edit Product</h1>
-          <label className="inline-flex items-center cursor-pointer">
+          <Switch product={product} setStatus={setStatus} />
+          {/* <label className="inline-flex items-center cursor-pointer">
             <span className="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               Off
             </span>
@@ -45,7 +47,7 @@ export default function ModalUpdate(prop) {
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               On
             </span>
-          </label>
+          </label> */}
         </div>
         <form onSubmit={handleEdit} className="flex flex-col gap-4">
           <label htmlFor="Name">
