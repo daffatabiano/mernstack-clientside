@@ -13,6 +13,7 @@ import Coupon from '../pages/menu/coupon';
 import Account from '../pages/menu/account';
 import ModalPhoneInput from '../components/modals/ModalPhoneInput';
 import { AdminProtect } from './protectedRoutes';
+import Category from '../pages/dashboard/menu/category';
 
 export const routeLists = [
   {
@@ -59,11 +60,29 @@ export const routeLists = [
     ),
   },
   {
-    path: '/admin-panel/dashboard/menu',
+    path: '/admin-panel/dashboard/products',
     name: 'Menu',
     element: (
       <AdminProtect>
         <MenuDashboard />
+      </AdminProtect>
+    ),
+  },
+  {
+    path: '/admin-panel/dashboard/products',
+    name: 'Menu',
+    element: (
+      <AdminProtect>
+        <MenuDashboard />
+      </AdminProtect>
+    ),
+  },
+  {
+    path: '/admin-panel/dashboard/categories',
+    name: 'Categories',
+    element: (
+      <AdminProtect>
+        <Category />
       </AdminProtect>
     ),
   },
