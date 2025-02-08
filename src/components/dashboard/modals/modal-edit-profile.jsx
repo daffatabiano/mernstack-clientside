@@ -1,4 +1,5 @@
 import { styles } from '../../../helper/styles';
+const PLACEHOLDER = import.meta.env.VITE_PLACEHOLDER_IMAGE;
 
 export default function ModalEditProfile(prop) {
   const {
@@ -6,7 +7,6 @@ export default function ModalEditProfile(prop) {
     updateNotif,
     handleEdit,
     setShowCropModal,
-    image,
     showCropModal,
     setShowEdit,
   } = prop;
@@ -35,7 +35,12 @@ export default function ModalEditProfile(prop) {
           <div
             onClick={() => setShowCropModal({ ...showCropModal, shown: true })}>
             <img
-              src={user.image}
+              src={
+                user.image ||
+                `${PLACEHOLDER}/30/dd6699/ffffff/100x100.png?text=${user.name
+                  ?.slice(0, 2)
+                  .toUpperCase()}`
+              }
               className="w-32 h-32 my-4 mx-auto rounded-full"
               alt=""
             />
