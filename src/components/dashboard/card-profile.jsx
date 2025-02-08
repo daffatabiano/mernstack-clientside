@@ -1,5 +1,6 @@
 import { styles } from '../../helper/styles';
 import { convertBirthdate, getWorkPeriod } from '../../utils/throttle';
+const PLACEHOLDER = import.meta.env.VITE_PLACEHOLDER_IMAGE;
 
 export default function CardProfile(prop) {
   const { setShowEdit } = prop;
@@ -30,7 +31,7 @@ export default function CardProfile(prop) {
       <img
         src={
           user.image ||
-          `https://placehold.jp/30/dd6699/ffffff/100x100.png?text=${user.name
+          `${PLACEHOLDER}/30/dd6699/ffffff/100x100.png?text=${user.name
             ?.slice(0, 2)
             .toUpperCase()}`
         }
