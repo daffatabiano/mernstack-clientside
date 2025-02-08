@@ -33,6 +33,13 @@ export default {
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
       },
+      colors: {
+        'base-dark': '#1c2833',
+        'sub-dark': '#2e4053',
+        'middle-dark': '#aab7b8',
+        'sub-light': '#d5dbdb',
+        'base-light': '#f4f6f6',
+      },
     },
   },
   plugins: [flowbite.plugin()],
