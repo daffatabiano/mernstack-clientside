@@ -120,8 +120,6 @@ export default function MenuDashboard() {
     (item) => item.category === showByCategory
   );
 
-  console.log(category);
-
   return (
     <>
       {/* Main Menu Layout */}
