@@ -50,7 +50,7 @@ export default function Category() {
   const [value, setValue] = useState('');
   const [image, setImage] = useState('');
   const handleCreate = async () => {
-    const body = { name, value, image };
+    const body = { label: name, value: value, image: image };
     await createCategory(body).unwrap();
     if (isSuccess) {
       setName('');
