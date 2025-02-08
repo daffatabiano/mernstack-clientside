@@ -27,8 +27,19 @@ export const listsAside = [
   },
   {
     name: 'Menu',
-    path: '/admin-panel/dashboard/menu',
     icon: <RiDashboardHorizontalFill />,
+    child: [
+      {
+        name: 'Products',
+        path: '/admin-panel/dashboard/products',
+        icon: <MdOutlineAccountCircle />,
+      },
+      {
+        name: 'Categories',
+        path: '/admin-panel/dashboard/categories',
+        icon: <MdRestaurantMenu />,
+      },
+    ],
   },
   {
     name: 'Order',
