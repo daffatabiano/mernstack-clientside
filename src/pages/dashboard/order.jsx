@@ -42,59 +42,49 @@ export default function OrderDashboard() {
 
   return (
     <>
-      <ModalCreate
-        setShownAdd={setShownAdd}
-        shownAdd={shownAdd}
-        handleAdd={handleAdd}
-        notify={notify}
-        shownInputPicture={shownInputPicture}
-        setShownInputPicture={setShownInputPicture}
-      />
-      <DashboardLayout>
-        <div className="w-full p-4">
-          <MenuHeader
-            submenu={listsOrder}
-            setShowByCategory={setShowByCategory}
-            setShownAdd={setShownAdd}
-            addButton={false}
-          />
-        </div>
+      <div className="w-full p-4">
+        <MenuHeader
+          submenu={listsOrder}
+          setShowByCategory={setShowByCategory}
+          setShownAdd={setShownAdd}
+          addButton={false}
+        />
+      </div>
 
-        {orders?.length === 0 ? (
-          <div className="w-full h-full p-4 flex flex-col justify-center items-center">
-            <img
-              src="/videos/notfound.gif"
-              alt="notfound-animation"
-              className="w-full"
-            />
-            <h1 className="text-3xl italic font-bold tracking-widest text-amber-400">
-              Under Construction !
-            </h1>
-          </div>
-        ) : (
-          <div className="grid grid-cols-4 gap-2 overflow-auto mt-2 px-2">
-            {orders?.map((order) => (
-              <button
-                type="button"
-                onClick={goToDetails(order._id)}
-                className="text-wrap bg-white rounded-lg p-4 drop-shadow-sm hover:transform hover:scale-105 transition-all duration-300"
-                key={order._id}>
-                <h1 className="text-indigo-500 font-semibold">
-                  # {parsingOrderId(order._id)}
-                </h1>
-                <p>
-                  {new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  }).format(order?.amount)}
-                </p>
-              </button>
-            ))}
-          </div>
-        )}
-      </DashboardLayout>
+      {orders?.length === 0 ? (
+        <div className="w-full h-full p-4 flex flex-col justify-center items-center">
+          <img
+            src="/videos/notfound.gif"
+            alt="notfound-animation"
+            className="w-full"
+          />
+          <h1 className="text-3xl italic font-bold tracking-widest text-amber-400">
+            Under Construction !
+          </h1>
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 gap-2 overflow-auto mt-2 px-2">
+          {orders?.map((order) => (
+            <button
+              type="button"
+              onClick={goToDetails(order._id)}
+              className="text-wrap bg-white rounded-lg p-4 drop-shadow-sm hover:transform hover:scale-105 transition-all duration-300"
+              key={order._id}>
+              <h1 className="text-indigo-500 font-semibold">
+                # {parsingOrderId(order._id)}
+              </h1>
+              <p>
+                {new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(order?.amount)}
+              </p>
+            </button>
+          ))}
+        </div>
+      )}
     </>
   );
 }
