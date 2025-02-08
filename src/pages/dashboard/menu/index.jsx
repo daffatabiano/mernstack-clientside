@@ -121,7 +121,7 @@ export default function MenuDashboard() {
     (item) => item.category === showByCategory
   );
 
-  console.log(shownAdd);
+  console.log(showDelete);
 
   return (
     <>
