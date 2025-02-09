@@ -1,5 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query';
-import { handlePutLifecycle } from '../../../utils/apiHandlers';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  handlePutLifecycle,
+  handleQueryLifecycle,
+} from '../../../utils/apiHandlers';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 const putReducers = createApi({
@@ -65,14 +68,14 @@ const putReducers = createApi({
         if (arg.callback) arg.callback();
       },
     }),
-    updateProduct: builder.mutation({
-      query: (b, id) => ({
+    updateProductAdmin: builder.mutation({
+      query: ({ id, ...b }) => ({
         url: `/product/${id}`,
         method: 'PUT',
         body: b,
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        await handlePutLifecycle({
+        await handleQueryLifecycle({
           dispatch,
           queryFulfilled,
           successTitle: 'Update Success',
@@ -136,11 +139,10 @@ export const {
   useUpdateCategoryMutation,
   useUpdateCustomerProfileMutation,
   useCollectOrdersByAdminMutation,
-  useUpdateProductMutation,
+  useUpdateProductAdminMutation,
   useUpdateAdminProfileMutation,
   useUpdatePasswordAdminMutation,
   useUpdateVoucherMutation,
 } = putReducers;
 export const putMiddleware = putReducers.middleware;
-
 export default putReducers;
