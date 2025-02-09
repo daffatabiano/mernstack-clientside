@@ -7,6 +7,7 @@ import loadingReducers from './loadingReducers';
 import postReducers from './api/postReducers';
 import fetchReducers from './api/fetchReducers';
 import deleteReducers from './api/deleteReducers';
+import putReducers from './api/putReducers';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -16,7 +17,7 @@ const rootReducer = combineReducers({
   [postReducers.reducerPath]: postReducers.reducer,
   [fetchReducers.reducerPath]: fetchReducers.reducer,
   [deleteReducers.reducerPath]: deleteReducers.reducer,
-  [fetchReducers.reducerPath]: fetchReducers.reducer,
+  [putReducers.reducerPath]: putReducers.reducer,
 });
 
 export default rootReducer;
