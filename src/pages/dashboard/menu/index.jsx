@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { listsSubmenu } from '../../../helper/constants';
-import usePost from '../../../hooks/usePost';
-import useFetch from '../../../hooks/useGet';
 import CardMenu from '../../../components/dashboard/card-menu';
 import ModalCreate from '../../../components/dashboard/modals/modal-create';
 import ModalDelete from '../../../components/dashboard/modals/modal-delete';
@@ -18,10 +16,8 @@ import { GrPowerReset } from 'react-icons/gr';
 
 export default function MenuDashboard() {
   const [shownAdd, setShownAdd] = useState(false);
-  const { updateProduct } = usePost();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [status, setStatus] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showByCategory, setShowByCategory] = useState('');
   const { data, isLoading, isError, isSuccess } = useGetAllProductsQuery({
@@ -37,7 +33,7 @@ export default function MenuDashboard() {
   });
   const [showEdit, setShowEdit] = useState({
     isShown: false,
-    id: '',
+    data: {},
   });
   const products = data?.data || [];
   const [shownInputPicture, setShownInputPicture] = useState({
@@ -45,63 +41,9 @@ export default function MenuDashboard() {
     type: '',
     image: '',
   });
-  const { data: product } = useFetch(`products/${showEdit.id}`);
-
   const [showToast, setShowToast] = useState(false);
-  const [notify, setNotify] = useState({
-    type: '',
-    message: '',
-  });
 
   const { upload } = useUpload();
-
-  const handleEdit = async (e) => {
-    e.preventDefault();
-    const body = {
-      category: e?.target?.category?.value,
-      image: e?.target?.image?.value,
-      name: e?.target?.name?.value,
-      discount: e?.target?.discount?.value,
-      price: e?.target?.price?.value,
-      status: status,
-    };
-
-    if (body.discount > 100) {
-      return setNotify({
-        message: 'Discount cannot be more than 100%',
-        type: 'error',
-      });
-    }
-
-    try {
-      const res = await updateProduct(showEdit.id, body);
-
-      if (res.status === 200) {
-        setShowToast(true);
-        setNotify({
-          message: res.data.message,
-          type: 'success',
-        });
-        setShowEdit({
-          isShown: false,
-          id: '',
-        });
-        data?.refetch();
-      } else {
-        setShowToast(true);
-        setNotify({
-          message: res.data.message,
-          type: 'error',
-        });
-      }
-    } catch (err) {
-      setShowToast(true);
-      setNotify({
-        message: err.response.data.message,
-        type: 'error',
-      });
-    }
-  };
 
   const handleUpload = async (e) => {
     try {
@@ -119,6 +61,39 @@ export default function MenuDashboard() {
   const filterProducts = products.filter(
     (item) => item.category === showByCategory
   );
+
+  const sortOptions = [
+    {
+      key: 'createdAt',
+      label: 'Newest',
+      onClick: () => setSearchParams({ sort: 'createdAt' }),
+    },
+    {
+      key: 'name_asc',
+      label: 'Z-A',
+      onClick: () => setSearchParams({ sort: 'name_asc' }),
+    },
+    {
+      key: 'name_desc',
+      label: 'A-Z',
+      onClick: () => setSearchParams({ sort: 'name_desc' }),
+    },
+    {
+      key: 'price_asc',
+      label: 'Lowest Price',
+      onClick: () => setSearchParams({ sort: 'price_asc' }),
+    },
+    {
+      key: 'price_desc',
+      label: 'Highest Price',
+      onClick: () => setSearchParams({ sort: 'price_desc' }),
+    },
+  ];
+
+  const currentOptions = searchParams.get('sort') || 'createdAt';
+
+  const selectedLabel =
+    sortOptions.find(({ key }) => key === currentOptions)?.label || 'Newest';
 
   return (
     <>
@@ -166,37 +141,15 @@ export default function MenuDashboard() {
                 <p>Sort By:</p>
                 <Dropdown
                   menu={{
-                    items: [
-                      {
-                        key: 'createdAt',
-                        label: 'Newest',
-                        onClick: () => setSearchParams({ sort: 'createdAt' }),
-                      },
-                      {
-                        key: 'name_asc',
-                        label: 'A-Z',
-                        onClick: () => setSearchParams({ sort: 'name_asc' }),
-                      },
-                      {
-                        key: 'name_desc',
-                        label: 'Z-A',
-                        onClick: () => setSearchParams({ sort: 'name_desc' }),
-                      },
-                      {
-                        key: 'price_asc',
-                        label: 'Lowest Price',
-                        onClick: () => setSearchParams({ sort: 'price_asc' }),
-                      },
-                      {
-                        key: 'price_desc',
-                        label: 'Highest Price',
-                        onClick: () => setSearchParams({ sort: 'price_desc' }),
-                      },
-                    ],
+                    items: sortOptions.map(({ key, label }) => ({
+                      key,
+                      label,
+                      onClick: () => setSearchParams({ sort: key }),
+                    })),
                   }}>
                   <a onClick={(e) => e.preventDefault()}>
                     <Space>
-                      {searchParams.get('sort') || 'Newest'}
+                      {selectedLabel}
                       <FaAngleDown />
                     </Space>
                   </a>
@@ -273,10 +226,6 @@ export default function MenuDashboard() {
       <ModalUpdate
         setShowEdit={setShowEdit}
         showEdit={showEdit}
-        handleEdit={handleEdit}
-        product={product}
-        setStatus={setStatus}
-        isNotify={notify}
         setShowToast={setShowToast}
         showToast={showToast}
         shownInputPicture={shownInputPicture}
