@@ -70,7 +70,7 @@ export default function CardMenu(prop) {
         </button>
         <button
           type="button"
-          onClick={() => setShowEdit({ isShown: true, id: item?._id })}
+          onClick={() => setShowEdit({ isShown: true, data: item })}
           className="px-4 py-2 bg-indigo-500 text-white rounded">
           Edit
         </button>
