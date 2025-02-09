@@ -1,5 +1,4 @@
 import { RiArrowGoBackFill } from 'react-icons/ri';
-import { listsSubmenu } from '../../../helper/constants';
 import { styles } from '../../../helper/styles';
 import { FaCheckCircle, FaPercent } from 'react-icons/fa';
 import { useState } from 'react';
@@ -29,6 +28,7 @@ export default function ModalCreate(prop) {
     search: searchParams.get('search') || '',
     sort: searchParams.get('sort') || 'createdAt',
   });
+  const [categoryChoose, setCategoryChoose] = useState('');
   const { data: category } = useGetCategoriesQuery();
 
   const { upload } = useUpload();
@@ -49,7 +49,7 @@ export default function ModalCreate(prop) {
   const handleAdd = async (e) => {
     e.preventDefault();
     const body = {
-      category: e?.target?.category?.value,
+      category: categoryChoose,
       image:
         shownInputPicture.image.length !== 0
           ? shownInputPicture.image
@@ -82,6 +82,7 @@ export default function ModalCreate(prop) {
           <label htmlFor="category">Category</label>
           <Select
             required
+            onChange={(e) => setCategoryChoose(e)}
             name="category"
             id="category"
             options={category?.data}
