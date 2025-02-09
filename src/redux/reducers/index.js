@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   [postReducers.reducerPath]: postReducers.reducer,
   [fetchReducers.reducerPath]: fetchReducers.reducer,
   [deleteReducers.reducerPath]: deleteReducers.reducer,
+  [fetchReducers.reducerPath]: fetchReducers.reducer,
 });
 
 export default rootReducer;
