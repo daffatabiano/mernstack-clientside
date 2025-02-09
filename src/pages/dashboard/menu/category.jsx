@@ -46,9 +46,9 @@ export default function Category() {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Label',
+      dataIndex: 'label',
+      key: 'label',
       render: (text) => <a>{text}</a>,
     },
     {
