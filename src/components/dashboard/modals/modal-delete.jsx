@@ -12,8 +12,10 @@ export default function ModalDelete(prop) {
   const deleteProductHandler = async (id) => {
     try {
       await productDelete(id).unwrap();
-      setShowDelete({ isShown: false });
-      await refetch();
+      if (isSuccess) {
+        setShowDelete({ isShown: false });
+        await refetch();
+      }
     } catch (err) {
       console.log(err);
     }
