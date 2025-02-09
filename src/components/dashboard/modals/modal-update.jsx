@@ -1,43 +1,37 @@
 import { RiArrowGoBackFill } from 'react-icons/ri';
 import { styles } from '../../../helper/styles';
-import { FaCheckCircle, FaPercent } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
 import Switch from '../../Switch';
-import { Modal, Select } from 'antd';
+import { Button, Input, Modal, Select } from 'antd';
 import {
   useGetAllProductsQuery,
   useGetCategoriesQuery,
 } from '../../../redux/reducers/api/fetchReducers';
-import { useUpdateProductMutation } from '../../../redux/reducers/api/putReducers';
+import { useState } from 'react';
+import { useUpdateProductAdminMutation } from '../../../redux/reducers/api/putReducers';
 export default function ModalUpdate(prop) {
-  const {
-    setShowEdit,
-    showEdit,
-    // handleEdit,
-    product,
-    setStatus,
-    shownInputPicture,
-    setShownInputPicture,
-  } = prop;
+  const { setShowEdit, showEdit, shownInputPicture, setShownInputPicture } =
+    prop;
   const { data: category } = useGetCategoriesQuery();
-  const [updateProduct, { isLoading, isSuccess }] = useUpdateProductMutation();
-  const { refetch } = useGetAllProductsQuery({
-    refetchOnMountOrArgChange: true,
-  });
+  const [updateProductAdmin, { isLoading, isSuccess }] =
+    useUpdateProductAdminMutation();
+  const { refetch } = useGetAllProductsQuery();
+  const [status, setStatus] = useState(false);
+  const [categoryChoose, setCategoryChoose] = useState('');
 
   const handleEdit = async (e) => {
     e.preventDefault();
     const body = {
-      category: e?.target?.category?.value,
+      category: categoryChoose,
       image: e?.target?.image?.value,
       name: e?.target?.name?.value,
       discount: e?.target?.discount?.value,
       price: e?.target?.price?.value,
       status: status,
     };
-
     try {
-      await updateProduct(body, showEdit.id).unwrap();
-      if (isSuccess) {
+      await updateProductAdmin({ id: showEdit.data?._id, ...body }).unwrap();
+      if (!isLoading) {
         setShowEdit({ isShown: false });
         await refetch();
       }
@@ -49,22 +43,23 @@ export default function ModalUpdate(prop) {
   return (
     <Modal
       open={showEdit.isShown}
+      centered
+      footer={null}
       onCancel={() => setShowEdit({ isShown: false })}>
       <div className="p-4 flex flex-col gap-2 min-w-1/3 h-[95%] bg-white rounded-lg overflow-y-auto overflow-x-hidden">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold text-indigo-500">Edit Product</h1>
-          <Switch product={product} setStatus={setStatus} />
+          <Switch product={showEdit} setStatus={setStatus} />
         </div>
         <form onSubmit={handleEdit} className="flex flex-col gap-4">
-          <label htmlFor="Name">
-            Category
-            <Select
-              name="category"
-              id="category"
-              options={category?.data}
-              defaultValue={product?.data?.category}
-            />
-          </label>
+          <label htmlFor="category">Category</label>
+          <Select
+            onChange={(e) => setCategoryChoose(e)}
+            name="category"
+            id="category"
+            options={category?.data}
+            defaultValue={showEdit?.data?.category}
+          />
           <label htmlFor="image">
             Image
             <div className="w-full flex justify-between gap-4 items-center relative">
@@ -83,7 +78,7 @@ export default function ModalUpdate(prop) {
                 src={
                   shownInputPicture.image
                     ? shownInputPicture.image
-                    : product?.data?.image || '/images/empty-food.png'
+                    : showEdit?.data?.image || '/images/empty-food.png'
                 }
                 alt=""
                 className="w-[150px] h-[100px] object-cover rounded"
@@ -144,52 +139,44 @@ export default function ModalUpdate(prop) {
                 ))}
             </div>
           </label>
-          <label htmlFor="food-name">
-            Food Name
-            <input
-              defaultValue={product?.data?.name}
-              type="text"
-              name="name"
-              id="food-name"
-              className={styles.input}
-            />
-          </label>
-          <label htmlFor="price">
-            Price
-            <input
-              defaultValue={product?.data?.price}
-              type="number"
-              name="price"
-              id="price"
-              className={styles.input}
-            />
-          </label>
-          <label htmlFor="discount">
-            Discount
-            <div className="relative ">
-              <input
-                defaultValue={product?.data?.discount}
-                type="number"
-                name="discount"
-                id="discount"
-                className={styles.input}
-                max="100"
-              />
-              <div className="absolute right-0 bg-white bottom-0 h-[90%] px-4 rounded-lg flex items-center justify-center">
-                <FaPercent />
-              </div>
-            </div>
-          </label>
-          <div className="w-full flex gap-2">
-            <button
-              type="button"
-              className={styles.button}
-              onClick={() => setShowEdit(false)}>
+          <label htmlFor="food-name">Food Name</label>
+          <Input
+            defaultValue={showEdit?.data?.name}
+            type="text"
+            name="name"
+            id="food-name"
+            className="rounded-lg border-0 bg-gray-200 placeholder-gray-600 text-gray-600 focus:bg-white focus:outline-none focus:border focus:border-indigo-500"
+          />
+          <label htmlFor="price">Price</label>
+          <Input
+            defaultValue={showEdit?.data?.price}
+            type="number"
+            name="price"
+            id="price"
+            className="rounded-lg border-0 bg-gray-200 placeholder-gray-600 text-gray-600 focus:bg-white focus:outline-none focus:border focus:border-indigo-500"
+          />
+          <label htmlFor="discount">Discount</label>
+          <Input
+            defaultValue={showEdit?.data?.discount}
+            type="number"
+            name="discount"
+            id="discount"
+            className="rounded-lg border-0 bg-gray-200 placeholder-gray-600 text-gray-600 focus:bg-white focus:outline-none focus:border focus:border-indigo-500"
+            min="0"
+            max="100"
+            suffix="%"
+          />
+          <div className="w-full flex gap-2 justify-end">
+            <Button
+              type="default"
+              htmlType="button"
+              onClick={() => setShowEdit(false)}
+              disabled={isLoading}>
               Close
-            </button>
-            <button type="submit" className={styles.button}>
+            </Button>
+            <Button type="primary" htmlType="submit" disabled={isLoading}>
               Update
-            </button>
+            </Button>
           </div>
         </form>
       </div>
