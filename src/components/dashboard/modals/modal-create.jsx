@@ -75,6 +75,7 @@ export default function ModalCreate(prop) {
       title="Create Product"
       open={shownAdd}
       footer={false}
+      onCancel={() => setShownAdd(false)}
       onClose={() => setShownAdd(false)}>
       <div className="w-full h-full p-4 bg-white rounded-lg overflow-auto">
         <form onSubmit={handleAdd} className="flex flex-col gap-4">
