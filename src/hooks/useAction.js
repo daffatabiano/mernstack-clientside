@@ -13,7 +13,7 @@ export default function useAction() {
   const { pathname } = window.location;
 
   const handlePayment = async (totalPrice, message) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('tokenCust');
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (!token) {
@@ -43,46 +43,11 @@ export default function useAction() {
         });
         const tokenTransaction = res?.data?.token;
 
-        window.snap.pay(tokenTransaction, {
-          onSuccess: async function (result) {
-            const orderData = JSON.parse(localStorage.getItem('cart'));
-            const bodyOrder = {
-              tableId: getTableId(pathname),
-              name: user?.name,
-              amount: totalPrice?.reduce((total, item) => total + item, 0),
-              data: orderData,
-              email: user?.email,
-              status: 'pending',
-            };
-            console.log(result);
-            const res = await axios.post(`${url}/order`, body, {
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            if (res.status === 200) {
-              message('Order Success');
+        if (tokenTransaction) {
+          localStorage.setItem('dataPayment', JSON.stringify(body));
+        }
 
-              setTimeout(() => {
-                dispatch(clearCart());
-                localStorage.removeItem('cart');
-                navigate('/order');
-                message('Order Processing ...');
-              }, 1000);
-            }
-          },
-          onPending: function (result) {
-            console.log(result);
-          },
-          onError: function (result) {
-            console.log(result);
-          },
-          onClose: function () {
-            console.log('payment closed');
-          },
-        });
+        window.snap.pay(tokenTransaction);
       } catch (error) {
         console.log(error);
       }
