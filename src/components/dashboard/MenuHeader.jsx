@@ -11,14 +11,14 @@ export default function MenuHeader(prop) {
       <div className=" gap-4 p-2 scrollbar-header-menu flex overflow-x-auto overflow-y-hidden">
         {submenu?.map((item) => (
           <h1
-            key={item.name}
+            key={item.label}
             onClick={() =>
               setSearchParams({
-                category: item.name === 'All' ? '' : item.name,
+                category: item.value === 'All' ? '' : item.value,
               })
             }
             className={styles.submenu}>
-            {item.name}
+            {item.label}
           </h1>
         ))}
       </div>
