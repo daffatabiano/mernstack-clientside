@@ -205,7 +205,9 @@ const postReducers = createApi({
           queryFulfilled,
           successTitle: 'Order Sent',
           errorTitle: 'Failed Sending',
-          callback: arg.callback,
+          callback: () => {
+            localStorage.removeItem('dataPayment');
+          },
         });
       },
     }),
