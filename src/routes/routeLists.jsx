@@ -14,6 +14,7 @@ import Account from '../pages/menu/account';
 import ModalPhoneInput from '../components/modals/ModalPhoneInput';
 import { AdminProtect } from './protectedRoutes';
 import Category from '../pages/dashboard/menu/category';
+import SuccesPayment from '../pages/success-payment';
 
 export const routeLists = [
   {
@@ -40,6 +41,11 @@ export const routeLists = [
     path: '/register',
     name: 'Register',
     element: <Register />,
+  },
+  {
+    path: '/success-payment',
+    name: 'Success Payment',
+    element: <SuccesPayment />,
   },
   {
     path: '/admin-panel/dashboard',
