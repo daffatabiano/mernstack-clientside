@@ -8,7 +8,10 @@ import MenuHeader from '../../../components/dashboard/MenuHeader';
 import { priceAfterDiscount } from '../../../helper/helper';
 import useUpload from '../../../hooks/useUpload';
 import { useSearchParams } from 'react-router-dom';
-import { useGetAllProductsQuery } from '../../../redux/reducers/api/fetchReducers';
+import {
+  useGetAllProductsQuery,
+  useGetCategoriesQuery,
+} from '../../../redux/reducers/api/fetchReducers';
 import Search from 'antd/es/input/Search';
 import { Button, Dropdown, Pagination, Space } from 'antd';
 import { FaAngleDown } from 'react-icons/fa';
@@ -42,7 +45,7 @@ export default function MenuDashboard() {
     image: '',
   });
   const [showToast, setShowToast] = useState(false);
-
+  const { data: category } = useGetCategoriesQuery();
   const { upload } = useUpload();
 
   const handleUpload = async (e) => {
@@ -125,7 +128,10 @@ export default function MenuDashboard() {
 
           <div className="flex justify-between w-full">
             <MenuHeader
-              submenu={listsSubmenu}
+              submenu={category?.data?.map(({ value, label }) => ({
+                label,
+                value,
+              }))}
               setShowByCategory={setShowByCategory}
               setShownAdd={setShownAdd}
             />
