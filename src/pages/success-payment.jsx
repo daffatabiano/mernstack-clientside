@@ -12,17 +12,16 @@ export default function SuccesPayment() {
 
   useEffect(() => {
     const sendToOrder = async () => {
-      const orderData = JSON.parse(localStorage.getItem('orderData'));
       const cart = JSON.parse(localStorage.getItem('cart'));
       const tableId = localStorage.getItem('tableId');
 
-      if (!orderData || !cart || !tableId) return; // Prevent errors
+      if (!dataPayment || !cart || !tableId) return; // Prevent errors
 
       const body = {
         tableId,
-        name: orderData.firstName,
-        email: orderData.email,
-        amount: orderData.amount,
+        name: dataPayment.firstName,
+        email: dataPayment.email,
+        amount: dataPayment.amount,
         orderData: cart,
       };
 
