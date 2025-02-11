@@ -28,7 +28,7 @@ export default function SuccesPayment() {
 
         try {
           await sendOrderCustomer(body).unwrap();
-          if (!isLoading && isSuccess) {
+          if (!isLoading) {
             localStorage.removeItem('cart');
             localStorage.removeItem('dataPayment');
           }
