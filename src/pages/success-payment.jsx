@@ -7,51 +7,50 @@ export default function SuccesPayment() {
   const dataPayment = JSON.parse(localStorage.getItem('dataPayment'));
   const [sendOrderCustomer, { isLoading, isSuccess }] =
     useSendOrderCustomerMutation();
-  const [successIndicator, setSuccessIndicator] = useState(5);
+  const [successIndicator, setSuccessIndicator] = useState(0);
   const navigate = useNavigate();
 
-  const sendToOrder = async () => {
-    const { firstName, email, amount } = JSON.parse(
-      localStorage.getItem('orderData')
-    );
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    const tableId = localStorage.getItem('tableId');
-    const body = {
-      tableId: tableId,
-      name: firstName,
-      email: email,
-      amount: amount,
-      orderData: cart,
-    };
-
-    try {
-      await sendOrderCustomer(body).unwrap();
-      if (!isLoading) {
-        localStorage.removeItem('cart');
-        localStorage.removeItem('dataPayment');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const sendToOrder = async () => {
+      const { firstName, email, amount } = JSON.parse(
+        localStorage.getItem('orderData')
+      );
+      const cart = JSON.parse(localStorage.getItem('cart'));
+      const tableId = localStorage.getItem('tableId');
+      const body = {
+        tableId: tableId,
+        name: firstName,
+        email: email,
+        amount: amount,
+        orderData: cart,
+      };
+
+      try {
+        await sendOrderCustomer(body).unwrap();
+        if (!isLoading) {
+          setSuccessIndicator(10);
+          localStorage.removeItem('cart');
+          localStorage.removeItem('dataPayment');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     sendToOrder();
     localStorage.removeItem('dataPayment');
-  }, [dataPayment, isLoading, sendOrderCustomer, sendToOrder]);
+  }, [dataPayment, isLoading, sendOrderCustomer]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSuccessIndicator((prev) => prev - 1);
-    }, 1000);
-
-    if (successIndicator === 0) {
+    if (successIndicator > 0) {
+      const interval = setInterval(() => {
+        setSuccessIndicator((prev) => prev - 1);
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    } else if (successIndicator === 0) {
       navigate('/order');
     }
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [navigate, successIndicator, isSuccess]);
   return (
     <>
