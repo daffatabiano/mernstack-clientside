@@ -37,20 +37,19 @@ export default function SuccesPayment() {
       }
     };
     sendToOrder();
-    localStorage.removeItem('dataPayment');
-  }, [dataPayment, isLoading, sendOrderCustomer]);
+  }, [dataPayment]);
 
   useEffect(() => {
     if (successIndicator > 0) {
       const interval = setInterval(() => {
         setSuccessIndicator((prev) => prev - 1);
       }, 1000);
+      if (successIndicator === 0) {
+        navigate('/order');
+      }
       return () => {
         clearInterval(interval);
       };
-    }
-    if (successIndicator === 0) {
-      navigate('/order');
     }
   }, [navigate, successIndicator, isSuccess]);
   return (
