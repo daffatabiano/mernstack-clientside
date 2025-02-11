@@ -11,35 +11,33 @@ export default function SuccesPayment() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (dataPayment) {
-      async function sendToOrder() {
-        const { firstName, email, amount } = JSON.parse(
-          localStorage.getItem('orderData')
-        );
-        const cart = JSON.parse(localStorage.getItem('cart'));
-        const tableId = localStorage.getItem('tableId');
-        const body = {
-          tableId: tableId,
-          name: firstName,
-          email: email,
-          amount: amount,
-          orderData: cart,
-        };
+    async function sendToOrder() {
+      const { firstName, email, amount } = JSON.parse(
+        localStorage.getItem('orderData')
+      );
+      const cart = JSON.parse(localStorage.getItem('cart'));
+      const tableId = localStorage.getItem('tableId');
+      const body = {
+        tableId: tableId,
+        name: firstName,
+        email: email,
+        amount: amount,
+        orderData: cart,
+      };
 
-        try {
-          await sendOrderCustomer(body).unwrap();
-          if (!isLoading) {
-            localStorage.removeItem('cart');
-            localStorage.removeItem('dataPayment');
-          }
-        } catch (error) {
-          console.log(error);
+      try {
+        await sendOrderCustomer(body).unwrap();
+        if (!isLoading) {
+          localStorage.removeItem('cart');
+          localStorage.removeItem('dataPayment');
         }
+      } catch (error) {
+        console.log(error);
       }
-      localStorage.removeItem('dataPayment');
-      sendToOrder();
     }
-  }, [dataPayment]);
+    localStorage.removeItem('dataPayment');
+    sendToOrder();
+  }, [dataPayment, isLoading, sendOrderCustomer]);
 
   useEffect(() => {
     const interval = setInterval(() => {
