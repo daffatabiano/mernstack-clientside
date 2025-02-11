@@ -48,7 +48,8 @@ export default function SuccesPayment() {
       return () => {
         clearInterval(interval);
       };
-    } else if (successIndicator === 0) {
+    }
+    if (successIndicator === 0) {
       navigate('/order');
     }
   }, [navigate, successIndicator, isSuccess]);
