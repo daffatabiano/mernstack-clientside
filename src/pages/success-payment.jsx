@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSendOrderCustomerMutation } from '../redux/reducers/api/postReducers';
 
 export default function SuccesPayment() {
-  const dataPayment = JSON.parse(localStorage.getItem('dataPayment'));
+  const navigate = useNavigate();
   const [sendOrderCustomer, { isLoading, isSuccess }] =
     useSendOrderCustomerMutation();
   const [successIndicator, setSuccessIndicator] = useState(0);
-  const navigate = useNavigate();
+  const requestSent = useRef(false); // Prevent infinite loop
 
   useEffect(() => {
+    if (requestSent.current) return; // Prevent multiple requests
+
+    const dataPayment = JSON.parse(localStorage.getItem('dataPayment'));
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    const tableId = localStorage.getItem('tableId');
+
+    if (!dataPayment || !cart || !tableId) return;
+
     const sendToOrder = async () => {
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      const tableId = localStorage.getItem('tableId');
-
-      if (!dataPayment || !cart || !tableId) return; // Prevent errors
-
       const body = {
         tableId,
         name: dataPayment.firstName,
@@ -27,17 +30,18 @@ export default function SuccesPayment() {
 
       try {
         await sendOrderCustomer(body).unwrap();
+        requestSent.current = true; // Mark request as sent
       } catch (error) {
         console.log(error);
       }
     };
 
-    if (dataPayment) sendToOrder();
-  }, [sendOrderCustomer, dataPayment]); // Ensure sendOrderCustomer is in dependencies
+    sendToOrder();
+  }, [sendOrderCustomer]); // Remove `dataPayment` to avoid infinite loop
 
   useEffect(() => {
     if (isSuccess) {
-      setSuccessIndicator(10); // Start countdown when order is successful
+      setSuccessIndicator(10);
       localStorage.removeItem('cart');
       localStorage.removeItem('dataPayment');
     }
