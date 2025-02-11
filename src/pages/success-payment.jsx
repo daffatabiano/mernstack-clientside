@@ -9,12 +9,25 @@ export default function SuccesPayment() {
     useSendOrderCustomerMutation();
   const [successIndicator, setSuccessIndicator] = useState(5);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (dataPayment) {
       async function sendToOrder() {
-        const orderData = JSON.parse(localStorage.getItem('cart'));
+        const { firstName, email, amount } = JSON.parse(
+          localStorage.getItem('orderData')
+        );
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        const tableId = localStorage.getItem('tableId');
+        const body = {
+          tableId: tableId,
+          name: firstName,
+          email: email,
+          amount: amount,
+          orderData: cart,
+        };
+
         try {
-          await sendOrderCustomer(orderData).unwrap();
+          await sendOrderCustomer(body).unwrap();
           if (!isLoading && isSuccess) {
             localStorage.removeItem('cart');
             localStorage.removeItem('dataPayment');
@@ -27,6 +40,7 @@ export default function SuccesPayment() {
       sendToOrder();
     }
   }, [dataPayment]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setSuccessIndicator((prev) => prev - 1);
