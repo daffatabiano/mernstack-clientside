@@ -61,7 +61,7 @@ export default function ModalCreate(prop) {
 
     try {
       await createProductAdmin(body).unwrap();
-      if (isSuccess) {
+      if (!isLoading) {
         setShownAdd(false);
         await refetch();
       }

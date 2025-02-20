@@ -6,13 +6,17 @@ export default function ModalDelete(prop) {
   const { showDelete, setShowDelete } = prop;
   const [productDelete, { isLoading, isSuccess }] = useProductDeleteMutation();
   const { refetch } = useGetAllProductsQuery({
-    refetchOnMountOrArgChange: true,
+    page: 1,
+    pageSize: 10,
+    category: '',
+    search: '',
+    sort: 'createdAt',
   });
 
   const deleteProductHandler = async (id) => {
     try {
       await productDelete(id).unwrap();
-      if (isSuccess) {
+      if (!isLoading) {
         setShowDelete({ isShown: false });
         await refetch();
       }

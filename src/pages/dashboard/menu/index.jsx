@@ -23,7 +23,7 @@ export default function MenuDashboard() {
   const [pageSize, setPageSize] = useState(10);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showByCategory, setShowByCategory] = useState('');
-  const { data, isLoading, isError, isSuccess } = useGetAllProductsQuery({
+  const { data, isLoading, isError, isSuccess  } = useGetAllProductsQuery({
     page: page,
     limit: pageSize,
     category: searchParams.get('category') || '',
