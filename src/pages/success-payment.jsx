@@ -8,10 +8,10 @@ export default function SuccesPayment() {
   const [sendOrderCustomer, { isLoading, isSuccess }] =
     useSendOrderCustomerMutation();
   const [successIndicator, setSuccessIndicator] = useState(0);
-  const requestSent = useRef(false); // Prevent infinite loop
+  const requestSent = useRef(false); // Prevent duplicate API calls
 
   useEffect(() => {
-    if (requestSent.current) return; // Prevent multiple requests
+    if (requestSent.current) return; // Prevent multiple triggers
 
     const dataPayment = JSON.parse(localStorage.getItem('dataPayment'));
     const cart = JSON.parse(localStorage.getItem('cart'));
@@ -28,16 +28,18 @@ export default function SuccesPayment() {
         orderData: cart,
       };
 
+      requestSent.current = true; // Set before making the API call
+
       try {
         await sendOrderCustomer(body).unwrap();
-        requestSent.current = true; // Mark request as sent
       } catch (error) {
-        console.log(error);
+        console.log('Order submission failed:', error);
+        requestSent.current = false; // Allow retry on failure
       }
     };
 
     sendToOrder();
-  }, [sendOrderCustomer]); // Remove `dataPayment` to avoid infinite loop
+  }, [sendOrderCustomer]); // Only trigger once on mount
 
   useEffect(() => {
     if (isSuccess) {
