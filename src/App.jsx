@@ -11,7 +11,8 @@ function App() {
   const { visible, message, type, description } = useSelector(
     (state) => state?.notification
   );
-  const load = useSelector((state) => console.log(state.loading));
+  const load = useSelector((state) => state.loading.loading);
+  const elements = useRoutes(routeLists);
 
   useEffect(() => {
     if (visible)
@@ -20,19 +21,19 @@ function App() {
         description,
         onClose: () => dispatch(clearNotification()),
       });
-  }, [visible]);
+  }, [description, dispatch, message, type, visible]);
 
-  // useEffect(() => {
-  //   if (loading) {
-  //     return (
-  //       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-slate-800/50 z-[100]">
-  //         <img src={loadingAnimation} alt="loading-animation" />
-  //       </div>
-  //     );
-  //   }
-  // }, [loading]);
-
-  const elements = useRoutes(routeLists);
+  if (load) {
+    return (
+      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-slate-800/50 z-[100]">
+        <img
+          src={loadingAnimation}
+          className="w-16 h-16"
+          alt="loading-animation"
+        />
+      </div>
+    );
+  }
 
   return elements;
 }
