@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaKey, FaLock, FaUnlock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { styles } from '../helper/styles';
+import { Button, Divider, Form, Input } from 'antd';
 
 export default function Home() {
   const [unlock, setUnlock] = useState(false);
@@ -13,6 +14,7 @@ export default function Home() {
   const voucherCheck = customer?.voucher?.length > 0 ? true : false;
   const [isIntroPlaying, setIsIntroPlaying] = useState(true);
   const [sectionPlayer, setSectionPlayer] = useState(1);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     if (!tokenCust) {
@@ -20,13 +22,59 @@ export default function Home() {
     }
   }, [tokenCust, navigate]);
 
+  useEffect(() => {
+    if (!tableId) {
+      setIsIntroPlaying(false);
+    }
+  }, [tableId]);
+
+  useEffect(() => {
+    if (sectionPlayer !== 1 && tableId) navigate('/menu');
+  }, [sectionPlayer, tableId, navigate]);
+
+  const onFinish = (values) => {
+    localStorage.setItem('tableId', values.tableId);
+    navigate('/menu');
+  };
+
+  if (!tableId) {
+    return (
+      <div className="min-w-screen min-h-screen m-auto md:w-fit transition-all transform duration-300 w-full h-full flex justify-center items-center flex-col">
+        <div className="w-full h-full flex flex-col gap-2 p-8 justify-center items-center bg-slate-100 border-[1px] border-slate-400/10 shadow-[0_3px_10px_rgb(0,0,0,0.2)] text-black rounded-lg animate-scale-in">
+          <div className="flex flex-col gap-2 place-items-center">
+            <h1 className="text-2xl font-semibold">
+              Please Assign Table Manually
+            </h1>
+            <p>You are not assigned to any table</p>
+          </div>
+          <hr className="w-full h-[2px] bg-slate-400 my-2" />
+          <Form
+            form={form}
+            className="animate-fade-in delay-1000"
+            onFinish={onFinish}>
+            <Form.Item name="tableId" rules={[{ required: true }]}>
+              <Input
+                className="w-full border-none rounded-lg focus:outline-none"
+                placeholder="Enter Table Number"
+              />
+            </Form.Item>
+            <Button className="w-full" htmlType="submit" type="primary">
+              {' '}
+              Submit{' '}
+            </Button>
+          </Form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      {isIntroPlaying && (
+      {isIntroPlaying && tableId && (
         <div className="min-w-screen min-h-screen m-auto md:w-1/2 md:h-1/2 transition-all transform duration-300 w-full h-full flex justify-center items-center flex-col">
           {sectionPlayer === 1 ? (
             <video
-              autoPlay
+              autoPlay={sectionPlayer === 1}
               onEnded={() =>
                 setSectionPlayer((sectionPlayer) => sectionPlayer + 1)
               }
@@ -34,19 +82,21 @@ export default function Home() {
               <source src="/videos/opening.mp4" type="video/mp4" />
             </video>
           ) : (
-            <div className="w-full h-full flex flex-col gap-2 p-4 justify-center items-center bg-slate-200 text-black rounded-lg animate-scale-in">
+            <div className="w-fit h-full flex flex-col gap-2 p-4 justify-center items-center bg-slate-200 text-black rounded-lg animate-scale-in">
               <div className="flex flex-col gap-2 place-items-center">
+                <p className=" animate-fade-in delay-1000">
+                  Hello {customer?.name || customer?.email || customer?.phone},
+                  Welcome to our Restaurant
+                </p>
                 <p className="text-sm">Currently you are in</p>
                 <h4 className="text-xl">Table</h4>
-                <h1 className="text-3xl text-semibold">
-                  <span className="text-sky-500 !text-[12px]">No.</span>
-                  {tableId}
+                <h1 className="text-[12px] text-semibold">
+                  No.
+                  <span className="text-xl font-bold text-indigo-400 animate-bounce">
+                    {tableId}
+                  </span>
                 </h1>
               </div>
-              <p className=" animate-fade-in delay-1000">
-                Hello {customer.name || customer.email || customer.phone},
-                Welcome to our Restaurant
-              </p>
               <div className=" animate-fade-in delay-1500 flex flex-col gap-1">
                 <p
                   className={`text-sm ${
