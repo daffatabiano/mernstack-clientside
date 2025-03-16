@@ -163,21 +163,6 @@ export default function Menu() {
                 }}
               />
             </div>
-            // <ButtonHeaderMenu
-            //   key={i}
-            //   title={item?.name}
-            //   active={item.name === toCategoryMenu.menu.name}
-            //   onClick={() => {
-            //     setToCategoryMenu({
-            //       ...toCategoryMenu,
-            //       menu: {
-            //         ...item,
-            //         image: item.image,
-            //         nama: item.name === 'All' ? '' : item.name,
-            //       },
-            //     });
-            //   }}
-            // />
           ))}
         </div>
       )}
