@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { handleQueryLifecycle } from '../../../utils/apiHandlers';
 import { clearLogin, login } from '../userReducers';
+import fetchReducers from './fetchReducers';
+import { showNotification } from '../notificationReducers';
 const BASE_URL = import.meta.env.VITE_API_URL;
-
 const postReducers = createApi({
   reducerPath: 'post-api',
   baseQuery: fetchBaseQuery({
@@ -162,15 +163,19 @@ const postReducers = createApi({
         body: b,
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        await handleQueryLifecycle({
-          dispatch,
-          queryFulfilled,
-          successTitle: 'OTP Sent',
-          errorTitle: 'Failed Sending',
-          callback: () => {
-            if (arg.callback) arg.callback();
-          },
-        });
+        const { data } = await queryFulfilled;
+        const success = data?.success || data.statusCode === 200;
+        if (success) {
+          dispatch(
+            showNotification({
+              type: 'success',
+              message: 'OTP Sent',
+              description: data?.message,
+              visible: true,
+            })
+          );
+        }
+        return data;
       },
     }),
     verifyOTPCustomer: builder.mutation({
@@ -180,15 +185,18 @@ const postReducers = createApi({
         body: b,
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        await handleQueryLifecycle({
+        const res = await handleQueryLifecycle({
           dispatch,
           queryFulfilled,
           successTitle: 'OTP Verified',
           errorTitle: 'Failed Verifying',
-          callback: () => {
-            if (arg.callback) arg.callback();
-          },
         });
+        if (arg.callback) arg.callback();
+        const customerProfileResponse = await dispatch(
+          fetchReducers.endpoints.getCustomerProfile.initiate(arg.customerId)
+        );
+
+        return { res, customerProfileResponse };
       },
     }),
 
