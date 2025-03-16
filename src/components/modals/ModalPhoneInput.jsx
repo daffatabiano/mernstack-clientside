@@ -5,6 +5,7 @@ import ModalWrapper from './Wrapper';
 import { useEffect, useState } from 'react';
 import useAction from '../../hooks/useAction';
 import { Toaster } from '../notif/Toaster';
+import { useSendOTPCustomerMutation } from '../../redux/reducers/api/postReducers';
 
 export default function ModalPhoneInput() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function ModalPhoneInput() {
   const [isCode, setIsCode] = useState('');
   const [countdownOtp, setCountdownOtp] = useState(300);
   const [showToast, setShowToast] = useState(false);
+  const [sendOTPCustomer, { isLoading }] = useSendOTPCustomerMutation();
   const [isNotify, setIsNotify] = useState({
     type: '',
     message: '',
@@ -28,52 +30,23 @@ export default function ModalPhoneInput() {
   });
   const { sendOtp, verifyOtp } = useAction();
 
-  const handleSendOtp = () => {
+  const handleSendOtp = async () => {
     if (isOpenInput.isEmail.shown) {
-      sendOtp({
+      await sendOTPCustomer({
         email: isOpenInput.isEmail.value,
         method: 'email',
-      })
-        .then((res) => {
-          if (res.status === 200) {
-            setShowToast(true);
-            setIsNotify({
-              type: 'success',
-              message: res.data.message,
-            });
-            setIsValid(true);
-          }
-        })
-        .catch((err) => {
-          setShowToast(true);
-          setIsNotify({
-            type: 'error',
-            message: err.response.data.message || err.message,
-          });
-        });
+      });
+      setIsValid(true);
     } else if (isOpenInput.isPhone.shown) {
       sendOtp({
         phone: isOpenInput.isPhone.value,
         method: 'sms',
-      })
-        .then((res) => {
-          if (res.status === 200) {
-            setShowToast(true);
-            setIsNotify({
-              type: 'success',
-              message: res.data.message,
-            });
-            setIsValid(true);
-          }
-        })
-        .catch((err) => {
-          setShowToast(true), console.log(err);
-          setIsNotify({
-            type: 'error',
-            message: err.response.data.message,
-          });
-          console.log(err);
-        });
+      });
+      await sendOTPCustomer({
+        email: isOpenInput.isEmail.value,
+        method: 'email',
+      });
+      setIsValid(true);
     }
   };
 
@@ -85,7 +58,6 @@ export default function ModalPhoneInput() {
           otp: isCode,
         })
           .then((res) => {
-            console.log(res);
             if (res.status === 200) {
               setShowToast(true);
               setIsNotify({
@@ -93,7 +65,6 @@ export default function ModalPhoneInput() {
                 message: res.data.message,
               });
               localStorage.setItem('tokenCust', res.data.token);
-              localStorage.setItem('customer', JSON.stringify(res.data.data));
               setTimeout(() => {
                 navigate(`/`);
               }, 1000);
@@ -155,6 +126,8 @@ export default function ModalPhoneInput() {
       return () => clearInterval(timer);
     }
   }, [handleSendOtp]);
+
+  useEffect(() => {});
 
   const formatTime = (sc) => {
     const minutes = Math.floor(sc / 60);
@@ -305,7 +278,7 @@ export default function ModalPhoneInput() {
                     : 'hidden'
                 }`}
                 onClick={handleSendOtp}>
-                Send Otp
+                {isLoading ? 'Loading...' : 'Send OTP'}
               </button>
               <button
                 type="link"
