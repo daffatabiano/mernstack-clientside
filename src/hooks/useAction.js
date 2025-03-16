@@ -76,7 +76,6 @@ export default function useAction() {
           Accept: 'application/json',
         },
       });
-
       return res;
     } catch (err) {
       console.log(err);
