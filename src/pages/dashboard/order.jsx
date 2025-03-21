@@ -5,17 +5,12 @@ import MenuHeader from '../../components/dashboard/MenuHeader';
 import { listsOrder } from '../../helper/constants';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
 import { useState } from 'react';
+import { useGetAllOrdersQuery } from '../../redux/reducers/api/fetchReducers';
 
 export default function OrderDashboard() {
-  const { data } = useFetch('orders');
+  const { data } = useGetAllOrdersQuery();
   const orders = data?.data;
-  const { data: tableData } = useFetch('tables');
   const navigate = useNavigate();
-  const [shownInputPicture, setShownInputPicture] = useState({
-    isShown: false,
-    type: '',
-    image: '',
-  });
   const [shownAdd, setShownAdd] = useState(false);
   const [notify, setNotify] = useState({
     isShown: false,

@@ -79,16 +79,20 @@ export const listsSubmenu = [
 
 export const listsOrder = [
   {
-    name: 'All',
+    label: 'All',
+    value: '',
   },
   {
-    name: 'Pending',
+    label: 'Pending',
+    value: 'pending',
   },
   {
-    name: 'Completed',
+    label: 'Completed',
+    value: 'completed',
   },
   {
-    name: 'Cancelled',
+    label: 'Cancelled',
+    value: 'cancelled',
   },
 ];
 
