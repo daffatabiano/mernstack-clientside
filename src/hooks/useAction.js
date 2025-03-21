@@ -70,6 +70,7 @@ export default function useAction() {
         },
       });
       if (res.status === 200) {
+        console.log(res);
         localStorage.setItem('user', JSON.stringify(res.data.data));
       }
       return res;

@@ -8,10 +8,10 @@ export default function SuccesPayment() {
   const [sendOrderCustomer, { isLoading, isSuccess }] =
     useSendOrderCustomerMutation();
   const [successIndicator, setSuccessIndicator] = useState(0);
-  const requestSent = useRef(false); // Prevent duplicate API calls
+  const requestSent = useRef(false);
 
   useEffect(() => {
-    if (requestSent.current) return; // Prevent multiple triggers
+    if (requestSent.current) return;
 
     const dataPayment = JSON.parse(localStorage.getItem('dataPayment'));
     const cart = JSON.parse(localStorage.getItem('cart'));
@@ -21,11 +21,19 @@ export default function SuccesPayment() {
 
     const sendToOrder = async () => {
       const body = {
-        tableId,
+        tableId: tableId,
         name: dataPayment.firstName,
         email: dataPayment.email,
         amount: dataPayment.amount,
-        orderData: cart,
+        orderData: cart.map((item) => ({
+          category: item.category,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          discount: item.discount,
+          image: item.image,
+          notes: item.notes,
+        })),
       };
 
       requestSent.current = true; // Set before making the API call
