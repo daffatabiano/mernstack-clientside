@@ -1,15 +1,24 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
 
 const useSocket = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketIo = io(import.meta.env.VITE_SOCKET_URL);
-    setSocket(socketIo);
+    // Connect to the WebSocket server
+    const socketInstance = io('http://localhost:3000', {
+      // Make sure to use the correct URL
+      transports: ['websocket'], // Use websocket protocol
+    });
 
-    // Clean up when component unmounts
-    return () => socketIo.disconnect();
+    setSocket(socketInstance);
+
+    // Clean up on unmount
+    return () => {
+      if (socketInstance) {
+        socketInstance.disconnect();
+      }
+    };
   }, []);
 
   return socket;
