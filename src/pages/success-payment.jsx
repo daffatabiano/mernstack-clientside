@@ -1,14 +1,27 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useSendOrderCustomerMutation } from '../redux/reducers/api/postReducers';
+import io from 'socket.io-client';
 
 export default function SuccesPayment() {
   const navigate = useNavigate();
-  const [sendOrderCustomer, { isLoading, isSuccess }] =
-    useSendOrderCustomerMutation();
   const [successIndicator, setSuccessIndicator] = useState(0);
   const requestSent = useRef(false);
+  const socket = useRef(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    socket.current = io(import.meta.env.VITE_API_URL);
+    socket.current.on('order', () => {
+      navigate('/order');
+    });
+
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
+    };
+  });
 
   useEffect(() => {
     if (requestSent.current) return;
@@ -39,7 +52,10 @@ export default function SuccesPayment() {
       requestSent.current = true; // Set before making the API call
 
       try {
-        await sendOrderCustomer(body).unwrap();
+        if (socket.current) {
+          socket.current.emit('placeOrder', body); // Send order data to backend
+          setIsSuccess(true);
+        }
       } catch (error) {
         console.log('Order submission failed:', error);
         requestSent.current = false; // Allow retry on failure
@@ -47,7 +63,7 @@ export default function SuccesPayment() {
     };
 
     sendToOrder();
-  }, [sendOrderCustomer]); // Only trigger once on mount
+  }, []); // Only trigger once on mount
 
   useEffect(() => {
     if (isSuccess) {
