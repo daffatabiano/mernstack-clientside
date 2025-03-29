@@ -4,12 +4,13 @@ import DashboardLayout from './layout';
 import MenuHeader from '../../components/dashboard/MenuHeader';
 import { listsOrder } from '../../helper/constants';
 import ModalCreate from '../../components/dashboard/modals/modal-create';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetAllOrdersQuery } from '../../redux/reducers/api/fetchReducers';
+import useSocket from '../../hooks/useSocket';
 
 export default function OrderDashboard() {
   const { data } = useGetAllOrdersQuery();
-  const orders = data?.data;
+  const [orders, setOrders] = useState(data.data || []);
   const navigate = useNavigate();
   const [shownAdd, setShownAdd] = useState(false);
   const [notify, setNotify] = useState({
@@ -19,6 +20,30 @@ export default function OrderDashboard() {
     icon: '',
   });
   const [showByCategory, setShowByCategory] = useState('');
+  const socket = useSocket();
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('newOrder', (order) => {
+        setOrders((prevOrders) => [...prevOrders, order]);
+      });
+
+      socket.on('orderStatusUpdated', (data) => {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === data.orderId
+              ? { ...order, status: data.status }
+              : order
+          )
+        );
+      });
+
+      return () => {
+        socket.off('newOrder');
+        socket.off('orderStatusUpdated');
+      };
+    }
+  }, [socket]);
 
   const handleAdd = async (e) => {
     return setShownAdd(!true);
