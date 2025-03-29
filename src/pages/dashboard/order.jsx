@@ -9,8 +9,7 @@ import { useGetAllOrdersQuery } from '../../redux/reducers/api/fetchReducers';
 import useSocket from '../../hooks/useSocket';
 
 export default function OrderDashboard() {
-  const { data } = useGetAllOrdersQuery();
-  const [orders, setOrders] = useState(data.data || []);
+  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const [shownAdd, setShownAdd] = useState(false);
   const [notify, setNotify] = useState({
@@ -59,6 +58,8 @@ export default function OrderDashboard() {
       navigate(`/dashboard/order/${id}`);
     };
   };
+
+  console.log(orders);
 
   return (
     <>
