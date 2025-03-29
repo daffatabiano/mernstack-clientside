@@ -27,7 +27,7 @@ export default function OrderDashboard() {
         setOrders((prevOrders) => [...prevOrders, order]);
       });
 
-      socket.on('orderStatusUpdated', (data) => {
+      socket.on('statusOrder', (data) => {
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
             order._id === data.orderId
@@ -39,7 +39,7 @@ export default function OrderDashboard() {
 
       return () => {
         socket.off('newOrder');
-        socket.off('orderStatusUpdated');
+        socket.off('statusOrder');
       };
     }
   }, [socket]);
