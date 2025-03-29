@@ -11,10 +11,7 @@ export default function SuccesPayment() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    socket.current = io(import.meta.env.VITE_API_URL);
-    socket.current.on('order', () => {
-      navigate('/order');
-    });
+    socket.current = io('http://localhost:3000', { transports: ['websocket'] });
 
     return () => {
       if (socket.current) {
@@ -53,7 +50,7 @@ export default function SuccesPayment() {
 
       try {
         if (socket.current) {
-          socket.current.emit('placeOrder', body); // Send order data to backend
+          socket.current.emit('newOrder', body); // Send order data to backend
           setIsSuccess(true);
         }
       } catch (error) {
