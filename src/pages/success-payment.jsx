@@ -79,8 +79,6 @@ export default function SuccesPayment() {
       }, 1000);
 
       return () => clearInterval(interval);
-    } else if (successIndicator === 0 && isSuccess) {
-      navigate('/order');
     }
   }, [successIndicator, isSuccess, navigate]);
 
