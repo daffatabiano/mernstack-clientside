@@ -11,7 +11,9 @@ export default function SuccesPayment() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    socket.current = io('http://localhost:3000', { transports: ['websocket'] });
+    socket.current = io(import.meta.env.VITE_API_URL, {
+      transports: ['websocket'],
+    });
 
     return () => {
       if (socket.current) {
