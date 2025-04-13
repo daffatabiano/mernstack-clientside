@@ -6,7 +6,7 @@ const useSocket = () => {
 
   useEffect(() => {
     // Connect to the WebSocket server
-    const socketInstance = io(import.meta.env.VITE_API_URL, {
+    const socketInstance = io(import.meta.env.VITE_API_URL_WS, {
       // Make sure to use the correct URL
       transports: ['websocket'], // Use websocket protocol
     });
