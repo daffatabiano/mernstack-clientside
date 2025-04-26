@@ -1,27 +1,36 @@
 import { useEffect, useState, useRef } from 'react';
 import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
+import Pusher from 'pusher-js';
+import { useSendOrderCustomerMutation } from '../redux/reducers/api/postReducers';
 
 export default function SuccesPayment() {
   const navigate = useNavigate();
   const [successIndicator, setSuccessIndicator] = useState(0);
   const requestSent = useRef(false);
-  const socket = useRef(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [sendOrderCustomer] = useSendOrderCustomerMutation();
 
   useEffect(() => {
-    socket.current = io(import.meta.env.VITE_API_URL_WS, {
-      // Make sure to use the correct URL
-      transports: ['websocket'], // Use websocket protocol
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+      cluster: import.meta.env.VITE_PUSHER_CLUSTER,
+    });
+
+    const channel = pusher.subscribe('orders');
+
+    channel.bind('payment-success', (data) => {
+      setSuccessIndicator(10);
+      localStorage.removeItem('cart');
+      localStorage.removeItem('dataPayment');
+      console.log(data);
     });
 
     return () => {
-      if (socket.current) {
-        socket.current.disconnect();
-      }
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (requestSent.current) return;
@@ -52,10 +61,8 @@ export default function SuccesPayment() {
       requestSent.current = true; // Set before making the API call
 
       try {
-        if (socket.current) {
-          socket.current.emit('newOrder', body); // Send order data to backend
-          setIsSuccess(true);
-        }
+        await sendOrderCustomer(body);
+        setIsSuccess(true);
       } catch (error) {
         console.log('Order submission failed:', error);
         requestSent.current = false; // Allow retry on failure
@@ -63,7 +70,7 @@ export default function SuccesPayment() {
     };
 
     sendToOrder();
-  }, []); // Only trigger once on mount
+  }, [sendOrderCustomer]); // Only trigger once on mount
 
   useEffect(() => {
     if (isSuccess) {
