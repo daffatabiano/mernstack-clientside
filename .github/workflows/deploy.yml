@@ -1,0 +1,20 @@
+name: mernstack ci/cd
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/Checkout@v2
+      - name: Install dependencies
+        run: npm Install
+      - name: Build
+        run: npm run build
+      - name: run deploy.sh
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
